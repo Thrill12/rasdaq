@@ -1,7 +1,7 @@
 ﻿using rasdaq.Graphics;
 namespace tests;
 
-public class Tests
+public class TestExample
 {
     [SetUp]
     public void Setup()
