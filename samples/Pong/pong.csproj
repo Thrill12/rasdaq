@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\rasdaq\rasdaq.csproj" />
+    <ProjectReference Include="..\..\src\rasdaq\rasdaq.csproj" />
   </ItemGroup>
 
 </Project>
