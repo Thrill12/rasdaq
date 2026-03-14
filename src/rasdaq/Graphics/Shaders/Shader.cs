@@ -1,4 +1,3 @@
-using System;
 using OpenTK.Graphics.OpenGL4;
 
 namespace rasdaq.Graphics.Shaders;
@@ -7,11 +6,11 @@ public class Shader : IDisposable
 {
     int Handle;
 
-    const string vertexPath = "src/rasdaq/Graphics/Shaders/shader.vert";
-    const string fragmentPath = "src/rasdaq/Graphics/Shaders/shader.frag";
-
-    public Shader()
+    public Shader(string? vertexPath = null, string? fragmentPath = null)
     {
+        vertexPath ??= Shaders.TEXTURE_SHADER;
+        fragmentPath ??= Shaders.TEXTURE_SHADER_FRAG;
+
         LoadShaderFiles(vertexPath, fragmentPath, out int VertexShader, out int FragmentShader);
 
         CompileShader(VertexShader, FragmentShader);
@@ -112,5 +111,10 @@ public class Shader : IDisposable
     public int GetAttribLocation(string attribName)
     {
         return GL.GetAttribLocation(Handle, attribName);
+    }
+
+    public int GetUniformLocation(string uniformName)
+    {
+        return GL.GetUniformLocation(Handle, uniformName);
     }
 }

@@ -1,0 +1,55 @@
+using System.Runtime.InteropServices;
+using OpenTK.Graphics.OpenGL4;
+using StbiSharp;
+
+namespace rasdaq.Graphics;
+
+public class Texture
+{
+    private int _handle;
+
+    public Texture(string path)
+    {
+        _handle = GL.GenTexture();
+        Use();
+
+        Stbi.SetFlipVerticallyOnLoad(true);
+
+        using (FileStream stream = File.OpenRead(path))
+        {
+            using (MemoryStream memoryStream = new())
+            {
+                stream.CopyTo(memoryStream);
+                StbiImage image = Stbi.LoadFromMemory(memoryStream, 4);
+                byte[] pixelData = image.Data.ToArray();
+                GCHandle handle = GCHandle.Alloc(pixelData, GCHandleType.Pinned);
+
+                try
+                {
+                    GL.TexImage2D(
+                        TextureTarget.Texture2D,
+                        0,
+                        PixelInternalFormat.Rgba,
+                        image.Width,
+                        image.Height,
+                        0,
+                        PixelFormat.Rgba,
+                        PixelType.UnsignedByte,
+                        handle.AddrOfPinnedObject()
+                    );
+                    GL.GenerateMipmap(GenerateMipmapTarget.Texture2D);
+                }
+                finally
+                {
+                    handle.Free();
+                }
+            }
+        }
+    }
+
+    public void Use()
+    {
+        GL.ActiveTexture(TextureUnit.Texture0);
+        GL.BindTexture(TextureTarget.Texture2D, _handle);
+    }
+}

@@ -11,4 +11,8 @@
     <ProjectReference Include="..\..\src\rasdaq\rasdaq.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="assets\" />
+  </ItemGroup>
+
 </Project>
