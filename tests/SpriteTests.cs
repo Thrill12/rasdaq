@@ -12,7 +12,7 @@ public class SpriteTests
     [SetUp]
     public void Init()
     {
-        var fileSystem = new MockFileSystem();
+        // var fileSystem = new MockFileSystem();
     }
 
     [Test]
