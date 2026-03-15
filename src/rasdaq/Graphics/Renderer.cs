@@ -20,10 +20,7 @@ public class Renderer
 
     public void Init()
     {
-        _shader = new Shader(
-            "src/rasdaq/Graphics/Shaders/texture_shader.vert",
-            "src/rasdaq/Graphics/Shaders/texture_shader.frag"
-        );
+        _shader = new Shader(Shaders.Common.TEXTURE_SHADER, Shaders.Common.TEXTURE_SHADER_FRAG);
         _shader.Use();
 
         vertexBufferObject = GL.GenBuffer();

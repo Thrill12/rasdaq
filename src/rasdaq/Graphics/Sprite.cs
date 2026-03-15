@@ -68,10 +68,7 @@ public class Sprite
         if (texturePath != null)
         {
             _texture = new Texture(texturePath);
-            _shader = new Shader(
-                "src/rasdaq/Graphics/Shaders/texture_shader.vert",
-                "src/rasdaq/Graphics/Shaders/texture_shader.frag"
-            );
+            _shader = new Shader(Common.TEXTURE_SHADER, Common.TEXTURE_SHADER_FRAG);
         }
         else
         {

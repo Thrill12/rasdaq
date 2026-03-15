@@ -1,4 +1,5 @@
 ﻿using rasdaq.Graphics;
+
 namespace tests;
 
 public class TestExample
@@ -12,7 +13,7 @@ public class TestExample
     [Test]
     public void ShouldCreateSpriteClass()
     {
-        Sprite spr = new();
+        Sprite spr = new(1f, 1f);
 
         Assert.That(spr != null);
     }

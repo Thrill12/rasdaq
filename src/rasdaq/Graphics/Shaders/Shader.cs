@@ -8,8 +8,8 @@ public class Shader : IDisposable
 
     public Shader(string? vertexPath = null, string? fragmentPath = null)
     {
-        vertexPath ??= Shaders.TEXTURE_SHADER;
-        fragmentPath ??= Shaders.TEXTURE_SHADER_FRAG;
+        vertexPath ??= Common.TEXTURE_SHADER;
+        fragmentPath ??= Common.TEXTURE_SHADER_FRAG;
 
         LoadShaderFiles(vertexPath, fragmentPath, out int VertexShader, out int FragmentShader);
 

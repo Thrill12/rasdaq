@@ -1,6 +1,6 @@
 namespace rasdaq.Graphics.Shaders;
 
-public static class Shaders
+public static class Common
 {
     public static readonly string TEXTURE_SHADER =
         "src/rasdaq/Graphics/Shaders/texture_shader.vert";

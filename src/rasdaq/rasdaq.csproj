@@ -1,5 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <OutputType>Library</OutputType>
     <TargetFramework>net10.0</TargetFramework>
@@ -13,11 +12,15 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Include="Graphics/Shaders/*.vert" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Graphics/Shaders/*.frag" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Folder Include="Audio\" />
     <Folder Include="Input\" />
     <Folder Include="GameResources\" />
     <Folder Include="FileResources\" />
     <Folder Include="Physics\" />
   </ItemGroup>
-
 </Project>
