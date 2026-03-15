@@ -1,4 +1,5 @@
 using System.Drawing;
+using System.IO.Abstractions;
 using NUnit.Framework;
 using OpenTK.Graphics.OpenGL4;
 using rasdaq.Graphics;
@@ -8,15 +9,10 @@ namespace rasdaq.Tests;
 [TestFixture]
 public class SpriteTests
 {
-    private void Setup()
+    [SetUp]
+    public void Init()
     {
-        // Setup GL context for unit tests
-        var nativeWindowSettings = new OpenTK.Windowing.Desktop.NativeWindowSettings()
-        {
-            Size = new OpenTK.Mathematics.Vector2i(800, 600),
-            Title = "Test Window",
-            StartVisible = false,
-        };
+        var fileSystem = new MockFileSystem();
     }
 
     [Test]
