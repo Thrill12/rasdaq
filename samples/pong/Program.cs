@@ -1,5 +1,5 @@
-﻿using rasdaq.Graphics;
-using System.Drawing;
+﻿using System.Drawing;
+using rasdaq.Graphics;
 using Application = rasdaq.Application;
 
 namespace Pong;
