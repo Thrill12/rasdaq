@@ -1,3 +1,9 @@
 <Solution>
-  <Project Path="rasdaq/rasdaq.csproj" />
+  <Folder Name="/samples/">
+    <Project Path="samples/pong/pong.csproj" />
+  </Folder>
+  <Folder Name="/src/">
+    <Project Path="src/rasdaq/rasdaq.csproj" />
+  </Folder>
+  <Project Path="tests/tests.csproj" />
 </Solution>
