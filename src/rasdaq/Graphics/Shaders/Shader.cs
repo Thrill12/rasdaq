@@ -18,12 +18,14 @@ public class Shader : IDisposable
         CleanupShader(VertexShader, FragmentShader);
     }
 
-    public Shader(string vertexValue, string fragmentValue, int i)
+    public static Shader FromSource(string vertexSource, string fragmentSource)
     {
-        LoadShaderFilesDirectly(vertexValue, fragmentValue, out int VertexShader, out int FragmentShader);
+        Shader shader = new();
+        LoadShaderFilesDirectly(vertexSource, fragmentSource, out int VertexShader, out int FragmentShader);
         CompileShader(VertexShader, FragmentShader);
-        LinkShader(VertexShader, FragmentShader);
-        CleanupShader(VertexShader, FragmentShader);
+        shader.LinkShader(VertexShader, FragmentShader);
+        shader.CleanupShader(VertexShader, FragmentShader);
+        return shader;
     }
 
     protected Shader() { }
