@@ -24,10 +24,6 @@ class MockTexture : Texture
 [TestFixture]
 public class SpriteTests
 {
-
-    string fragShader = "#version 330 core\r\n\r\nin vec2 TextureCoord;\r\nin vec4 VertColor;\r\n\r\nout vec4 FragColor;\r\n\r\nuniform sampler2D texture0;\r\n\r\nvoid main()\r\n{\r\n    FragColor = texture(texture0, TextureCoord) * VertColor;\r\n}";
-    string vertShader = "#version 330 core\r\n\r\nin vec3 aPosition;\r\nin vec2 aTexture;\r\nin vec4 aColor;\r\n\r\nout vec2 TextureCoord;\r\nout vec4 VertColor;\r\n\r\nvoid main()\r\n{\r\n    gl_Position = vec4(aPosition, 1.0);\r\n\r\n    TextureCoord = aTexture;\r\n    VertColor = aColor;\r\n}";
-
     [SetUp]
     public void Init()
     {
