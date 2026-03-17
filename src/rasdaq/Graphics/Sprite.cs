@@ -1,5 +1,5 @@
-﻿using System.Drawing;
-using rasdaq.Graphics.Shaders;
+﻿using rasdaq.Graphics.Shaders;
+using System.Drawing;
 
 namespace rasdaq.Graphics;
 
@@ -21,17 +21,22 @@ public class Sprite
     private Texture? _texture;
     public Texture? Texture => _texture;
 
-    public Sprite(float width, float height, Color color)
+    public void SetShader(Shader newShader)
     {
-        _ = new Sprite(width, height, color, null);
+        _shader = newShader;
     }
 
-    public Sprite(float width, float height, string texturePath)
+    public Sprite(float width, float height, Color color, Shader? shader = null)
     {
-        _ = new Sprite(width, height, Color.White, texturePath);
+        _ = new Sprite(width, height, color, null, shader);
     }
 
-    public Sprite(float width, float height, Color? color = null, string? texturePath = null)
+    public Sprite(float width, float height, string texturePath, Shader? shader = null)
+    {
+        _ = new Sprite(width, height, Color.White, texturePath, shader);
+    }
+
+    public Sprite(float width, float height, Color? color = null, string? texturePath = null, Shader? shader = null)
     {
         float hw = width / 2;
         float hh = height / 2;
@@ -57,22 +62,29 @@ public class Sprite
             0.0f, // BL (repeated)
         ];
 
-        _ = new Sprite(_vertices, color, texturePath);
+        _ = new Sprite(_vertices, color, texturePath, shader);
     }
 
-    public Sprite(float[] vertices, Color? color = null, string? texturePath = null)
+    public Sprite(float[] vertices, Color? color = null, string? texturePath = null, Shader? shader = null)
     {
         _vertices = vertices;
         _color = color ?? Color.White;
 
-        if (texturePath != null)
+        if (shader == null)
         {
-            _texture = new Texture(texturePath);
-            _shader = new Shader(Common.TEXTURE_SHADER, Common.TEXTURE_SHADER_FRAG);
+            if (texturePath != null)
+            {
+                _texture = new Texture(texturePath);
+                _shader = new Shader(Common.TEXTURE_SHADER, Common.TEXTURE_SHADER_FRAG);
+            }
+            else
+            {
+                _shader = new Shader();
+            }
         }
         else
         {
-            _shader = new Shader();
+            _shader = shader;
         }
 
         _uvs =

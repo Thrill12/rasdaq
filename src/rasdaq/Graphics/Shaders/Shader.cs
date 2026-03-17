@@ -18,6 +18,16 @@ public class Shader : IDisposable
         CleanupShader(VertexShader, FragmentShader);
     }
 
+    public Shader(string vertexValue, string fragmentValue, int i)
+    {
+        LoadShaderFilesDirectly(vertexValue, fragmentValue, out int VertexShader, out int FragmentShader);
+        CompileShader(VertexShader, FragmentShader);
+        LinkShader(VertexShader, FragmentShader);
+        CleanupShader(VertexShader, FragmentShader);
+    }
+
+    public Shader() { }
+
     public void Use()
     {
         GL.UseProgram(Handle);
@@ -71,6 +81,20 @@ public class Shader : IDisposable
 
         FragmentShader = GL.CreateShader(ShaderType.FragmentShader);
         GL.ShaderSource(FragmentShader, FragmentShaderSource);
+    }
+
+    private static void LoadShaderFilesDirectly(
+        string vertex,
+        string fragment,
+        out int VertexShader,
+        out int FragmentShader
+        )
+    {
+        VertexShader = GL.CreateShader(ShaderType.VertexShader);
+        GL.ShaderSource(VertexShader, vertex);
+
+        FragmentShader = GL.CreateShader(ShaderType.FragmentShader);
+        GL.ShaderSource(FragmentShader, fragment);
     }
 
     private void LinkShader(int VertexShader, int FragmentShader)

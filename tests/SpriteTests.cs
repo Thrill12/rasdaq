@@ -1,18 +1,28 @@
-using System.Drawing;
-using System.IO.Abstractions;
-using NUnit.Framework;
-using OpenTK.Graphics.OpenGL4;
 using rasdaq.Graphics;
+using rasdaq.Graphics.Shaders;
+using System.Drawing;
 
-namespace rasdaq.Tests;
+namespace tests;
+
+class MockShader : Shader
+{
+    public MockShader() : base()
+    {
+
+    }
+}
 
 [TestFixture]
 public class SpriteTests
 {
+
+    string fragShader = "#version 330 core\r\n\r\nin vec2 TextureCoord;\r\nin vec4 VertColor;\r\n\r\nout vec4 FragColor;\r\n\r\nuniform sampler2D texture0;\r\n\r\nvoid main()\r\n{\r\n    FragColor = texture(texture0, TextureCoord) * VertColor;\r\n}";
+    string vertShader = "#version 330 core\r\n\r\nin vec3 aPosition;\r\nin vec2 aTexture;\r\nin vec4 aColor;\r\n\r\nout vec2 TextureCoord;\r\nout vec4 VertColor;\r\n\r\nvoid main()\r\n{\r\n    gl_Position = vec4(aPosition, 1.0);\r\n\r\n    TextureCoord = aTexture;\r\n    VertColor = aColor;\r\n}";
+
     [SetUp]
     public void Init()
     {
-        // var fileSystem = new MockFileSystem();
+
     }
 
     [Test]
@@ -23,7 +33,7 @@ public class SpriteTests
         Color color = Color.Red;
 
         // Act
-        var sprite = new Sprite(vertices, color);
+        var sprite = new Sprite(vertices, color, null, new MockShader());
 
         // Assert
         Assert.That(sprite.Vertices, Is.EqualTo(vertices));
@@ -56,7 +66,7 @@ public class SpriteTests
         string texturePath = "samples/pong/assets/praise_the_lord.png";
 
         // Act
-        var sprite = new Sprite(1f, 1f, Color.White, texturePath);
+        var sprite = new Sprite(1f, 1f, Color.White, texturePath, new MockShader());
 
         // Assert
         Assert.That(sprite.Texture, Is.Not.Null);

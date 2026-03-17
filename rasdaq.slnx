@@ -1,5 +1,7 @@
 <Solution>
-  <Folder Name="/samples/" />
+  <Folder Name="/samples/">
+    <Project Path="samples/pong/pong.csproj" Id="54cd4a57-3c6c-4630-97fd-2807ccc98d7d" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/rasdaq/rasdaq.csproj" />
   </Folder>
