@@ -13,8 +13,5 @@ internal class Program
         Texture tex = new("samples/pong/assets/andrei.png");
         Sprite spr = new(2f, 1f, tex);
         Application.SetBackgroundColor(Color.CornflowerBlue);
-
-            app.Run();
-        }
     }
 }
