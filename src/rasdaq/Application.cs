@@ -1,19 +1,23 @@
-﻿using OpenTK.Graphics.OpenGL4;
+﻿using System.Drawing;
+using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using rasdaq.Graphics;
 
 namespace rasdaq;
 
 public class Application : GameWindow
 {
+    public static Application? Instance { get; private set; }
+
     public Application(int width, int height, string title)
         : base(
             GameWindowSettings.Default,
             new NativeWindowSettings() { ClientSize = (width, height), Title = title }
         )
     {
-        Console.WriteLine("rasdaq started");
+        Instance = this;
     }
 
     protected override void OnUpdateFrame(FrameEventArgs args)
@@ -25,9 +29,14 @@ public class Application : GameWindow
             Close();
         }
     }
+
+    public static void SetBackgroundColor(Color color)
+    {
+        GL.ClearColor(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f);
+    }
+
     protected override void OnLoad()
     {
-        GL.ClearColor(0.2f, 0.3f, 0.3f, 1.0f);
     }
 
     protected override void OnRenderFrame(FrameEventArgs e)
@@ -36,6 +45,13 @@ public class Application : GameWindow
 
         GL.Clear(ClearBufferMask.ColorBufferBit);
 
+        // Rendering code here
+        Renderer.Instance.Render();
+
+        // Double-buffering means that there are two areas that OpenGL draws to.
+        // In essence: One area is displayed, while the other is being rendered to.
+        // Then, when you call SwapBuffers, the two are reversed.
+        // A single-buffered context could have issues such as screen tearing.
         SwapBuffers();
     }
 

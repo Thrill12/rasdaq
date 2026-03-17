@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "pong": {
+      "commandName": "Project",
+      "workingDirectory": "$(SolutionDir)"
+    }
+  }
+}
