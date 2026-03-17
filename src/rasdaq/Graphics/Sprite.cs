@@ -26,55 +26,32 @@ public class Sprite
         _shader = newShader;
     }
 
-    public Sprite(float width, float height, Color color, Shader? shader = null)
-    {
-        _ = new Sprite(width, height, color, null, shader);
-    }
+    public Sprite(float width, float height, Color color, Shader? shader = null) :
+        this(width, height, color, null, shader)
+    { }
 
-    public Sprite(float width, float height, string texturePath, Shader? shader = null)
-    {
-        _ = new Sprite(width, height, Color.White, texturePath, shader);
-    }
+    public Sprite(float width, float height, Texture texture, Shader? shader = null) :
+        this(width, height, Color.White, texture, shader)
+    { }
 
-    public Sprite(float width, float height, Color? color = null, string? texturePath = null, Shader? shader = null)
-    {
-        float hw = width / 2;
-        float hh = height / 2;
-        _vertices =
-        [
-            -hw,
-            -hh,
-            0.0f, // BL
-            hw,
-            -hh,
-            0.0f, // BR
-            hw,
-            hh,
-            0.0f, // TR
-            -hw,
-            hh,
-            0.0f, // TL
-            hw,
-            hh,
-            0.0f, // TR (repeated)
-            -hw,
-            -hh,
-            0.0f, // BL (repeated)
-        ];
+    public Sprite(float width, float height, Color? color = null, Texture? texture = null, Shader? shader = null) :
+        this(BuildVertices(width, height), color, texture, shader)
+    { }
 
-        _ = new Sprite(_vertices, color, texturePath, shader);
-    }
-
-    public Sprite(float[] vertices, Color? color = null, string? texturePath = null, Shader? shader = null)
+    public Sprite(float[] vertices, Color? color = null, Texture? texture = null, Shader? shader = null)
     {
         _vertices = vertices;
         _color = color ?? Color.White;
 
+        if (texture != null)
+        {
+            _texture = texture;
+        }
+
         if (shader == null)
         {
-            if (texturePath != null)
+            if (texture != null)
             {
-                _texture = new Texture(texturePath);
                 _shader = new Shader(Common.TEXTURE_SHADER, Common.TEXTURE_SHADER_FRAG);
             }
             else
@@ -104,5 +81,32 @@ public class Sprite
         ];
 
         Renderer.Instance.LoadSprite(this);
+    }
+
+    private static float[] BuildVertices(float width, float height)
+    {
+        float hw = width / 2;
+        float hh = height / 2;
+        return
+        [
+            -hw,
+            -hh,
+            0.0f, // BL
+            hw,
+            -hh,
+            0.0f, // BR
+            hw,
+            hh,
+            0.0f, // TR
+            -hw,
+            hh,
+            0.0f, // TL
+            hw,
+            hh,
+            0.0f, // TR (repeated)
+            -hw,
+            -hh,
+            0.0f, // BL (repeated)
+        ];
     }
 }

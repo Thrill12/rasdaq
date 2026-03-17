@@ -1,12 +1,14 @@
-using System.Runtime.InteropServices;
 using OpenTK.Graphics.OpenGL4;
 using StbiSharp;
+using System.Runtime.InteropServices;
 
 namespace rasdaq.Graphics;
 
 public class Texture
 {
     private int _handle;
+
+    protected Texture() { }
 
     public Texture(string path)
     {

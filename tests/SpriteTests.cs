@@ -12,6 +12,14 @@ class MockShader : Shader
     }
 }
 
+class MockTexture : Texture
+{
+    public MockTexture() : base()
+    {
+
+    }
+}
+
 [TestFixture]
 public class SpriteTests
 {
@@ -28,14 +36,11 @@ public class SpriteTests
     [Test]
     public void Sprite_WithVertices_SetsPropertiesCorrectly()
     {
-        // Arrange
         float[] vertices = [0f, 0f, 0f, 1f, 0f, 0f, 0f, 1f, 0f];
         Color color = Color.Red;
 
-        // Act
         var sprite = new Sprite(vertices, color, null, new MockShader());
 
-        // Assert
         Assert.That(sprite.Vertices, Is.EqualTo(vertices));
         Assert.That(sprite.Color, Is.EqualTo(color));
         Assert.That(sprite.Texture, Is.Null);
@@ -44,14 +49,11 @@ public class SpriteTests
     [Test]
     public void Sprite_WithWidthHeight_GeneratesCorrectQuadVertices()
     {
-        // Arrange
         float width = 2f,
             height = 3f;
 
-        // Act
         var sprite = new Sprite(width, height);
 
-        // Assert
         Assert.That(sprite.Vertices.Length, Is.EqualTo(18)); // 6 vertices * 3 floats
         Assert.That(sprite.Vertices[0], Is.EqualTo(-1f)); // left
         Assert.That(sprite.Vertices[1], Is.EqualTo(-1.5f)); // bottom
@@ -62,13 +64,9 @@ public class SpriteTests
     [Test]
     public void Sprite_WithTexture_LoadsTexture()
     {
-        // Arrange
-        string texturePath = "samples/pong/assets/praise_the_lord.png";
+        Texture tex = new MockTexture();
+        var sprite = new Sprite(1f, 1f, Color.White, tex, new MockShader());
 
-        // Act
-        var sprite = new Sprite(1f, 1f, Color.White, texturePath, new MockShader());
-
-        // Assert
         Assert.That(sprite.Texture, Is.Not.Null);
         Assert.That(sprite.Color, Is.EqualTo(Color.White));
     }
@@ -76,10 +74,8 @@ public class SpriteTests
     [Test]
     public void Sprite_DefaultColor_IsWhite()
     {
-        // Act
         var sprite = new Sprite(1f, 1f);
 
-        // Assert
         Assert.That(sprite.Color, Is.EqualTo(Color.White));
     }
 }
