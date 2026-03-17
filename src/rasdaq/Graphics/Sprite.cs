@@ -42,27 +42,11 @@ public class Sprite
     {
         _vertices = vertices;
         _color = color ?? Color.White;
+        _texture = texture;
 
-        if (texture != null)
-        {
-            _texture = texture;
-        }
-
-        if (shader == null)
-        {
-            if (texture != null)
-            {
-                _shader = new Shader(Common.TEXTURE_SHADER, Common.TEXTURE_SHADER_FRAG);
-            }
-            else
-            {
-                _shader = new Shader();
-            }
-        }
-        else
-        {
-            _shader = shader;
-        }
+        _shader = shader ?? (texture != null
+            ? new Shader(Common.TEXTURE_SHADER, Common.TEXTURE_SHADER_FRAG)
+            : new Shader(Common.COLOR_SHADER, Common.COLOR_SHADER_FRAG));
 
         _uvs =
         [
