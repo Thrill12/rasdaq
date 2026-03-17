@@ -6,6 +6,7 @@
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="coverlet.collector" Version="6.0.4"/>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.0"/>
@@ -14,11 +15,10 @@
     <PackageReference Include="NUnit3TestAdapter" Version="5.0.0"/>
     <PackageReference Include="System.IO.Abstractions" Version="22.1.0"/>
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\src\rasdaq\rasdaq.csproj"/>
-    <Folder Include="../src/rasdaq/Graphics/Shaders"/>
   </ItemGroup>
+
   <ItemGroup>
-    <Using Include="NUnit.Framework"/>
   </ItemGroup>
 </Project>

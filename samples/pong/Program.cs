@@ -14,6 +14,7 @@ internal class Program
         Sprite spr = new(2f, 1f, tex);
         Application.SetBackgroundColor(Color.CornflowerBlue);
 
-        app.Run();
+            app.Run();
+        }
     }
 }

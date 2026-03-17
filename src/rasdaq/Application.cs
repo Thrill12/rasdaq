@@ -37,13 +37,6 @@ public class Application : GameWindow
 
     protected override void OnLoad()
     {
-        // Enable alpha blending so textures with transparency show the background
-        GL.Enable(EnableCap.Blend);
-        GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-
-        Console.WriteLine("rasdaq started");
-
-        Renderer.Instance.Init();
     }
 
     protected override void OnRenderFrame(FrameEventArgs e)
