@@ -1,8 +1,4 @@
 <Solution>
-  <Folder Name="/.github/" />
-  <Folder Name="/.github/workflows/">
-    <File Path="test.yml" />
-  </Folder>
   <Folder Name="/samples/">
     <Project Path="samples/pong/pong.csproj" Id="54cd4a57-3c6c-4630-97fd-2807ccc98d7d">
       <Build Solution="Debug|*" Project="false" />
