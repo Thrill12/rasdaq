@@ -49,7 +49,7 @@ public class SpriteTests
         float width = 2f,
             height = 3f;
 
-        var sprite = new Sprite(width, height);
+        var sprite = new Sprite(width, height, Color.White, new MockShader());
 
         Assert.That(sprite.Vertices.Length, Is.EqualTo(18)); // 6 vertices * 3 floats
         Assert.That(sprite.Vertices[0], Is.EqualTo(-1f)); // left
@@ -71,7 +71,7 @@ public class SpriteTests
     [Test]
     public void Sprite_DefaultColor_IsWhite()
     {
-        var sprite = new Sprite(1f, 1f);
+        var sprite = new Sprite(1f, 1f, null, null, new MockShader());
 
         Assert.That(sprite.Color, Is.EqualTo(Color.White));
     }
