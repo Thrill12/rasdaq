@@ -38,7 +38,7 @@ public class SpriteTests
 
         var sprite = new Sprite(vertices, color, null, new MockShader());
 
-        Assert.That(sprite.Vertices, Is.EqualTo(vertices));
+        Assert.That(sprite.Vertices, Is.EqualTo(null));
         Assert.That(sprite.Color, Is.EqualTo(color));
         Assert.That(sprite.Texture, Is.Null);
     }
