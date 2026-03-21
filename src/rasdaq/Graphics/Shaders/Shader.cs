@@ -78,8 +78,6 @@ public class Shader : IDisposable
         string vertexSource = LoadEmbeddedShader(vertexName);
         string fragmentSource = LoadEmbeddedShader(fragmentName);
 
-        Console.WriteLine(vertexSource);
-
         VertexShader = GL.CreateShader(ShaderType.VertexShader);
         GL.ShaderSource(VertexShader, vertexSource);
 

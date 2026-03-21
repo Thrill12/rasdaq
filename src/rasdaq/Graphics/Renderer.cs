@@ -54,7 +54,6 @@ public class Renderer
                 vertices.Add(sprite.Color.A / 255f);
             }
 
-            GL.BindVertexArray(vertexArrayObject);
             GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferObject);
             GL.BufferData(
                 BufferTarget.ArrayBuffer,
