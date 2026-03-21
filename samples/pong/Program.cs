@@ -13,7 +13,7 @@ internal class Program
             using Application app = new(800, 600, "Pong");
 
             Texture tex = new("assets/andrei.png");
-            Sprite spr = new(2f, 1f, Color.Red);
+            Sprite spr = new(1f, 1.1f, tex);
             Application.SetBackgroundColor(Color.CornflowerBlue);
 
             app.Run();

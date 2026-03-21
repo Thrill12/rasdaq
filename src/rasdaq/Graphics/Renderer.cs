@@ -20,18 +20,11 @@ public class Renderer
 
     public void Init()
     {
-        _shader = new Shader(Shaders.Common.TEXTURE_SHADER, Shaders.Common.TEXTURE_SHADER_FRAG);
-        _shader.Use();
-
         vertexBufferObject = GL.GenBuffer();
         vertexArrayObject = GL.GenVertexArray();
 
         GL.BindVertexArray(vertexArrayObject);
         GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferObject);
-
-        // aPosition always at index 0, offset 0
-        GL.VertexAttribPointer(0, 3, VertexAttribPointerType.Float, false, 9 * sizeof(float), 0);
-        GL.EnableVertexAttribArray(0);
 
         vertices = new();
     }
@@ -61,6 +54,7 @@ public class Renderer
                 vertices.Add(sprite.Color.A / 255f);
             }
 
+            GL.BindVertexArray(vertexArrayObject);
             GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferObject);
             GL.BufferData(
                 BufferTarget.ArrayBuffer,
@@ -70,29 +64,41 @@ public class Renderer
             );
 
             sprite.Shader.Use();
+
+            // aPosition — must be set every frame
+            GL.VertexAttribPointer(
+                sprite.Shader.GetAttribLocation("aPosition"),
+                3,
+                VertexAttribPointerType.Float,
+                false,
+                9 * sizeof(float),
+                0
+            );
+            GL.EnableVertexAttribArray(sprite.Shader.GetAttribLocation("aPosition"));
+
             if (sprite.Texture != null)
             {
                 // UVs
                 GL.VertexAttribPointer(
-                    1,
+                    sprite.Shader.GetAttribLocation("aTexture"),
                     2,
                     VertexAttribPointerType.Float,
                     false,
                     9 * sizeof(float),
                     3 * sizeof(float)
                 );
-                GL.EnableVertexAttribArray(1);
+                GL.EnableVertexAttribArray(sprite.Shader.GetAttribLocation("aTexture"));
 
                 // Colors
                 GL.VertexAttribPointer(
-                    2,
+                    sprite.Shader.GetAttribLocation("aColor"),
                     4,
                     VertexAttribPointerType.Float,
                     false,
                     9 * sizeof(float),
                     5 * sizeof(float)
                 );
-                GL.EnableVertexAttribArray(2);
+                GL.EnableVertexAttribArray(sprite.Shader.GetAttribLocation("aColor"));
 
                 sprite.Texture.Use();
                 int texUniformLoc = sprite.Shader.GetUniformLocation("texture0");
@@ -104,18 +110,18 @@ public class Renderer
             else
             {
                 GL.VertexAttribPointer(
-                    1,
-                    3,
+                    sprite.Shader.GetAttribLocation("aColor"),
+                    4,
                     VertexAttribPointerType.Float,
                     false,
                     9 * sizeof(float),
                     5 * sizeof(float)
                 );
-                GL.EnableVertexAttribArray(1);
-                GL.DisableVertexAttribArray(2);
+                GL.EnableVertexAttribArray(sprite.Shader.GetAttribLocation("aColor"));
+                GL.DisableVertexAttribArray(sprite.Shader.GetAttribLocation("aTexture"));
             }
-            GL.BindVertexArray(vertexArrayObject);
-            GL.DrawArrays(PrimitiveType.Triangles, 0, vertices.Count / 8);
+
+            GL.DrawArrays(PrimitiveType.Triangles, 0, vertices.Count / 9);
         }
     }
 

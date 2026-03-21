@@ -1,9 +1,9 @@
-﻿using System.Drawing;
-using OpenTK.Graphics.OpenGL4;
+﻿using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using rasdaq.Graphics;
+using System.Drawing;
 
 namespace rasdaq;
 
@@ -37,6 +37,13 @@ public class Application : GameWindow
 
     protected override void OnLoad()
     {
+        // Allows rendering png transparency
+        GL.Enable(EnableCap.Blend);
+        GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
+
+        Console.WriteLine("rasdaq started");
+
+        Renderer.Instance.Init();
     }
 
     protected override void OnRenderFrame(FrameEventArgs e)
