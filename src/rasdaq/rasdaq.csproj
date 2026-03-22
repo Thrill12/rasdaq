@@ -13,9 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Include="Graphics/Shaders/*.vert" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="Graphics/Shaders/*.frag" CopyToOutputDirectory="PreserveNewest" />
-  </ItemGroup>
+    <EmbeddedResource Include="Graphics/Shaders/*.vert" />
+    <EmbeddedResource Include="Graphics/Shaders/*.frag" />
+</ItemGroup>
 
   <ItemGroup>
     <Compile Remove="Audio\**" />

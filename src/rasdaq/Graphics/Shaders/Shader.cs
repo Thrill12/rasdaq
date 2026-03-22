@@ -69,20 +69,31 @@ public class Shader : IDisposable
     }
 
     private static void LoadShaderFiles(
-        string vertexPath,
-        string fragmentPath,
+        string vertexName,
+        string fragmentName,
         out int VertexShader,
         out int FragmentShader
-    )
+        )
     {
-        string VertexShaderSource = File.ReadAllText(vertexPath);
-        string FragmentShaderSource = File.ReadAllText(fragmentPath);
+        string vertexSource = LoadEmbeddedShader(vertexName);
+        string fragmentSource = LoadEmbeddedShader(fragmentName);
 
         VertexShader = GL.CreateShader(ShaderType.VertexShader);
-        GL.ShaderSource(VertexShader, VertexShaderSource);
+        GL.ShaderSource(VertexShader, vertexSource);
 
         FragmentShader = GL.CreateShader(ShaderType.FragmentShader);
-        GL.ShaderSource(FragmentShader, FragmentShaderSource);
+        GL.ShaderSource(FragmentShader, fragmentSource);
+    }
+
+    private static string LoadEmbeddedShader(string filename)
+    {
+        var assembly = typeof(Shader).Assembly;
+        string resourceName = $"rasdaq.Graphics.Shaders.{filename}";
+
+        using Stream stream = assembly.GetManifestResourceStream(resourceName)
+            ?? throw new FileNotFoundException($"Embedded shader not found: {resourceName}");
+        using StreamReader reader = new(stream);
+        return reader.ReadToEnd();
     }
 
     private static void LoadShaderFilesDirectly(
@@ -148,7 +159,11 @@ public class Shader : IDisposable
     {
         Use();
         int location = GetUniformLocation(uniformName);
-        if (location == -1) return;
+        if (location == -1)
+        {
+            return;
+        }
+
         GL.Uniform1(location, val);
     }
 
@@ -156,7 +171,11 @@ public class Shader : IDisposable
     {
         Use();
         int location = GetUniformLocation(uniformName);
-        if (location == -1) return;
+        if (location == -1)
+        {
+            return;
+        }
+
         GL.Uniform2(location, val.X, val.Y);
     }
 
@@ -164,14 +183,22 @@ public class Shader : IDisposable
     {
         Use();
         int location = GetUniformLocation(uniformName);
-        if (location == -1) return;
+        if (location == -1)
+        {
+            return;
+        }
+
         GL.Uniform3(location, ref val);
     }
     public void SetUniform(string uniformName, OpenTK.Mathematics.Vector4 val)
     {
         Use();
         int location = GetUniformLocation(uniformName);
-        if (location == -1) return;
+        if (location == -1)
+        {
+            return;
+        }
+
         GL.Uniform4(location, ref val);
     }
 
@@ -179,7 +206,11 @@ public class Shader : IDisposable
     {
         Use();
         int location = GetUniformLocation(uniformName);
-        if (location == -1) return;
+        if (location == -1)
+        {
+            return;
+        }
+
         GL.UniformMatrix4(location, transpose, ref val);
     }
 }
