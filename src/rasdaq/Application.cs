@@ -3,6 +3,7 @@ using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using rasdaq.Graphics;
+using rasdaq.Input;
 using System.Drawing;
 
 namespace rasdaq;
@@ -10,6 +11,7 @@ namespace rasdaq;
 public class Application : GameWindow
 {
     public static Application? Instance { get; private set; }
+    public InputManager InputManager { get; private set; }
 
     public Application(int width, int height, string title)
         : base(
@@ -18,6 +20,7 @@ public class Application : GameWindow
         )
     {
         Instance = this;
+            InputManager = new InputManager(this);
     }
 
     protected override void OnUpdateFrame(FrameEventArgs args)
@@ -34,6 +37,13 @@ public class Application : GameWindow
     {
         GL.ClearColor(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f);
     }
+
+    public override void Run()
+    {
+        InputManager.SetEventListeners();
+        base.Run();
+    }
+
 
     protected override void OnLoad()
     {
