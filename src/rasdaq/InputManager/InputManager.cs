@@ -44,4 +44,13 @@ public class InputManager
         };
     }
 
+    public void LockMouse()
+    {
+        _gameWindow.CursorState = OpenTK.Windowing.Common.CursorState.Grabbed;
+    }
+
+    public void UnlockMouse()
+    {
+        _gameWindow.CursorState = OpenTK.Windowing.Common.CursorState.Normal;
+    }
 }
