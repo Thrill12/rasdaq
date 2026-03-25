@@ -8,20 +8,32 @@ namespace Pong;
 
 internal class Program
 {
-    static void TestKey()
+    static void TestKey(Application application, bool isMouseLocked)
     {
-        Console.WriteLine("testing keys");
+        if (isMouseLocked)
+        {
+            application.InputManager.LockMouse();
+        } else
+        {
+            application.InputManager.UnlockMouse();
+        }
+        Console.WriteLine("testing keys: B");
     }
     static void Main()
     {
         try
         {
             using Application app = new(800, 600, "Pong");
+            bool lockedMouse = false;
 
             Texture tex = new("assets/andrei.png");
             Sprite spr = new(1f, 1.1f, tex);
             Application.SetBackgroundColor(Color.CornflowerBlue);
-            app.InputManager.AddKeyDownCallback(Keys.B, TestKey);
+            
+            app.InputManager.AddKeyDownCallback(Keys.B, () =>
+            {
+                TestKey(app, lockedMouse); lockedMouse = !lockedMouse;
+            });
 
             app.Run();
         }
