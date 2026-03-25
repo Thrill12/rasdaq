@@ -1,0 +1,13 @@
+name: Testing
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v6
+      - name: Run tests
+        run: dotnet test
