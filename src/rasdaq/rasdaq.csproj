@@ -16,4 +16,8 @@
     <EmbeddedResource Include="Graphics/Shaders/*.vert" />
     <EmbeddedResource Include="Graphics/Shaders/*.frag" />
 </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Physics\" />
+  </ItemGroup>
 </Project>

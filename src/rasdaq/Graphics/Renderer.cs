@@ -35,20 +35,7 @@ public class Renderer
         foreach (Sprite sprite in sprites)
         {
             vertices.Clear();
-            for (int i = 0, uvIndex = 0; i < sprite.Vertices.Length; i += 3, uvIndex += 2)
-            {
-                vertices.Add(sprite.Vertices[i]);
-                vertices.Add(sprite.Vertices[i + 1]);
-                vertices.Add(sprite.Vertices[i + 2]);
-
-                vertices.Add(sprite.UVs[uvIndex]);
-                vertices.Add(sprite.UVs[uvIndex + 1]);
-
-                vertices.Add(sprite.Color.R / 255f);
-                vertices.Add(sprite.Color.G / 255f);
-                vertices.Add(sprite.Color.B / 255f);
-                vertices.Add(sprite.Color.A / 255f);
-            }
+            AddSpriteVertices(sprite);
 
             GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferObject);
             GL.BufferData(
@@ -59,64 +46,86 @@ public class Renderer
             );
 
             sprite.Shader.Use();
+            SetVertexAttributes(sprite);
 
-            // aPosition — must be set every frame
+            GL.DrawArrays(PrimitiveType.Triangles, 0, vertices.Count / 9);
+        }
+    }
+
+    private static void SetVertexAttributes(Sprite sprite)
+    {
+        // aPosition — must be set every frame
+        GL.VertexAttribPointer(
+            sprite.Shader.GetAttribLocation("aPosition"),
+            3,
+            VertexAttribPointerType.Float,
+            false,
+            9 * sizeof(float),
+            0
+        );
+        GL.EnableVertexAttribArray(sprite.Shader.GetAttribLocation("aPosition"));
+
+        if (sprite.Texture != null)
+        {
+            // UVs
             GL.VertexAttribPointer(
-                sprite.Shader.GetAttribLocation("aPosition"),
-                3,
+                sprite.Shader.GetAttribLocation("aTexture"),
+                2,
                 VertexAttribPointerType.Float,
                 false,
                 9 * sizeof(float),
-                0
+                3 * sizeof(float)
             );
-            GL.EnableVertexAttribArray(sprite.Shader.GetAttribLocation("aPosition"));
+            GL.EnableVertexAttribArray(sprite.Shader.GetAttribLocation("aTexture"));
 
-            if (sprite.Texture != null)
+            // Colors
+            GL.VertexAttribPointer(
+                sprite.Shader.GetAttribLocation("aColor"),
+                4,
+                VertexAttribPointerType.Float,
+                false,
+                9 * sizeof(float),
+                5 * sizeof(float)
+            );
+            GL.EnableVertexAttribArray(sprite.Shader.GetAttribLocation("aColor"));
+
+            sprite.Texture.Use();
+            int texUniformLoc = sprite.Shader.GetUniformLocation("texture0");
+            if (texUniformLoc >= 0)
             {
-                // UVs
-                GL.VertexAttribPointer(
-                    sprite.Shader.GetAttribLocation("aTexture"),
-                    2,
-                    VertexAttribPointerType.Float,
-                    false,
-                    9 * sizeof(float),
-                    3 * sizeof(float)
-                );
-                GL.EnableVertexAttribArray(sprite.Shader.GetAttribLocation("aTexture"));
-
-                // Colors
-                GL.VertexAttribPointer(
-                    sprite.Shader.GetAttribLocation("aColor"),
-                    4,
-                    VertexAttribPointerType.Float,
-                    false,
-                    9 * sizeof(float),
-                    5 * sizeof(float)
-                );
-                GL.EnableVertexAttribArray(sprite.Shader.GetAttribLocation("aColor"));
-
-                sprite.Texture.Use();
-                int texUniformLoc = sprite.Shader.GetUniformLocation("texture0");
-                if (texUniformLoc >= 0)
-                {
-                    GL.Uniform1(texUniformLoc, 0);
-                }
+                GL.Uniform1(texUniformLoc, 0);
             }
-            else
-            {
-                GL.VertexAttribPointer(
-                    sprite.Shader.GetAttribLocation("aColor"),
-                    4,
-                    VertexAttribPointerType.Float,
-                    false,
-                    9 * sizeof(float),
-                    5 * sizeof(float)
-                );
-                GL.EnableVertexAttribArray(sprite.Shader.GetAttribLocation("aColor"));
-                GL.DisableVertexAttribArray(sprite.Shader.GetAttribLocation("aTexture"));
-            }
+        }
+        else
+        {
+            GL.VertexAttribPointer(
+                sprite.Shader.GetAttribLocation("aColor"),
+                4,
+                VertexAttribPointerType.Float,
+                false,
+                9 * sizeof(float),
+                5 * sizeof(float)
+            );
+            GL.EnableVertexAttribArray(sprite.Shader.GetAttribLocation("aColor"));
+            GL.DisableVertexAttribArray(sprite.Shader.GetAttribLocation("aTexture"));
+        }
+    }
 
-            GL.DrawArrays(PrimitiveType.Triangles, 0, vertices.Count / 9);
+    private void AddSpriteVertices(Sprite sprite)
+    {
+        for (int i = 0, uvIndex = 0; i < sprite.Vertices.Length; i += 3, uvIndex += 2)
+        {
+            vertices.Add(sprite.Vertices[i]);
+            vertices.Add(sprite.Vertices[i + 1]);
+            vertices.Add(sprite.Vertices[i + 2]);
+
+            vertices.Add(sprite.UVs[uvIndex]);
+            vertices.Add(sprite.UVs[uvIndex + 1]);
+
+            vertices.Add(sprite.Color.R / 255f);
+            vertices.Add(sprite.Color.G / 255f);
+            vertices.Add(sprite.Color.B / 255f);
+            vertices.Add(sprite.Color.A / 255f);
         }
     }
 
