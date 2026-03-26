@@ -1,4 +1,5 @@
 using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 
 namespace rasdaq.Graphics.Shaders;
 
@@ -161,53 +162,58 @@ public class Shader : IDisposable
         int location = GetUniformLocation(uniformName);
         if (location == -1)
         {
+            Console.WriteLine($"Uniform '{uniformName}' not found in shader.");
             return;
         }
 
         GL.Uniform1(location, val);
     }
 
-    public void SetUniform(string uniformName, OpenTK.Mathematics.Vector2 val)
+    public void SetUniform(string uniformName, Vector2 val)
     {
         Use();
         int location = GetUniformLocation(uniformName);
         if (location == -1)
         {
+            Console.WriteLine($"Uniform '{uniformName}' not found in shader.");
             return;
         }
 
         GL.Uniform2(location, val.X, val.Y);
     }
 
-    public void SetUniform(string uniformName, OpenTK.Mathematics.Vector3 val)
+    public void SetUniform(string uniformName, Vector3 val)
     {
         Use();
         int location = GetUniformLocation(uniformName);
         if (location == -1)
         {
+            Console.WriteLine($"Uniform '{uniformName}' not found in shader.");
             return;
         }
 
         GL.Uniform3(location, ref val);
     }
-    public void SetUniform(string uniformName, OpenTK.Mathematics.Vector4 val)
+    public void SetUniform(string uniformName, Vector4 val)
     {
         Use();
         int location = GetUniformLocation(uniformName);
         if (location == -1)
         {
+            Console.WriteLine($"Uniform '{uniformName}' not found in shader.");
             return;
         }
 
         GL.Uniform4(location, ref val);
     }
 
-    public void SetUniform(string uniformName, OpenTK.Mathematics.Matrix4 val, bool transpose = false)
+    public void SetUniform(string uniformName, Matrix4 val, bool transpose = false)
     {
         Use();
         int location = GetUniformLocation(uniformName);
         if (location == -1)
         {
+            Console.WriteLine($"Uniform '{uniformName}' not found in shader.");
             return;
         }
 

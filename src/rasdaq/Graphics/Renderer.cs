@@ -1,5 +1,4 @@
 using OpenTK.Graphics.OpenGL4;
-using rasdaq.Graphics.Shaders;
 
 namespace rasdaq.Graphics;
 
@@ -9,9 +8,6 @@ public class Renderer
 
     private int vertexBufferObject;
     private int vertexArrayObject;
-
-    private Shader _shader;
-    public Shader Shader => _shader;
 
     private List<Sprite> sprites = new List<Sprite>();
 

@@ -3,7 +3,6 @@ using System.Drawing;
 using Application = rasdaq.Application;
 
 using OpenTK.Windowing.GraphicsLibraryFramework;
-using OpenTK.Graphics.OpenGL;
 using rasdaq.Input;
 
 namespace Pong;
