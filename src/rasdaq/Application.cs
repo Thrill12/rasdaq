@@ -20,7 +20,8 @@ public class Application : GameWindow
         )
     {
         Instance = this;
-            InputManager = new InputManager(this);
+        InputManager = new InputManager(this);
+        InputManager.logMouseDelta = true;
     }
 
     protected override void OnUpdateFrame(FrameEventArgs args)

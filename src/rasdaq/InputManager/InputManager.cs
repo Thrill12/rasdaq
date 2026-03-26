@@ -1,3 +1,4 @@
+using OpenTK.Mathematics;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 
@@ -8,6 +9,7 @@ public class InputManager
     private GameWindow _gameWindow;
     private Dictionary<Keys, Action> upCallbacks = [];
     private Dictionary<Keys, Action> downCallbacks = [];
+    static internal bool logMouseDelta = false;
 
     public InputManager(GameWindow gameWindow)
     {
@@ -42,6 +44,8 @@ public class InputManager
                 downCallbacks[e.Key]();
             }
         };
+        // placeholder function, what are we supposed to do with mouse movements?
+        _gameWindow.MouseMove += GetMouseDelta;
     }
 
     public void LockMouse()
@@ -53,4 +57,14 @@ public class InputManager
     {
         _gameWindow.CursorState = OpenTK.Windowing.Common.CursorState.Normal;
     }
+
+    public void GetMouseDelta(OpenTK.Windowing.Common.MouseMoveEventArgs e)
+    {
+        if (logMouseDelta) 
+        {
+            Console.WriteLine("x: " + e.DeltaX);
+            Console.WriteLine("y: " + e.DeltaY);
+        }
+    }
+
 }
