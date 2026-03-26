@@ -3,6 +3,8 @@ using System.Drawing;
 using Application = rasdaq.Application;
 
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using OpenTK.Graphics.OpenGL;
+using rasdaq.Input;
 
 namespace Pong;
 
@@ -19,6 +21,20 @@ internal class Program
         }
         Console.WriteLine("testing keys: B");
     }
+
+    static void TestMButton1()
+    {
+        Console.WriteLine("MB1 clicked!");
+
+        InputManager.logMouseDelta = true;
+    }
+
+    static void TestMButton1Up()
+    {
+        Console.WriteLine("MB1 released!");
+        InputManager.logMouseDelta = false;
+    }
+
     static void Main()
     {
         try
@@ -34,6 +50,9 @@ internal class Program
             {
                 TestKey(app, lockedMouse); lockedMouse = !lockedMouse;
             });
+
+            app.InputManager.AddMouseButtonDownCallback(MouseButton.Button1, TestMButton1);
+            app.InputManager.AddMouseButtonUpCallback(MouseButton.Button1, TestMButton1Up);
 
             app.Run();
         }
