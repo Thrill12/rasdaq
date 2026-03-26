@@ -9,7 +9,9 @@ public class InputManager
     private GameWindow _gameWindow;
     private Dictionary<Keys, Action> upCallbacks = [];
     private Dictionary<Keys, Action> downCallbacks = [];
-    static internal bool logMouseDelta = false;
+    private Dictionary<MouseButton, Action> mButtonUpCallbacks = [];
+    private Dictionary<MouseButton, Action> mButtonDownCallbacks = [];
+    static public bool logMouseDelta = false;
 
     public InputManager(GameWindow gameWindow)
     {
@@ -25,7 +27,18 @@ public class InputManager
     {
         downCallbacks.Add(key, inputCallback);
     }
-    
+
+    public void AddMouseButtonDownCallback(MouseButton mouseButton, Action inputCallback)
+    {
+        mButtonDownCallbacks.Add(mouseButton, inputCallback);
+    }
+
+    public void AddMouseButtonUpCallback(MouseButton mouseButton, Action inputCallback)
+    {
+        mButtonUpCallbacks.Add(mouseButton, inputCallback);
+    }
+
+
     internal void SetEventListeners()
     {
         Console.WriteLine("Setting listeners");
@@ -44,8 +57,25 @@ public class InputManager
                 downCallbacks[e.Key]();
             }
         };
+
         // placeholder function, what are we supposed to do with mouse movements?
         _gameWindow.MouseMove += GetMouseDelta;
+
+        _gameWindow.MouseDown += (e) =>
+        {
+            if (mButtonDownCallbacks.ContainsKey(e.Button))
+            {
+                mButtonDownCallbacks[e.Button]();
+            }    
+        };
+        
+        _gameWindow.MouseUp += (e) =>
+        {
+            if (mButtonUpCallbacks.ContainsKey(e.Button))
+            {
+                mButtonUpCallbacks[e.Button]();
+            }
+        };
     }
 
     public void LockMouse()
