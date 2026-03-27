@@ -20,6 +20,13 @@ public class Application : GameWindow
         Instance = this;
     }
 
+    // GAME LOOP ACTIONS
+    public Action<double> Update;
+    public Action<double> FrameUpdate;
+    public Action<double> LateUpdate;
+
+    private double _msPerUpdate = 0.01f;
+    private double _lag = 0.0f;
     protected override void OnUpdateFrame(FrameEventArgs args)
     {
         base.OnUpdateFrame(args);
@@ -28,6 +35,25 @@ public class Application : GameWindow
         {
             Close();
         }
+
+        _lag += args.Time;
+
+        // TODO: Spiral of death?
+        // When lag keeps increasing, the game can't catch up and
+        // will at some point explode?
+
+        // PROCESS INPUT HERE
+
+        while (_lag >= _msPerUpdate)
+        {
+            Update?.Invoke(_msPerUpdate);
+
+            _lag -= _msPerUpdate;
+        }
+
+        FrameUpdate?.Invoke(args.Time);
+
+        LateUpdate?.Invoke(args.Time);
     }
 
     public static void SetBackgroundColor(Color color)
@@ -46,26 +72,21 @@ public class Application : GameWindow
         Renderer.Instance.Init();
     }
 
-    protected override void OnRenderFrame(FrameEventArgs e)
+    protected override void OnRenderFrame(FrameEventArgs args)
     {
-        base.OnRenderFrame(e);
+        base.OnRenderFrame(args);
 
         GL.Clear(ClearBufferMask.ColorBufferBit);
 
-        // Rendering code here
         Renderer.Instance.Render();
 
-        // Double-buffering means that there are two areas that OpenGL draws to.
-        // In essence: One area is displayed, while the other is being rendered to.
-        // Then, when you call SwapBuffers, the two are reversed.
-        // A single-buffered context could have issues such as screen tearing.
         SwapBuffers();
     }
 
-    protected override void OnFramebufferResize(FramebufferResizeEventArgs e)
+    protected override void OnFramebufferResize(FramebufferResizeEventArgs args)
     {
-        base.OnFramebufferResize(e);
+        base.OnFramebufferResize(args);
 
-        GL.Viewport(0, 0, e.Width, e.Height);
+        GL.Viewport(0, 0, args.Width, args.Height);
     }
 }

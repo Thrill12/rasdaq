@@ -16,6 +16,21 @@ internal class Program
             Sprite spr = new(1f, 1.1f, tex);
             Application.SetBackgroundColor(Color.CornflowerBlue);
 
+            app.Update += (deltaTime) =>
+            {
+                Console.WriteLine($"Update {deltaTime}");
+            };
+
+            app.FrameUpdate += (deltaTime) =>
+            {
+                Console.WriteLine($"FrameUpdate {deltaTime}");
+            };
+
+            app.LateUpdate += (deltaTime) =>
+            {
+                Console.WriteLine($"LateUpdate {deltaTime}");
+            };
+
             app.Run();
         }
         catch (Exception ex)
