@@ -13,10 +13,10 @@ internal class Program
     {
         if (isMouseLocked)
         {
-            application.InputManager.LockMouse();
+            application.InputManager.LockMouse(application);
         } else
         {
-            application.InputManager.UnlockMouse();
+            application.InputManager.UnlockMouse(application);
         }
         Console.WriteLine("testing keys: B");
     }
