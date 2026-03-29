@@ -4,38 +4,43 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace rasdaq.Input;
 
-public class InputManager
+public class InputManager(GameWindow gameWindow)
 {
-    private GameWindow _gameWindow;
-    private Dictionary<Keys, Action> upCallbacks = [];
-    private Dictionary<Keys, Action> downCallbacks = [];
-    private Dictionary<MouseButton, Action> mButtonUpCallbacks = [];
-    private Dictionary<MouseButton, Action> mButtonDownCallbacks = [];
+    private GameWindow _gameWindow = gameWindow;
+
+    private Dictionary<Keys, Action> _upCallbacks = [];
+    public Dictionary<Keys, Action> UpCallbacks => _upCallbacks;
+    
+    private Dictionary<Keys, Action> _downCallbacks = [];
+    public Dictionary<Keys, Action> DownCallbacks => _downCallbacks;
+
+    private Dictionary<MouseButton, Action> _mButtonUpCallbacks = [];
+    public Dictionary<MouseButton, Action> MButtonUpCallbacks => _mButtonUpCallbacks;
+    
+    private Dictionary<MouseButton, Action> _mButtonDownCallbacks = [];
+    public Dictionary<MouseButton, Action> MButtonDownCallbacks => _mButtonDownCallbacks;
+    
     static public bool logMouseDelta = false;
 
-    public InputManager(GameWindow gameWindow)
-    {
-        _gameWindow = gameWindow;
-    }
 
     public void AddKeyUpCallback(Keys key, Action inputCallback)
     {
-        upCallbacks.Add(key, inputCallback);
+        UpCallbacks.Add(key, inputCallback);
     }
 
     public void AddKeyDownCallback(Keys key, Action inputCallback)
     {
-        downCallbacks.Add(key, inputCallback);
+        DownCallbacks.Add(key, inputCallback);
     }
 
     public void AddMouseButtonDownCallback(MouseButton mouseButton, Action inputCallback)
     {
-        mButtonDownCallbacks.Add(mouseButton, inputCallback);
+        MButtonDownCallbacks.Add(mouseButton, inputCallback);
     }
 
     public void AddMouseButtonUpCallback(MouseButton mouseButton, Action inputCallback)
     {
-        mButtonUpCallbacks.Add(mouseButton, inputCallback);
+        MButtonUpCallbacks.Add(mouseButton, inputCallback);
     }
 
 
@@ -44,17 +49,17 @@ public class InputManager
         Console.WriteLine("Setting listeners");
         _gameWindow.KeyUp += (e) =>
         {
-            if (upCallbacks.ContainsKey(e.Key))
+            if (UpCallbacks.ContainsKey(e.Key))
             {
-                upCallbacks[e.Key]();
+                UpCallbacks[e.Key]();
             }
         };
 
         _gameWindow.KeyDown += (e) =>
         {
-            if (downCallbacks.ContainsKey(e.Key))
+            if (DownCallbacks.ContainsKey(e.Key))
             {
-                downCallbacks[e.Key]();
+                DownCallbacks[e.Key]();
             }
         };
 
@@ -63,17 +68,17 @@ public class InputManager
 
         _gameWindow.MouseDown += (e) =>
         {
-            if (mButtonDownCallbacks.ContainsKey(e.Button))
+            if (MButtonDownCallbacks.ContainsKey(e.Button))
             {
-                mButtonDownCallbacks[e.Button]();
+                MButtonDownCallbacks[e.Button]();
             }    
         };
         
         _gameWindow.MouseUp += (e) =>
         {
-            if (mButtonUpCallbacks.ContainsKey(e.Button))
+            if (MButtonUpCallbacks.ContainsKey(e.Button))
             {
-                mButtonUpCallbacks[e.Button]();
+                MButtonUpCallbacks[e.Button]();
             }
         };
     }
