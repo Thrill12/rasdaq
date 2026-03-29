@@ -4,10 +4,8 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 
 namespace rasdaq.Input;
 
-public class InputManager(GameWindow gameWindow)
+public class InputManager
 {
-    private GameWindow _gameWindow = gameWindow;
-
     private Dictionary<Keys, Action> _upCallbacks = [];
     public Dictionary<Keys, Action> UpCallbacks => _upCallbacks;
     
@@ -44,10 +42,10 @@ public class InputManager(GameWindow gameWindow)
     }
 
 
-    internal void SetEventListeners()
+    internal void SetEventListeners(GameWindow gameWindow)
     {
         Console.WriteLine("Setting listeners");
-        _gameWindow.KeyUp += (e) =>
+        gameWindow.KeyUp += (e) =>
         {
             if (UpCallbacks.ContainsKey(e.Key))
             {
@@ -55,7 +53,7 @@ public class InputManager(GameWindow gameWindow)
             }
         };
 
-        _gameWindow.KeyDown += (e) =>
+        gameWindow.KeyDown += (e) =>
         {
             if (DownCallbacks.ContainsKey(e.Key))
             {
@@ -64,9 +62,9 @@ public class InputManager(GameWindow gameWindow)
         };
 
         // placeholder function, what are we supposed to do with mouse movements?
-        _gameWindow.MouseMove += GetMouseDelta;
+        gameWindow.MouseMove += GetMouseDelta;
 
-        _gameWindow.MouseDown += (e) =>
+        gameWindow.MouseDown += (e) =>
         {
             if (MButtonDownCallbacks.ContainsKey(e.Button))
             {
@@ -74,7 +72,7 @@ public class InputManager(GameWindow gameWindow)
             }    
         };
         
-        _gameWindow.MouseUp += (e) =>
+        gameWindow.MouseUp += (e) =>
         {
             if (MButtonUpCallbacks.ContainsKey(e.Button))
             {
@@ -83,14 +81,14 @@ public class InputManager(GameWindow gameWindow)
         };
     }
 
-    public void LockMouse()
+    public void LockMouse(GameWindow gameWindow)
     {
-        _gameWindow.CursorState = OpenTK.Windowing.Common.CursorState.Grabbed;
+        gameWindow.CursorState = OpenTK.Windowing.Common.CursorState.Grabbed;
     }
 
-    public void UnlockMouse()
+    public void UnlockMouse(GameWindow gameWindow)
     {
-        _gameWindow.CursorState = OpenTK.Windowing.Common.CursorState.Normal;
+        gameWindow.CursorState = OpenTK.Windowing.Common.CursorState.Normal;
     }
 
     public void GetMouseDelta(OpenTK.Windowing.Common.MouseMoveEventArgs e)

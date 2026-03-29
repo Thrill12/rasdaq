@@ -20,7 +20,7 @@ public class Application : GameWindow
         )
     {
         Instance = this;
-        InputManager = new InputManager(this);
+        InputManager = new InputManager();
     }
 
     protected override void OnUpdateFrame(FrameEventArgs args)
@@ -40,7 +40,7 @@ public class Application : GameWindow
 
     public override void Run()
     {
-        InputManager.SetEventListeners();
+        InputManager.SetEventListeners(this);
         base.Run();
     }
 
