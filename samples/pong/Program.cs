@@ -13,9 +13,9 @@ internal class Program
         {
             using Application app = new(800, 600, "Pong");
 
-            Texture tex = new Texture("assets/andrei.png");
+            Texture tex = new("assets/andrei.png");
 
-            World world = new(app);
+            World world = new();
             Entity soldier = new();
             soldier.AddComponent(new Soldier());
 

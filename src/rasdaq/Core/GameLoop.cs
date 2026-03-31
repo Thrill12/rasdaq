@@ -6,6 +6,8 @@ internal class GameLoop(World world)
 {
     private double _msPerUpdate = 0.01f;
     private double _lag = 0.0f;
+    private double _maxUpdates = 10;
+    internal double MaxUpdates => _maxUpdates;
 
     private World _world = world;
 
@@ -19,9 +21,9 @@ internal class GameLoop(World world)
 
         // PROCESS INPUT HERE
 
-        double maxUpdates = 10;
+        _maxUpdates = 10;
 
-        while (_lag >= _msPerUpdate && maxUpdates-- > 0)
+        while (_lag >= _msPerUpdate && _maxUpdates-- > 0)
         {
             _world.Update(_msPerUpdate);
 

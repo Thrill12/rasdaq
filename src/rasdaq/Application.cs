@@ -5,6 +5,9 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 using rasdaq.Core.ECS;
 using rasdaq.Graphics;
 using System.Drawing;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("tests")]
 
 namespace rasdaq;
 

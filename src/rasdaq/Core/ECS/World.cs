@@ -11,11 +11,15 @@ public class World
     private GameLoop _gameLoop;
     internal GameLoop GameLoop => _gameLoop;
 
-    public World(Application app)
+    public World()
     {
         _id = Guid.NewGuid().ToString("N");
         _gameLoop = new(this);
-        app.worlds.Add(this);
+
+        if (Application.Instance != null)
+        {
+            Application.Instance.worlds.Add(this);
+        }
     }
 
     private List<Entity> _entities = new();

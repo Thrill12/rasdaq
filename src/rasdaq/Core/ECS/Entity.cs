@@ -15,7 +15,12 @@ public class Entity
 
     private List<Component> _components = new();
 
-    public void AddComponent(Component c) { c.Entity = this; _components.Add(c); }
+    public void AddComponent(Component c)
+    {
+        c.Entity = this;
+        _components.Add(c);
+    }
+
     public T? GetComponent<T>() where T : Component
     {
         return _components.OfType<T>().FirstOrDefault();
