@@ -1,9 +1,10 @@
-﻿using rasdaq.Graphics.Shaders;
+﻿using rasdaq.Core.ECS;
+using rasdaq.Graphics.Shaders;
 using System.Drawing;
 
 namespace rasdaq.Graphics;
 
-public class Sprite
+public class Sprite : Component
 {
     private Shader _shader;
 
@@ -20,6 +21,11 @@ public class Sprite
 
     private Texture? _texture;
     public Texture? Texture => _texture;
+
+    internal override void Init()
+    {
+        Renderer.Instance.LoadSprite(this);
+    }
 
     public void SetShader(Shader newShader)
     {
@@ -68,8 +74,6 @@ public class Sprite
             0.0f,
             0.0f, // BL (repeated)
         ];
-
-        Renderer.Instance.LoadSprite(this);
     }
 
     private static float[] BuildVertices(float width, float height)

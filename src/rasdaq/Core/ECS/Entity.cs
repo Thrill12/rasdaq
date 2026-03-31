@@ -23,7 +23,11 @@ public class Entity
 
     internal void Start()
     {
-        _components.ForEach(c => c.Start());
+        _components.ForEach(c =>
+        {
+            c.Init();
+            c.Start();
+        });
     }
 
     internal void Update(double dt)
@@ -45,6 +49,7 @@ public class Entity
 public abstract class Component
 {
     public Entity? Entity { get; internal set; }
+    internal virtual void Init() { }
     public virtual void Start() { }
     public virtual void Update(double deltaTime) { }
     public virtual void FrameUpdate(double deltaTime) { }

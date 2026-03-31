@@ -16,11 +16,15 @@ public class Application : GameWindow
 
     public Application(int width, int height, string title)
         : base(
-            GameWindowSettings.Default,
+            new GameWindowSettings()
+            {
+                UpdateFrequency = 0
+            },
             new NativeWindowSettings() { ClientSize = (width, height), Title = title }
         )
     {
         Instance = this;
+        VSync = VSyncMode.Off;
     }
 
     protected override void OnUpdateFrame(FrameEventArgs args)

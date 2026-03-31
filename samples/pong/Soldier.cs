@@ -17,5 +17,7 @@ internal class Soldier : Component
     public override void FrameUpdate(double deltaTime)
     {
         base.Update(deltaTime);
+        Console.SetCursorPosition(0, 0);
+        Console.WriteLine("Soldier FPS " + Math.Round(1f / deltaTime));
     }
 }

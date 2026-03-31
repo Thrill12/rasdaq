@@ -18,46 +18,72 @@ public class World
         app.worlds.Add(this);
     }
 
-    private HashSet<Entity> _entities = new();
-    public HashSet<Entity> Entities => _entities;
+    private List<Entity> _entities = new();
+    public List<Entity> Entities => _entities;
 
-    public void AddEntity(Entity entity)
+    private List<Entity> _pendingAdd = new();
+    private List<Entity> _pendingRemove = new();
+
+    public void AddEntity(Entity e)
     {
-        _entities.Add(entity);
+        _pendingAdd.Add(e);
+    }
+
+    public void RemoveEntity(Entity e)
+    {
+        _pendingRemove.Add(e);
+    }
+
+    // This is used in case there is any change of entities at runtime
+    // It prevents entities being skipped or updated twice
+    private void FlushPendingEntities()
+    {
+        foreach (var e in _pendingAdd)
+        {
+            _entities.Add(e);
+        }
+
+        _pendingAdd.Clear();
+        foreach (var e in _pendingRemove)
+        {
+            _entities.Remove(e);
+        }
+
+        _pendingRemove.Clear();
     }
 
     internal void Start()
     {
-        for (int i = 0; i < _entities.Count; i++)
+        FlushPendingEntities();
+        foreach (var e in _entities)
         {
-            Entity e = _entities.ElementAt(i);
             e.Start();
         }
     }
 
     internal void Update(double deltaTime)
     {
-        for (int i = 0; i < _entities.Count; i++)
+        FlushPendingEntities();
+        foreach (var e in _entities)
         {
-            Entity e = _entities.ElementAt(i);
             e.Update(deltaTime);
         }
     }
 
     internal void FrameUpdate(double deltaTime)
     {
-        for (int i = 0; i < _entities.Count; i++)
+        FlushPendingEntities();
+        foreach (var e in _entities)
         {
-            Entity e = _entities.ElementAt(i);
             e.FrameUpdate(deltaTime);
         }
     }
 
     internal void LateUpdate(double deltaTime)
     {
-        for (int i = 0; i < _entities.Count; i++)
+        FlushPendingEntities();
+        foreach (var e in _entities)
         {
-            Entity e = _entities.ElementAt(i);
             e.LateUpdate(deltaTime);
         }
     }
