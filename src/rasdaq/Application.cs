@@ -2,6 +2,7 @@
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using rasdaq.Core.ECS;
 using rasdaq.Graphics;
 using System.Drawing;
 
@@ -10,6 +11,8 @@ namespace rasdaq;
 public class Application : GameWindow
 {
     public static Application? Instance { get; private set; }
+
+    internal List<World> worlds = new();
 
     public Application(int width, int height, string title)
         : base(
@@ -20,13 +23,6 @@ public class Application : GameWindow
         Instance = this;
     }
 
-    // GAME LOOP ACTIONS
-    public Action<double> Update;
-    public Action<double> FrameUpdate;
-    public Action<double> LateUpdate;
-
-    private double _msPerUpdate = 0.01f;
-    private double _lag = 0.0f;
     protected override void OnUpdateFrame(FrameEventArgs args)
     {
         base.OnUpdateFrame(args);
@@ -36,24 +32,10 @@ public class Application : GameWindow
             Close();
         }
 
-        _lag += args.Time;
-
-        // TODO: Spiral of death?
-        // When lag keeps increasing, the game can't catch up and
-        // will at some point explode?
-
-        // PROCESS INPUT HERE
-
-        while (_lag >= _msPerUpdate)
+        foreach (World world in worlds)
         {
-            Update?.Invoke(_msPerUpdate);
-
-            _lag -= _msPerUpdate;
+            world.GameLoop.Tick(args.Time);
         }
-
-        FrameUpdate?.Invoke(args.Time);
-
-        LateUpdate?.Invoke(args.Time);
     }
 
     public static void SetBackgroundColor(Color color)
@@ -70,6 +52,11 @@ public class Application : GameWindow
         Console.WriteLine("rasdaq started");
 
         Renderer.Instance.Init();
+
+        foreach (World world in worlds)
+        {
+            world.Start();
+        }
     }
 
     protected override void OnRenderFrame(FrameEventArgs args)
