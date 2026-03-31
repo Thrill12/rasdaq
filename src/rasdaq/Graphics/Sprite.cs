@@ -38,6 +38,11 @@ public class Sprite
         this(BuildVertices(width, height), color, texture, shader)
     { }
 
+    public void SetWidthHeight(float width, float height)
+    {
+        _vertices = BuildVertices(width, height);
+    }
+
     public Sprite(float[] vertices, Color? color = null, Texture? texture = null, Shader? shader = null)
     {
         _vertices = vertices;
