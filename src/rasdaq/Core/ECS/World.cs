@@ -31,7 +31,7 @@ public class World
 
         if (Application.Instance != null)
         {
-            Application.Instance.worlds.Add(this);
+            Application.Instance.RegisterWorld(this);
         }
     }
 

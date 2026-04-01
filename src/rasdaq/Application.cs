@@ -21,8 +21,8 @@ public sealed class Application
     /// </summary>
     public static Application? Instance { get; private set; }
 
-    internal List<World> worlds = new();
-    internal GameWindow _gameWindow;
+    private List<World> _worlds = new();
+    private GameWindow _gameWindow;
 
     public Application(int width, int height, string title)
     {
@@ -43,6 +43,11 @@ public sealed class Application
         _gameWindow.FramebufferResize += OnFramebufferResize;
     }
 
+    internal void RegisterWorld(World world)
+    {
+        _worlds.Add(world);
+    }
+
     /// <summary>
     /// Starts the application window.
     /// </summary>
@@ -58,7 +63,7 @@ public sealed class Application
             _gameWindow.Close();
         }
 
-        foreach (World world in worlds)
+        foreach (World world in _worlds)
         {
             world.GameLoop.Tick(args.Time);
         }
@@ -79,7 +84,7 @@ public sealed class Application
 
         Renderer.Instance.Init();
 
-        foreach (World world in worlds)
+        foreach (World world in _worlds)
         {
             world.Start();
         }
