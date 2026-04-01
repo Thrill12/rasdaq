@@ -18,8 +18,6 @@ public class Texture
         Stbi.SetFlipVerticallyOnLoad(true);
 
         using (FileStream stream = File.OpenRead(path))
-
-
         {
             using (MemoryStream memoryStream = new())
             {
