@@ -139,5 +139,6 @@ public sealed class Application : IDisposable
     public void Dispose()
     {
         _gameWindow.Dispose();
+        Instance = null;
     }
 }
