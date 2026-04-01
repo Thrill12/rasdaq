@@ -21,7 +21,9 @@ public class Texture
 
 
         {
-            using (MemoryStream memoryStream = new()){stream.CopyTo(memoryStream)   ;
+            using (MemoryStream memoryStream = new())
+            {
+                stream.CopyTo(memoryStream);
                 StbiImage image = Stbi.LoadFromMemory(memoryStream, 4);
                 byte[] pixelData = image.Data.ToArray();
                 GCHandle handle = GCHandle.Alloc(pixelData, GCHandleType.Pinned);
