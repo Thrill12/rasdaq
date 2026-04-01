@@ -19,14 +19,14 @@ public class GameLoopTests
 
         world.AddEntity(trackerEntity);
 
-        loop.Tick(0.01);
+        loop.Tick(loop.MsPerUpdate);
         Assert.That(tracker.updateCounter, Is.EqualTo(1));
         Assert.That(tracker.frameUpdateCounter, Is.EqualTo(1));
         Assert.That(tracker.lateUpdateCounter, Is.EqualTo(1));
 
         tracker.Reset();
 
-        loop.Tick(0.1);
+        loop.Tick(loop.MsPerUpdate * 10);
         Assert.That(tracker.updateCounter, Is.EqualTo(10));
         Assert.That(tracker.frameUpdateCounter, Is.EqualTo(1));
         Assert.That(tracker.lateUpdateCounter, Is.EqualTo(1));
@@ -36,6 +36,7 @@ public class GameLoopTests
     public void GameLoop_MaxUpdates()
     {
         World world = new();
+        GameLoop loop = world.GameLoop;
 
         Entity trackerEntity = new();
         LifecycleTracker tracker = new();
@@ -43,12 +44,15 @@ public class GameLoopTests
 
         world.AddEntity(trackerEntity);
 
-        world.GameLoop.Tick(100.0);
+        world.GameLoop.Tick(loop.MsPerUpdate * 100);
 
         Assert.That(tracker.updateCounter, Is.EqualTo(10));
     }
 }
 
+/// <summary>
+/// Testing component only for tracking updates.
+/// </summary>
 internal class LifecycleTracker : Component
 {
     public int updateCounter;

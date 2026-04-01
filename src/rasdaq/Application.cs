@@ -11,32 +11,51 @@ using System.Runtime.CompilerServices;
 
 namespace rasdaq;
 
-public class Application : GameWindow
+/// <summary>
+/// Main rasdaq application class.
+/// </summary>
+public sealed class Application
 {
+    /// <summary>
+    /// Application instance singleton.
+    /// </summary>
     public static Application? Instance { get; private set; }
 
     internal List<World> worlds = new();
+    internal GameWindow _gameWindow;
 
     public Application(int width, int height, string title)
-        : base(
+    {
+        Instance = this;
+
+        _gameWindow = new(
             new GameWindowSettings()
             {
                 UpdateFrequency = 0
             },
             new NativeWindowSettings() { ClientSize = (width, height), Title = title }
-        )
-    {
-        Instance = this;
-        VSync = VSyncMode.Off;
+        );
+
+        _gameWindow.VSync = VSyncMode.Off;
+        _gameWindow.UpdateFrame += OnUpdateFrame;
+        _gameWindow.Load += OnLoad;
+        _gameWindow.RenderFrame += OnRenderFrame;
+        _gameWindow.FramebufferResize += OnFramebufferResize;
     }
 
-    protected override void OnUpdateFrame(FrameEventArgs args)
+    /// <summary>
+    /// Starts the application window.
+    /// </summary>
+    public void Run()
     {
-        base.OnUpdateFrame(args);
+        _gameWindow.Run();
+    }
 
-        if (KeyboardState.IsKeyDown(Keys.Escape))
+    void OnUpdateFrame(FrameEventArgs args)
+    {
+        if (_gameWindow.KeyboardState.IsKeyDown(Keys.Escape))
         {
-            Close();
+            _gameWindow.Close();
         }
 
         foreach (World world in worlds)
@@ -50,7 +69,7 @@ public class Application : GameWindow
         GL.ClearColor(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f);
     }
 
-    protected override void OnLoad()
+    void OnLoad()
     {
         // Allows rendering png transparency
         GL.Enable(EnableCap.Blend);
@@ -66,21 +85,17 @@ public class Application : GameWindow
         }
     }
 
-    protected override void OnRenderFrame(FrameEventArgs args)
+    void OnRenderFrame(FrameEventArgs args)
     {
-        base.OnRenderFrame(args);
-
         GL.Clear(ClearBufferMask.ColorBufferBit);
 
         Renderer.Instance.Render();
 
-        SwapBuffers();
+        _gameWindow.SwapBuffers();
     }
 
-    protected override void OnFramebufferResize(FramebufferResizeEventArgs args)
+    void OnFramebufferResize(FramebufferResizeEventArgs args)
     {
-        base.OnFramebufferResize(args);
-
         GL.Viewport(0, 0, args.Width, args.Height);
     }
 }

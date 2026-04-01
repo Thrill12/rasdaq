@@ -7,20 +7,25 @@ namespace rasdaq.Graphics;
 public class Sprite : Component
 {
     private Shader _shader;
-
-    public Shader Shader => _shader;
-
     private float[] _vertices;
-    public float[] Vertices => _vertices;
-
     private float[] _uvs;
-    public float[] UVs => _uvs;
-
     private Color _color;
-    public Color Color => _color;
-
     private Texture? _texture;
+
+    /// <summary>
+    /// Texture of sprite.
+    /// </summary>
     public Texture? Texture => _texture;
+    /// <summary>
+    /// Shader of Sprite.
+    /// </summary>
+    public Shader Shader => _shader;
+    /// <summary>
+    /// Colour of Sprite.
+    /// </summary>
+    public Color Color => _color;
+    public float[] UVs => _uvs;
+    public float[] Vertices => _vertices;
 
     internal override void Init()
     {

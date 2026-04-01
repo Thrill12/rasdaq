@@ -1,15 +1,28 @@
 ﻿namespace rasdaq.Core.ECS;
 
 /// <summary>
-/// A world holds entities
+/// A world is a container for entities and their components. 
+/// It is responsible for the entity lifecycle and management.
 /// </summary>
 public class World
 {
     private readonly string _id;
-    public string ID => _id;
-
     private GameLoop _gameLoop;
+
+    private List<Entity> _entities = new();
+    private List<Entity> _pendingAdd = new();
+    private List<Entity> _pendingRemove = new();
+
     internal GameLoop GameLoop => _gameLoop;
+
+    /// <summary>
+    /// Unique ID representing the world.
+    /// </summary>
+    public string ID => _id;
+    /// <summary>
+    /// Gets the collection of entities managed by this world.
+    /// </summary>
+    public List<Entity> Entities => _entities;
 
     public World()
     {
@@ -22,24 +35,29 @@ public class World
         }
     }
 
-    private List<Entity> _entities = new();
-    public List<Entity> Entities => _entities;
-
-    private List<Entity> _pendingAdd = new();
-    private List<Entity> _pendingRemove = new();
-
+    /// <summary>
+    /// Adds the specified entity to the world entities.
+    /// </summary>
+    /// <param name="e"></param>
     public void AddEntity(Entity e)
     {
         _pendingAdd.Add(e);
     }
 
+    /// <summary>
+    /// Removes the specified entity from the world entities.
+    /// </summary>
+    /// <param name="e"></param>
     public void RemoveEntity(Entity e)
     {
         _pendingRemove.Add(e);
     }
 
-    // This is used in case there is any change of entities at runtime
-    // It prevents entities being skipped or updated twice
+    /// <summary>
+    /// Processes entities queued for addition/removal. Used
+    /// to prevent adding or removing entities at runtime
+    /// causing entities to be skipped, or updated twice.
+    /// </summary>
     private void FlushPendingEntities()
     {
         foreach (var e in _pendingAdd)
