@@ -9,9 +9,7 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v6
-
-      - name: Verify formatting (fail if changes needed)
+      - name: Run formatting
         run: dotnet format --verify-no-changes --severity warn
-
       - name: Run tests
         run: dotnet test
