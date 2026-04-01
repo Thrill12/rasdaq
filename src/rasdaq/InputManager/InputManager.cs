@@ -1,25 +1,30 @@
 using OpenTK.Mathematics;
-using OpenTK.Windowing.Desktop;
+using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("tests")]
 
 namespace rasdaq.Input;
 
-public class InputManager
+public class InputManager(IGameWindow gameWindow)
 {
+    private IGameWindow gameWindow = gameWindow;
     private Dictionary<Keys, Action> _upCallbacks = [];
     public Dictionary<Keys, Action> UpCallbacks => _upCallbacks;
-    
+
     private Dictionary<Keys, Action> _downCallbacks = [];
     public Dictionary<Keys, Action> DownCallbacks => _downCallbacks;
 
     private Dictionary<MouseButton, Action> _mButtonUpCallbacks = [];
     public Dictionary<MouseButton, Action> MButtonUpCallbacks => _mButtonUpCallbacks;
-    
+
     private Dictionary<MouseButton, Action> _mButtonDownCallbacks = [];
     public Dictionary<MouseButton, Action> MButtonDownCallbacks => _mButtonDownCallbacks;
-    
-    static public bool logMouseDelta = false;
 
+    public Action<MouseMoveEventArgs> mouseMoveAction = e => { };
+
+    static public bool logMouseDelta = false;
 
     public void AddKeyUpCallback(Keys key, Action inputCallback)
     {
@@ -41,8 +46,7 @@ public class InputManager
         MButtonUpCallbacks.Add(mouseButton, inputCallback);
     }
 
-
-    internal void SetEventListeners(GameWindow gameWindow)
+    internal void SetEventListeners()
     {
         Console.WriteLine("Setting listeners");
         gameWindow.KeyUp += (e) =>
@@ -62,16 +66,16 @@ public class InputManager
         };
 
         // placeholder function, what are we supposed to do with mouse movements?
-        gameWindow.MouseMove += GetMouseDelta;
+        gameWindow.MouseMove += mouseMoveAction;
 
         gameWindow.MouseDown += (e) =>
         {
             if (MButtonDownCallbacks.ContainsKey(e.Button))
             {
                 MButtonDownCallbacks[e.Button]();
-            }    
+            }
         };
-        
+
         gameWindow.MouseUp += (e) =>
         {
             if (MButtonUpCallbacks.ContainsKey(e.Button))
@@ -81,23 +85,18 @@ public class InputManager
         };
     }
 
-    public void LockMouse(GameWindow gameWindow)
+    public void LockMouse()
     {
-        gameWindow.CursorState = OpenTK.Windowing.Common.CursorState.Grabbed;
+        gameWindow.CursorState = CursorState.Grabbed;
     }
 
-    public void UnlockMouse(GameWindow gameWindow)
+    public void UnlockMouse()
     {
-        gameWindow.CursorState = OpenTK.Windowing.Common.CursorState.Normal;
+        gameWindow.CursorState = CursorState.Normal;
     }
 
-    public void GetMouseDelta(OpenTK.Windowing.Common.MouseMoveEventArgs e)
+    public Vector2 GetMousePosition()
     {
-        if (logMouseDelta) 
-        {
-            Console.WriteLine("x: " + e.DeltaX);
-            Console.WriteLine("y: " + e.DeltaY);
-        }
+        return gameWindow.MouseState.Position;
     }
-
 }

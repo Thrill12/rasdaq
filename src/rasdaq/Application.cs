@@ -8,7 +8,7 @@ using System.Drawing;
 
 namespace rasdaq;
 
-public class Application : GameWindow
+public class Application : GameWindow, IGameWindow
 {
     public static Application? Instance { get; private set; }
     public InputManager InputManager { get; private set; }
@@ -20,7 +20,7 @@ public class Application : GameWindow
         )
     {
         Instance = this;
-        InputManager = new InputManager();
+        InputManager = new InputManager(this);
     }
 
     protected override void OnUpdateFrame(FrameEventArgs args)
@@ -40,7 +40,7 @@ public class Application : GameWindow
 
     public override void Run()
     {
-        InputManager.SetEventListeners(this);
+        InputManager.SetEventListeners();
         base.Run();
     }
 

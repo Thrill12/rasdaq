@@ -1,9 +1,8 @@
-﻿using rasdaq.Graphics;
+﻿using OpenTK.Windowing.GraphicsLibraryFramework;
+using rasdaq.Graphics;
+using rasdaq.Input;
 using System.Drawing;
 using Application = rasdaq.Application;
-
-using OpenTK.Windowing.GraphicsLibraryFramework;
-using rasdaq.Input;
 
 namespace Pong;
 
@@ -13,10 +12,11 @@ internal class Program
     {
         if (isMouseLocked)
         {
-            application.InputManager.LockMouse(application);
-        } else
+            application.InputManager.LockMouse();
+        }
+        else
         {
-            application.InputManager.UnlockMouse(application);
+            application.InputManager.UnlockMouse();
         }
         Console.WriteLine("testing keys: B");
     }
@@ -44,7 +44,7 @@ internal class Program
             Texture tex = new("assets/andrei.png");
             Sprite spr = new(1f, 1.1f, tex);
             Application.SetBackgroundColor(Color.CornflowerBlue);
-            
+
             app.InputManager.AddKeyDownCallback(Keys.B, () =>
             {
                 TestKey(app, lockedMouse); lockedMouse = !lockedMouse;
