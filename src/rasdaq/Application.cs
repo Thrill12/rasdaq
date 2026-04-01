@@ -14,21 +14,37 @@ namespace rasdaq;
 /// <summary>
 /// Main rasdaq application class.
 /// </summary>
-public sealed class Application
+public class Application
 {
-    /// <summary>
-    /// Application instance singleton.
-    /// </summary>
     public static Application? Instance { get; private set; }
 
     private List<World> _worlds = new();
-    private GameWindow _gameWindow;
+    private GameWindow? _gameWindow;
 
-    public Application(int width, int height, string title)
+    static internal GameWindow GameWindow
     {
-        Instance = this;
+        get
+        {
+            return Instance?._gameWindow ?? throw new InvalidOperationException("There is no window created.");
+        }
+        set
+        {
+            if (Instance == null) throw new InvalidOperationException("There is no Application instance.");
 
-        _gameWindow = new(
+            Instance._gameWindow = value;
+        }
+    }
+
+    public static void Initialize(int width, int height, string title)
+    {
+        if (Instance != null) return;
+
+        Instance = new(width, height, title);
+    }
+
+    internal Application(int width, int height, string title)
+    {
+        GameWindow = new(
             new GameWindowSettings()
             {
                 UpdateFrequency = 0
@@ -36,11 +52,11 @@ public sealed class Application
             new NativeWindowSettings() { ClientSize = (width, height), Title = title }
         );
 
-        _gameWindow.VSync = VSyncMode.Off;
-        _gameWindow.UpdateFrame += OnUpdateFrame;
-        _gameWindow.Load += OnLoad;
-        _gameWindow.RenderFrame += OnRenderFrame;
-        _gameWindow.FramebufferResize += OnFramebufferResize;
+        GameWindow.VSync = VSyncMode.Off;
+        GameWindow.UpdateFrame += OnUpdateFrame;
+        GameWindow.Load += OnLoad;
+        GameWindow.RenderFrame += OnRenderFrame;
+        GameWindow.FramebufferResize += OnFramebufferResize;
     }
 
     internal void RegisterWorld(World world)
@@ -51,16 +67,16 @@ public sealed class Application
     /// <summary>
     /// Starts the application window.
     /// </summary>
-    public void Run()
+    public static void Run()
     {
-        _gameWindow.Run();
+        GameWindow.Run();
     }
 
     private void OnUpdateFrame(FrameEventArgs args)
     {
-        if (_gameWindow.KeyboardState.IsKeyDown(Keys.Escape))
+        if (GameWindow.KeyboardState.IsKeyDown(Keys.Escape))
         {
-            _gameWindow.Close();
+            GameWindow.Close();
         }
 
         foreach (World world in _worlds)
@@ -96,7 +112,7 @@ public sealed class Application
 
         Renderer.Instance.Render();
 
-        _gameWindow.SwapBuffers();
+        GameWindow.SwapBuffers();
     }
 
     private void OnFramebufferResize(FramebufferResizeEventArgs args)
