@@ -11,7 +11,7 @@ internal class Program
     {
         try
         {
-            Application.Initialize(780, 680, "rasdaq");
+            Application app = new(800, 600, "rasdaq");
             Texture tex = new("assets/andrei.png");
 
             World world = new();
@@ -23,7 +23,7 @@ internal class Program
 
             world.AddEntity(soldier);
 
-            Application.Run();
+            app.Run();
         }
         catch (Exception ex)
         {

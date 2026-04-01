@@ -14,37 +14,50 @@ namespace rasdaq;
 /// <summary>
 /// Main rasdaq application class.
 /// </summary>
-public class Application
+public sealed class Application
 {
     public static Application? Instance { get; private set; }
 
     private List<World> _worlds = new();
-    private GameWindow? _gameWindow;
+    private GameWindow _gameWindow;
 
-    static internal GameWindow GameWindow
-    {
-        get
-        {
-            return Instance?._gameWindow ?? throw new InvalidOperationException("There is no window created.");
-        }
-        set
-        {
-            if (Instance == null) throw new InvalidOperationException("There is no Application instance.");
-
-            Instance._gameWindow = value;
-        }
-    }
-
+    /// <summary>
+    /// Alternative entry point. See <see cref="Application.Application(int, int, string)"/>
+    /// for the main constructor method.
+    /// </summary>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <param name="title"></param>
+    /// <exception cref="InvalidOperationException"></exception>
     public static void Initialize(int width, int height, string title)
     {
-        if (Instance != null) return;
+        if (Instance != null)
+        {
+            throw new InvalidOperationException("There already exists an application.");
+        }
 
         Instance = new(width, height, title);
     }
 
-    internal Application(int width, int height, string title)
+    /// <summary>
+    /// Main entry point of a rasdaq-based application.
+    /// 
+    /// See <see cref="Initialize(int, int, string)"/> for the static function way.
+    /// </summary>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <param name="title"></param>
+    /// <exception cref="InvalidOperationException"></exception>
+    public Application(int width, int height, string title)
     {
-        GameWindow = new(
+        if (Instance != null)
+        {
+            throw new InvalidOperationException("There already exists an application.");
+        }
+
+        Instance = this;
+
+        _gameWindow = new(
             new GameWindowSettings()
             {
                 UpdateFrequency = 0
@@ -52,11 +65,11 @@ public class Application
             new NativeWindowSettings() { ClientSize = (width, height), Title = title }
         );
 
-        GameWindow.VSync = VSyncMode.Off;
-        GameWindow.UpdateFrame += OnUpdateFrame;
-        GameWindow.Load += OnLoad;
-        GameWindow.RenderFrame += OnRenderFrame;
-        GameWindow.FramebufferResize += OnFramebufferResize;
+        _gameWindow.VSync = VSyncMode.Off;
+        _gameWindow.UpdateFrame += OnUpdateFrame;
+        _gameWindow.Load += OnLoad;
+        _gameWindow.RenderFrame += OnRenderFrame;
+        _gameWindow.FramebufferResize += OnFramebufferResize;
     }
 
     internal void RegisterWorld(World world)
@@ -67,16 +80,16 @@ public class Application
     /// <summary>
     /// Starts the application window.
     /// </summary>
-    public static void Run()
+    public void Run()
     {
-        GameWindow.Run();
+        _gameWindow.Run();
     }
 
     private void OnUpdateFrame(FrameEventArgs args)
     {
-        if (GameWindow.KeyboardState.IsKeyDown(Keys.Escape))
+        if (_gameWindow.KeyboardState.IsKeyDown(Keys.Escape))
         {
-            GameWindow.Close();
+            _gameWindow.Close();
         }
 
         foreach (World world in _worlds)
@@ -112,7 +125,7 @@ public class Application
 
         Renderer.Instance.Render();
 
-        GameWindow.SwapBuffers();
+        _gameWindow.SwapBuffers();
     }
 
     private void OnFramebufferResize(FramebufferResizeEventArgs args)
