@@ -9,8 +9,6 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v6
-      - name: Run format
-        run: dotnet format
       - name: Run tests
         run: dotnet test
       - name: Run build
