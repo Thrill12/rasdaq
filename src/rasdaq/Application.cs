@@ -56,7 +56,7 @@ public sealed class Application
         _gameWindow.Run();
     }
 
-    void OnUpdateFrame(FrameEventArgs args)
+    private void OnUpdateFrame(FrameEventArgs args)
     {
         if (_gameWindow.KeyboardState.IsKeyDown(Keys.Escape))
         {
@@ -74,7 +74,7 @@ public sealed class Application
         GL.ClearColor(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f);
     }
 
-    void OnLoad()
+    private void OnLoad()
     {
         // Allows rendering png transparency
         GL.Enable(EnableCap.Blend);
@@ -90,7 +90,7 @@ public sealed class Application
         }
     }
 
-    void OnRenderFrame(FrameEventArgs args)
+    private void OnRenderFrame(FrameEventArgs args)
     {
         GL.Clear(ClearBufferMask.ColorBufferBit);
 
@@ -99,7 +99,7 @@ public sealed class Application
         _gameWindow.SwapBuffers();
     }
 
-    void OnFramebufferResize(FramebufferResizeEventArgs args)
+    private void OnFramebufferResize(FramebufferResizeEventArgs args)
     {
         GL.Viewport(0, 0, args.Width, args.Height);
     }
