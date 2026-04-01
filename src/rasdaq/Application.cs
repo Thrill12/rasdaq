@@ -14,7 +14,7 @@ namespace rasdaq;
 /// <summary>
 /// Main rasdaq application class.
 /// </summary>
-public sealed class Application
+public sealed class Application : IDisposable
 {
     public static Application? Instance { get; private set; }
 
@@ -131,5 +131,13 @@ public sealed class Application
     private void OnFramebufferResize(FramebufferResizeEventArgs args)
     {
         GL.Viewport(0, 0, args.Width, args.Height);
+    }
+
+    /// <summary>
+    /// Cleans up resources.
+    /// </summary>
+    public void Dispose()
+    {
+        _gameWindow.Dispose();
     }
 }

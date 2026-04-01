@@ -11,7 +11,7 @@ internal class Program
     {
         try
         {
-            Application app = new(800, 600, "rasdaq");
+            using Application app = new(800, 600, "rasdaq");
             Texture tex = new("assets/andrei.png");
 
             World world = new();
