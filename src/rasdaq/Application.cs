@@ -22,24 +22,6 @@ public sealed class Application : IDisposable
     private GameWindow _gameWindow;
 
     /// <summary>
-    /// Alternative entry point. See <see cref="Application.Application(int, int, string)"/>
-    /// for the main constructor method.
-    /// </summary>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
-    /// <param name="title"></param>
-    /// <exception cref="InvalidOperationException"></exception>
-    public static void Initialize(int width, int height, string title)
-    {
-        if (Instance != null)
-        {
-            throw new InvalidOperationException("There already exists an application.");
-        }
-
-        Instance = new(width, height, title);
-    }
-
-    /// <summary>
     /// Main entry point of a rasdaq-based application.
     /// 
     /// See <see cref="Initialize(int, int, string)"/> for the static function way.
@@ -98,6 +80,10 @@ public sealed class Application : IDisposable
         }
     }
 
+    /// <summary>
+    /// Sets the background color of the window.
+    /// </summary>
+    /// <param name="color"></param>
     public static void SetBackgroundColor(Color color)
     {
         GL.ClearColor(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f);
