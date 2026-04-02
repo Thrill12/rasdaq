@@ -23,8 +23,6 @@ public sealed class Application : IDisposable
 
     /// <summary>
     /// Main entry point of a rasdaq-based application.
-    /// 
-    /// See <see cref="Initialize(int, int, string)"/> for the static function way.
     /// </summary>
     /// <param name="width"></param>
     /// <param name="height"></param>
