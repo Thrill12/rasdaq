@@ -16,27 +16,4 @@
     <EmbeddedResource Include="Graphics/Shaders/*.vert" />
     <EmbeddedResource Include="Graphics/Shaders/*.frag" />
 </ItemGroup>
-
-  <ItemGroup>
-    <Compile Remove="Audio\**" />
-    <Compile Remove="FileResources\**" />
-    <Compile Remove="GameResources\**" />
-    <Compile Remove="Input\**" />
-    <Compile Remove="Physics\**" />
-    <Content Remove="Audio\**" />
-    <Content Remove="FileResources\**" />
-    <Content Remove="GameResources\**" />
-    <Content Remove="Input\**" />
-    <Content Remove="Physics\**" />
-    <EmbeddedResource Remove="Audio\**" />
-    <EmbeddedResource Remove="FileResources\**" />
-    <EmbeddedResource Remove="GameResources\**" />
-    <EmbeddedResource Remove="Input\**" />
-    <EmbeddedResource Remove="Physics\**" />
-    <None Remove="Audio\**" />
-    <None Remove="FileResources\**" />
-    <None Remove="GameResources\**" />
-    <None Remove="Input\**" />
-    <None Remove="Physics\**" />
-  </ItemGroup>
 </Project>
