@@ -1,4 +1,5 @@
-﻿using OpenTK.Windowing.GraphicsLibraryFramework;
+﻿using OpenTK.Windowing.Common;
+using OpenTK.Windowing.GraphicsLibraryFramework;
 using rasdaq.Graphics;
 using rasdaq.Input;
 using System.Drawing;
@@ -8,8 +9,13 @@ namespace Pong;
 
 internal class Program
 {
-    static void TestKey(Application application, bool isMouseLocked)
+    static bool isMouseLocked = false;
+    static bool logMouseDelta = false;
+
+    static void TestKey(Application application)
     {
+        isMouseLocked = !isMouseLocked;
+
         if (isMouseLocked)
         {
             application.InputManager.LockMouse();
@@ -18,20 +24,27 @@ internal class Program
         {
             application.InputManager.UnlockMouse();
         }
+
         Console.WriteLine("testing keys: B");
     }
 
-    static void TestMButton1()
+    static void TestMButton1Down()
     {
         Console.WriteLine("MB1 clicked!");
 
-        InputManager.logMouseDelta = true;
+        logMouseDelta = true;
     }
 
     static void TestMButton1Up()
     {
         Console.WriteLine("MB1 released!");
-        InputManager.logMouseDelta = false;
+        logMouseDelta = false;
+    }
+
+    static void PrintMouseDelta(float deltaX, float deltaY)
+    {
+        Console.WriteLine("Delta X: " + deltaX);
+        Console.WriteLine("Delta Y: " + deltaY);
     }
 
     static void Main()
@@ -39,19 +52,28 @@ internal class Program
         try
         {
             using Application app = new(800, 600, "Pong");
-            bool lockedMouse = false;
 
             Texture tex = new("assets/andrei.png");
             Sprite spr = new(1f, 1.1f, tex);
             Application.SetBackgroundColor(Color.CornflowerBlue);
 
-            app.InputManager.AddKeyDownCallback(Keys.B, () =>
-            {
-                TestKey(app, lockedMouse); lockedMouse = !lockedMouse;
-            });
+            app.InputManager.KeyDownCallbacks.Add(Keys.B, () => TestKey(app));
+            app.InputManager.KeyDownCallbacks.Add(Keys.A, () =>
+                {
+                    Console.WriteLine("X: " + app.InputManager.GetMousePosition().X);
+                    Console.WriteLine("Y: " + app.InputManager.GetMousePosition().Y);
+                });
 
-            app.InputManager.AddMouseButtonDownCallback(MouseButton.Button1, TestMButton1);
-            app.InputManager.AddMouseButtonUpCallback(MouseButton.Button1, TestMButton1Up);
+            app.InputManager.mouseMoveAction = (e) =>
+            {
+                if (logMouseDelta)
+                {
+                    PrintMouseDelta(e.DeltaX, e.DeltaY);
+                }
+            };
+
+            app.InputManager.MouseButtonDownCallbacks.Add(MouseButton.Button1, TestMButton1Down);
+            app.InputManager.MouseButtonUpCallbacks.Add(MouseButton.Button1, TestMButton1Up);
 
             app.Run();
         }

@@ -101,60 +101,12 @@ public class InputManagerTests
     }
 
     [Test]
-    public void AddKeyUpCallback_PassValidPair_AddToDict()
-    {
-        Dictionary<Keys, Action> upCallbacks = [];
-        upCallbacks.Add(Keys.A, MockCallbacks.MockCallback);
-
-        var inputManager = new InputManager(mockApplication);
-        inputManager.AddKeyUpCallback(Keys.A, MockCallbacks.MockCallback);
-
-        Assert.That(inputManager.UpCallbacks, Is.EqualTo(upCallbacks));
-    }
-
-    [Test]
-    public void AddKeyDownCallback_PassValidPair_AddToDict()
-    {
-        Dictionary<Keys, Action> downCallbacks = [];
-        downCallbacks.Add(Keys.A, MockCallbacks.MockCallback);
-
-        var inputManager = new InputManager(mockApplication);
-        inputManager.AddKeyDownCallback(Keys.A, MockCallbacks.MockCallback);
-
-        Assert.That(inputManager.DownCallbacks, Is.EqualTo(downCallbacks));
-    }
-
-    [Test]
-    public void AddMouseButtonDownCallback_PassValidPair_AddToDict()
-    {
-        Dictionary<MouseButton, Action> mButtonDownCallbacks = [];
-        mButtonDownCallbacks.Add(MouseButton.Button1, MockCallbacks.MockCallback);
-
-        var inputManager = new InputManager(mockApplication);
-        inputManager.AddMouseButtonDownCallback(MouseButton.Button1, MockCallbacks.MockCallback);
-
-        Assert.That(inputManager.MButtonDownCallbacks, Is.EqualTo(mButtonDownCallbacks));
-    }
-
-    [Test]
-    public void AddMouseButtonUpCallback_PassValidPair_AddToDict()
-    {
-        Dictionary<MouseButton, Action> mButtonUpCallbacks = [];
-        mButtonUpCallbacks.Add(MouseButton.Button1, MockCallbacks.MockCallback);
-
-        var inputManager = new InputManager(mockApplication);
-        inputManager.AddMouseButtonUpCallback(MouseButton.Button1, MockCallbacks.MockCallback);
-
-        Assert.That(inputManager.MButtonUpCallbacks, Is.EqualTo(mButtonUpCallbacks));
-    }
-
-    [Test]
     public void SetEventListeners_InvokeKeyDown_InvokeKeyDownCallback()
     {
         bool isKeyDown = false;
 
         var inputManager = new InputManager(mockApplication);
-        inputManager.AddKeyDownCallback(Keys.A, () => isKeyDown = true);
+        inputManager.KeyDownCallbacks.Add(Keys.A, () => isKeyDown = true);
         inputManager.SetEventListeners();
 
         mockApplication.TriggerKeyDown(Keys.A);
@@ -168,7 +120,7 @@ public class InputManagerTests
         bool isKeyUp = false;
 
         var inputManager = new InputManager(mockApplication);
-        inputManager.AddKeyUpCallback(Keys.A, () => isKeyUp = true);
+        inputManager.KeyUpCallbacks.Add(Keys.A, () => isKeyUp = true);
         inputManager.SetEventListeners();
 
         mockApplication.TriggerKeyUp(Keys.A);
@@ -182,7 +134,7 @@ public class InputManagerTests
         bool isMouseDown = false;
 
         var inputManager = new InputManager(mockApplication);
-        inputManager.AddMouseButtonDownCallback(MouseButton.Button1, () => isMouseDown = true);
+        inputManager.MouseButtonDownCallbacks.Add(MouseButton.Button1, () => isMouseDown = true);
         inputManager.SetEventListeners();
 
         mockApplication.TriggerMouseButtonDown(MouseButton.Button1);
@@ -196,7 +148,7 @@ public class InputManagerTests
         bool isMouseUp = false;
 
         var inputManager = new InputManager(mockApplication);
-        inputManager.AddMouseButtonUpCallback(MouseButton.Button1, () => isMouseUp = true);
+        inputManager.MouseButtonUpCallbacks.Add(MouseButton.Button1, () => isMouseUp = true);
         inputManager.SetEventListeners();
 
         mockApplication.TriggerMouseButtonUp(MouseButton.Button1);

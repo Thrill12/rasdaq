@@ -9,59 +9,48 @@ namespace rasdaq.Input;
 
 public class InputManager(IGameWindow gameWindow)
 {
-    private IGameWindow gameWindow = gameWindow;
-    private Dictionary<Keys, Action> _upCallbacks = [];
-    public Dictionary<Keys, Action> UpCallbacks => _upCallbacks;
+    private readonly IGameWindow gameWindow = gameWindow;
 
-    private Dictionary<Keys, Action> _downCallbacks = [];
-    public Dictionary<Keys, Action> DownCallbacks => _downCallbacks;
-
-    private Dictionary<MouseButton, Action> _mButtonUpCallbacks = [];
-    public Dictionary<MouseButton, Action> MButtonUpCallbacks => _mButtonUpCallbacks;
-
-    private Dictionary<MouseButton, Action> _mButtonDownCallbacks = [];
-    public Dictionary<MouseButton, Action> MButtonDownCallbacks => _mButtonDownCallbacks;
-
+    /// <summary>
+    /// Callback to run upon releasing specified keyboard key
+    /// </summary>
+    public Dictionary<Keys, Action> KeyUpCallbacks { get; } = [];
+    /// <summary>
+    /// Callback to run upon pressing down specified keyboard key
+    /// </summary>
+    public Dictionary<Keys, Action> KeyDownCallbacks { get; } = [];
+    /// <summary>
+    /// Callback to run upon releasing specified mouse button
+    /// </summary>
+    public Dictionary<MouseButton, Action> MouseButtonUpCallbacks { get; } = [];
+    /// <summary>
+    /// Callback to run upon pressing down specified mouse button
+    /// </summary>
+    public Dictionary<MouseButton, Action> MouseButtonDownCallbacks { get; } = [];
+    /// <summary>
+    /// Callback to run when mouse moves
+    /// </summary>
     public Action<MouseMoveEventArgs> mouseMoveAction = e => { };
 
-    static public bool logMouseDelta = false;
-
-    public void AddKeyUpCallback(Keys key, Action inputCallback)
-    {
-        UpCallbacks.Add(key, inputCallback);
-    }
-
-    public void AddKeyDownCallback(Keys key, Action inputCallback)
-    {
-        DownCallbacks.Add(key, inputCallback);
-    }
-
-    public void AddMouseButtonDownCallback(MouseButton mouseButton, Action inputCallback)
-    {
-        MButtonDownCallbacks.Add(mouseButton, inputCallback);
-    }
-
-    public void AddMouseButtonUpCallback(MouseButton mouseButton, Action inputCallback)
-    {
-        MButtonUpCallbacks.Add(mouseButton, inputCallback);
-    }
-
+    /// <summary>
+    /// Sets defined callbacks to event listeners for keys/mouse
+    /// </summary>
     internal void SetEventListeners()
     {
         Console.WriteLine("Setting listeners");
         gameWindow.KeyUp += (e) =>
         {
-            if (UpCallbacks.ContainsKey(e.Key))
+            if (KeyUpCallbacks.ContainsKey(e.Key))
             {
-                UpCallbacks[e.Key]();
+                KeyUpCallbacks[e.Key]();
             }
         };
 
         gameWindow.KeyDown += (e) =>
         {
-            if (DownCallbacks.ContainsKey(e.Key))
+            if (KeyDownCallbacks.ContainsKey(e.Key))
             {
-                DownCallbacks[e.Key]();
+                KeyDownCallbacks[e.Key]();
             }
         };
 
@@ -69,21 +58,25 @@ public class InputManager(IGameWindow gameWindow)
 
         gameWindow.MouseDown += (e) =>
         {
-            if (MButtonDownCallbacks.ContainsKey(e.Button))
+            if (MouseButtonDownCallbacks.ContainsKey(e.Button))
             {
-                MButtonDownCallbacks[e.Button]();
+                MouseButtonDownCallbacks[e.Button]();
             }
         };
 
         gameWindow.MouseUp += (e) =>
         {
-            if (MButtonUpCallbacks.ContainsKey(e.Button))
+            if (MouseButtonUpCallbacks.ContainsKey(e.Button))
             {
-                MButtonUpCallbacks[e.Button]();
+                MouseButtonUpCallbacks[e.Button]();
             }
         };
     }
 
+    /// <summary>
+    /// Locks mouse cursor to center of screen
+    /// </summary>
+    /// <returns>OpenTK CursorState</returns>
     public CursorState LockMouse()
     {
         gameWindow.CursorState = CursorState.Grabbed;
@@ -91,6 +84,10 @@ public class InputManager(IGameWindow gameWindow)
         return gameWindow.CursorState;
     }
 
+    /// <summary>
+    /// Unlocks mouse cursor from center of screen, if locked
+    /// </summary>
+    /// <returns>OpenTK CursorState</returns>
     public CursorState UnlockMouse()
     {
         gameWindow.CursorState = CursorState.Normal;
@@ -98,6 +95,10 @@ public class InputManager(IGameWindow gameWindow)
         return gameWindow.CursorState;
     }
 
+    /// <summary>
+    /// Gets the position of the mouse relative to the content area of this window
+    /// </summary>
+    /// <returns>Vector2 representing mouse coordinates</returns>
     public Vector2 GetMousePosition()
     {
         return gameWindow.MousePosition;
