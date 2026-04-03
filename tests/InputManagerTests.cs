@@ -1,4 +1,5 @@
 using NUnit.Framework;
+using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using rasdaq;
@@ -39,11 +40,12 @@ internal class MouseMoveData(float X, float Y, float DeltaX, float DeltaY)
     }
 }
 
+
 internal class MockApplication : IGameWindow
 {
-    public CursorState CursorState { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
-    // TODO
-    public MouseState MouseState => throw new NotImplementedException();
+    public CursorState CursorState { get; set; } = CursorState.Normal;
+
+    public Vector2 MousePosition { get; set; }
 
     public event Action<KeyboardKeyEventArgs>? KeyDown;
 
@@ -225,4 +227,31 @@ public class InputManagerTests
 
         Assert.That(inputMouseMoveData, Is.EqualTo(verifiedMouseMoveData));
     }
+
+    [Test]
+    public void LockMouse_Call_SetGrabbedCursorState()
+    {
+        InputManager inputManager = new(mockApplication);
+
+        Assert.That(inputManager.LockMouse(), Is.EqualTo(CursorState.Grabbed));
+    }
+
+    [Test]
+    public void UnlockMouse_Call_SetNormalCursorState()
+    {
+        InputManager inputManager = new(mockApplication);
+
+        Assert.That(inputManager.UnlockMouse(), Is.EqualTo(CursorState.Normal));
+    }
+
+    [Test]
+    public void GetMousePosition_Call_GetVector2MousePosition()
+    {
+        InputManager inputManager = new(mockApplication);
+        Vector2 verifiedVector = new(30, 60);
+        mockApplication.MousePosition = verifiedVector;
+
+        Assert.That(inputManager.GetMousePosition(), Is.EqualTo(verifiedVector));
+    }
+
 }

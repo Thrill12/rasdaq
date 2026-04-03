@@ -65,7 +65,6 @@ public class InputManager(IGameWindow gameWindow)
             }
         };
 
-        // placeholder function, what are we supposed to do with mouse movements?
         gameWindow.MouseMove += mouseMoveAction;
 
         gameWindow.MouseDown += (e) =>
@@ -85,18 +84,22 @@ public class InputManager(IGameWindow gameWindow)
         };
     }
 
-    public void LockMouse()
+    public CursorState LockMouse()
     {
         gameWindow.CursorState = CursorState.Grabbed;
+
+        return gameWindow.CursorState;
     }
 
-    public void UnlockMouse()
+    public CursorState UnlockMouse()
     {
         gameWindow.CursorState = CursorState.Normal;
+
+        return gameWindow.CursorState;
     }
 
     public Vector2 GetMousePosition()
     {
-        return gameWindow.MouseState.Position;
+        return gameWindow.MousePosition;
     }
 }
