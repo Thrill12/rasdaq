@@ -1,25 +1,36 @@
-﻿using rasdaq.Graphics.Shaders;
+﻿using rasdaq.Core.ECS;
+using rasdaq.Graphics.Shaders;
 using System.Drawing;
 
 namespace rasdaq.Graphics;
 
-public class Sprite
+public class Sprite : Component
 {
     private Shader _shader;
-
-    public Shader Shader => _shader;
-
     private float[] _vertices;
+    private float[] _uvs;
+    private Color _color;
+    private Texture? _texture;
+
+    /// <summary>
+    /// Texture of sprite.
+    /// </summary>
+    public Texture? Texture => _texture;
+    /// <summary>
+    /// Shader of Sprite.
+    /// </summary>
+    public Shader Shader => _shader;
+    /// <summary>
+    /// Colour of Sprite.
+    /// </summary>
+    public Color Color => _color;
+    public float[] UVs => _uvs;
     public float[] Vertices => _vertices;
 
-    private float[] _uvs;
-    public float[] UVs => _uvs;
-
-    private Color _color;
-    public Color Color => _color;
-
-    private Texture? _texture;
-    public Texture? Texture => _texture;
+    internal override void Init()
+    {
+        Renderer.Instance.LoadSprite(this);
+    }
 
     public void SetShader(Shader newShader)
     {
@@ -37,6 +48,11 @@ public class Sprite
     public Sprite(float width, float height, Color? color = null, Texture? texture = null, Shader? shader = null) :
         this(BuildVertices(width, height), color, texture, shader)
     { }
+
+    public void SetWidthHeight(float width, float height)
+    {
+        _vertices = BuildVertices(width, height);
+    }
 
     public Sprite(float[] vertices, Color? color = null, Texture? texture = null, Shader? shader = null)
     {
@@ -63,8 +79,6 @@ public class Sprite
             0.0f,
             0.0f, // BL (repeated)
         ];
-
-        Renderer.Instance.LoadSprite(this);
     }
 
     private static float[] BuildVertices(float width, float height)

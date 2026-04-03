@@ -2,50 +2,98 @@
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using rasdaq.Core.ECS;
 using rasdaq.Graphics;
 using rasdaq.Input;
 using System.Drawing;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("tests")]
 
 namespace rasdaq;
 
-public class Application : GameWindow, IGameWindow
+/// <summary>
+/// Main rasdaq application class.
+/// </summary>
+public sealed class Application : IDisposable
 {
     public static Application? Instance { get; private set; }
     public InputManager InputManager { get; private set; }
 
+    private List<World> _worlds = new();
+    private GameWindow _gameWindow;
+
+    /// <summary>
+    /// Main entry point of a rasdaq-based application.
+    /// </summary>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <param name="title"></param>
+    /// <exception cref="InvalidOperationException"></exception>
     public Application(int width, int height, string title)
-        : base(
-            GameWindowSettings.Default,
+    {
+        if (Instance != null)
+        {
+            throw new InvalidOperationException("There already exists an application.");
+        }
+
+        Instance = this;
+
+        _gameWindow = new(
+            new GameWindowSettings()
+            {
+                UpdateFrequency = 0
+            },
             new NativeWindowSettings() { ClientSize = (width, height), Title = title }
         )
-    {
-        Instance = this;
-        InputManager = new InputManager(this);
+        {
+            VSync = VSyncMode.Off
+        };
+        _gameWindow.UpdateFrame += OnUpdateFrame;
+        _gameWindow.Load += OnLoad;
+        _gameWindow.RenderFrame += OnRenderFrame;
+        _gameWindow.FramebufferResize += OnFramebufferResize;
+
+        InputManager = new InputManager(new GameWindowWrapper(_gameWindow));
     }
 
-    protected override void OnUpdateFrame(FrameEventArgs args)
+    internal void RegisterWorld(World world)
     {
-        base.OnUpdateFrame(args);
+        _worlds.Add(world);
+    }
 
-        if (KeyboardState.IsKeyDown(Keys.Escape))
+    /// <summary>
+    /// Starts the application window.
+    /// </summary>
+    public void Run()
+    {
+        InputManager.SetEventListeners();
+        _gameWindow.Run();
+    }
+
+    private void OnUpdateFrame(FrameEventArgs args)
+    {
+        if (_gameWindow.KeyboardState.IsKeyDown(Keys.Escape))
         {
-            Close();
+            _gameWindow.Close();
+        }
+
+        foreach (World world in _worlds)
+        {
+            world.GameLoop.Tick(args.Time);
         }
     }
 
+    /// <summary>
+    /// Sets the background color of the window.
+    /// </summary>
+    /// <param name="color"></param>
     public static void SetBackgroundColor(Color color)
     {
         GL.ClearColor(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f);
     }
 
-    public override void Run()
-    {
-        InputManager.SetEventListeners();
-        base.Run();
-    }
-
-
-    protected override void OnLoad()
+    private void OnLoad()
     {
         // Allows rendering png transparency
         GL.Enable(EnableCap.Blend);
@@ -54,28 +102,33 @@ public class Application : GameWindow, IGameWindow
         Console.WriteLine("rasdaq started");
 
         Renderer.Instance.Init();
+
+        foreach (World world in _worlds)
+        {
+            world.Start();
+        }
     }
 
-    protected override void OnRenderFrame(FrameEventArgs e)
+    private void OnRenderFrame(FrameEventArgs args)
     {
-        base.OnRenderFrame(e);
-
         GL.Clear(ClearBufferMask.ColorBufferBit);
 
-        // Rendering code here
         Renderer.Instance.Render();
 
-        // Double-buffering means that there are two areas that OpenGL draws to.
-        // In essence: One area is displayed, while the other is being rendered to.
-        // Then, when you call SwapBuffers, the two are reversed.
-        // A single-buffered context could have issues such as screen tearing.
-        SwapBuffers();
+        _gameWindow.SwapBuffers();
     }
 
-    protected override void OnFramebufferResize(FramebufferResizeEventArgs e)
+    private void OnFramebufferResize(FramebufferResizeEventArgs args)
     {
-        base.OnFramebufferResize(e);
+        GL.Viewport(0, 0, args.Width, args.Height);
+    }
 
-        GL.Viewport(0, 0, e.Width, e.Height);
+    /// <summary>
+    /// Cleans up resources.
+    /// </summary>
+    public void Dispose()
+    {
+        _gameWindow.Dispose();
+        Instance = null;
     }
 }

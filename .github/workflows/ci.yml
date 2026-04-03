@@ -1,4 +1,4 @@
-name: Testing
+name: CI
 
 on:
   pull_request:
@@ -9,5 +9,7 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v6
+      - name: Run formatting
+        run: dotnet format --verify-no-changes --severity warn
       - name: Run tests
         run: dotnet test
