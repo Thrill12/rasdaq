@@ -205,5 +205,4 @@ public class InputManagerTests
 
         Assert.That(inputManager.GetMousePosition(), Is.EqualTo(verifiedVector));
     }
-
 }

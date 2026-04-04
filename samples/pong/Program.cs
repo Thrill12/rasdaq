@@ -1,7 +1,7 @@
-﻿using pong;
+﻿using OpenTK.Windowing.GraphicsLibraryFramework;
+using pong;
 using rasdaq.Core.ECS;
 using rasdaq.Graphics;
-using OpenTK.Windowing.GraphicsLibraryFramework;
 using Application = rasdaq.Application;
 
 namespace Pong;
