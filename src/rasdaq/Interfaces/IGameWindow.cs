@@ -1,7 +1,7 @@
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 
-public interface IGameWindow
+internal interface IGameWindow
 {
     event Action<KeyboardKeyEventArgs> KeyDown;
     event Action<KeyboardKeyEventArgs> KeyUp;

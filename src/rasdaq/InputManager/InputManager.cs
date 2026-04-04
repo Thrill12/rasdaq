@@ -7,9 +7,9 @@ using System.Runtime.CompilerServices;
 
 namespace rasdaq.Input;
 
-public class InputManager(IGameWindow gameWindow)
+public class InputManager
 {
-    private readonly IGameWindow gameWindow = gameWindow;
+    private readonly IGameWindow gameWindow;
 
     /// <summary>
     /// Callback to run upon releasing specified keyboard key
@@ -31,6 +31,12 @@ public class InputManager(IGameWindow gameWindow)
     /// Callback to run when mouse moves
     /// </summary>
     public Action<MouseMoveEventArgs> mouseMoveAction = e => { };
+
+
+    internal InputManager(IGameWindow gameWindow)
+    {
+        this.gameWindow = gameWindow;
+    }
 
     /// <summary>
     /// Sets defined callbacks to event listeners for keys/mouse
