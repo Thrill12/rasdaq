@@ -4,6 +4,7 @@ using OpenTK.Windowing.Desktop;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using rasdaq.Core.ECS;
 using rasdaq.Graphics;
+using rasdaq.Input;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 
@@ -17,6 +18,7 @@ namespace rasdaq;
 public sealed class Application : IDisposable
 {
     public static Application? Instance { get; private set; }
+    public InputManager InputManager { get; private set; }
 
     private List<World> _worlds = new();
     private GameWindow _gameWindow;
@@ -43,13 +45,16 @@ public sealed class Application : IDisposable
                 UpdateFrequency = 0
             },
             new NativeWindowSettings() { ClientSize = (width, height), Title = title }
-        );
-
-        _gameWindow.VSync = VSyncMode.Off;
+        )
+        {
+            VSync = VSyncMode.Off
+        };
         _gameWindow.UpdateFrame += OnUpdateFrame;
         _gameWindow.Load += OnLoad;
         _gameWindow.RenderFrame += OnRenderFrame;
         _gameWindow.FramebufferResize += OnFramebufferResize;
+
+        InputManager = new InputManager(new GameWindowWrapper(_gameWindow));
     }
 
     internal void RegisterWorld(World world)
@@ -62,6 +67,7 @@ public sealed class Application : IDisposable
     /// </summary>
     public void Run()
     {
+        InputManager.SetEventListeners();
         _gameWindow.Run();
     }
 
