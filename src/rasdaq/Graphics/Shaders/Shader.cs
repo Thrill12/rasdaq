@@ -209,7 +209,7 @@ public class Shader : IDisposable
 
     public void SetUniform(string uniformName, Matrix4 val, bool transpose = false)
     {
-        Use();
+        // Use();
         int location = GetUniformLocation(uniformName);
         if (location == -1)
         {

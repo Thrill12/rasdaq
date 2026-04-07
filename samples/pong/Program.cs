@@ -63,11 +63,28 @@ internal class Program
             world.AddEntity(soldier);
 
             app.InputManager.KeyDownCallbacks.Add(Keys.B, () => TestKey(app));
+            // app.InputManager.KeyDownCallbacks.Add(Keys.A, () =>
+            //     {
+            //         Console.WriteLine("X: " + app.InputManager.GetMousePosition().X);
+            //         Console.WriteLine("Y: " + app.InputManager.GetMousePosition().Y);
+            //     });
+            app.InputManager.KeyDownCallbacks.Add(Keys.W, () =>
+            {
+                spr.Transform.Move(0, 0.1f);
+                System.Console.WriteLine("yo just got");
+            });
+            app.InputManager.KeyDownCallbacks.Add(Keys.S, () =>
+            {
+                spr.Transform.Move(0, -0.1f);
+            });
             app.InputManager.KeyDownCallbacks.Add(Keys.A, () =>
-                {
-                    Console.WriteLine("X: " + app.InputManager.GetMousePosition().X);
-                    Console.WriteLine("Y: " + app.InputManager.GetMousePosition().Y);
-                });
+            {
+                spr.Transform.Move(-0.1f, 0);
+            });
+            app.InputManager.KeyDownCallbacks.Add(Keys.D, () =>
+            {
+                spr.Transform.Move(0.1f, 0);
+            });
 
             app.InputManager.mouseMoveAction = (e) =>
             {

@@ -1,4 +1,5 @@
 using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 
 namespace rasdaq.Graphics;
 
@@ -46,6 +47,7 @@ public class Renderer
             );
 
             sprite.Shader.Use();
+            sprite.Shader.SetUniform("transform", sprite.Transform.GetTransformation(), true);
             SetVertexAttributes(sprite);
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, vertices.Count / 9);
