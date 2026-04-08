@@ -1,10 +1,16 @@
 ﻿using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Core;
+using Serilog.Events;
 using System.Runtime.CompilerServices;
+using ILogger = Microsoft.Extensions.Logging.ILogger;
 
 namespace rasdaq.Logging;
 
 public static class Log
 {
+    private static readonly string _sessionTimestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH-mm-ss");
+
     private static LogLevel _logLevel = LogLevel.Trace;
     private static ILoggerFactory _factory = CreateFactory(_logLevel);
 
@@ -20,14 +26,35 @@ public static class Log
     /// Trace and Debug should not be used in production - these may contain rasdaq logs.
     /// </summary>
     /// <param name="newLogLevel"></param>
-    public static void SetLogLevel(LogLevel newLogLevel)
+    public static void SetLogLevel(RasdaqLogLevel newLogLevel)
     {
-        _logLevel = newLogLevel;
+        _logLevel = ConvertToMsLogLevel(newLogLevel);
         _factory = CreateFactory(_logLevel);
     }
 
+    /// <summary>
+    /// Creates Serilog instance. Used for writing logs to files.
+    /// </summary>
+    private static Logger CreateSerilog(LogLevel level)
+    {
+        Directory.CreateDirectory("logs");
+
+        return new LoggerConfiguration()
+            .MinimumLevel.Is(ConvertToSerilogLevel(level))
+            .WriteTo.File(
+                $"logs/rasdaq {_sessionTimestamp}.log",
+                outputTemplate: "{Timestamp:yyyy:MM:dd HH:mm:ss} [{Level:u4}] {SourceContext}: {Message}{NewLine}{Exception}"
+            )
+            .CreateLogger();
+    }
+
+    /// <summary>
+    /// Creates ILogger Factory. Used for creating factories that emit to console.
+    /// </summary>
     private static ILoggerFactory CreateFactory(LogLevel level)
     {
+        Logger serilog = CreateSerilog(level);
+
         return LoggerFactory.Create(builder =>
         {
             builder.SetMinimumLevel(level);
@@ -36,8 +63,31 @@ public static class Log
                 options.SingleLine = true;
                 options.TimestampFormat = "yyyy:MM:dd HH:mm:ss ";
             });
+            builder.AddSerilog(serilog, dispose: true);
         });
     }
+
+    private static LogEventLevel ConvertToSerilogLevel(LogLevel level) => level switch
+    {
+        LogLevel.Trace => LogEventLevel.Verbose,
+        LogLevel.Debug => LogEventLevel.Debug,
+        LogLevel.Information => LogEventLevel.Information,
+        LogLevel.Warning => LogEventLevel.Warning,
+        LogLevel.Error => LogEventLevel.Error,
+        LogLevel.Critical => LogEventLevel.Fatal,
+        _ => LogEventLevel.Information
+    };
+
+    private static LogLevel ConvertToMsLogLevel(RasdaqLogLevel level) => level switch
+    {
+        RasdaqLogLevel.Trace => LogLevel.Trace,
+        RasdaqLogLevel.Debug => LogLevel.Debug,
+        RasdaqLogLevel.Info => LogLevel.Information,
+        RasdaqLogLevel.Warning => LogLevel.Warning,
+        RasdaqLogLevel.Error => LogLevel.Error,
+        RasdaqLogLevel.Critical => LogLevel.Critical,
+        _ => LogLevel.Information
+    };
 
     private static ILogger GetLogger(string loggerPath)
     {
@@ -120,4 +170,15 @@ public static class Log
         string label = string.IsNullOrEmpty(message) ? ex.Message : message;
         GetLogger(callerPath).LogError(ex, "{Member}: {Message}", callerMember, label);
     }
+}
+
+public enum RasdaqLogLevel
+{
+    Trace = 0,
+    Debug = 1,
+    Info = 2,
+    Warning = 3,
+    Error = 4,
+    Critical = 5,
+    None = 6
 }

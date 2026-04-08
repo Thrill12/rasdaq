@@ -18,6 +18,6 @@ internal class Soldier : Component
     {
         base.Update(deltaTime);
         // Console.SetCursorPosition(0, 0);
-        // Console.WriteLine("Soldier FPS " + Math.Round(1f / deltaTime));
+        // Log.Info("Soldier FPS " + Math.Round(1f / deltaTime));
     }
 }

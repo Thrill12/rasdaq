@@ -2,6 +2,7 @@
 using pong;
 using rasdaq.Core.ECS;
 using rasdaq.Graphics;
+using rasdaq.Logging;
 using Application = rasdaq.Application;
 
 namespace Pong;
@@ -24,26 +25,26 @@ internal class Program
             application.InputManager.UnlockMouse();
         }
 
-        Console.WriteLine("testing keys: B");
+        Log.Info("testing keys: B");
     }
 
     static void TestMButton1Down()
     {
-        Console.WriteLine("MB1 clicked!");
+        Log.Info("MB1 clicked!");
 
         logMouseDelta = true;
     }
 
     static void TestMButton1Up()
     {
-        Console.WriteLine("MB1 released!");
+        Log.Info("MB1 released!");
         logMouseDelta = false;
     }
 
     static void PrintMouseDelta(float deltaX, float deltaY)
     {
-        Console.WriteLine("Delta X: " + deltaX);
-        Console.WriteLine("Delta Y: " + deltaY);
+        Log.Info("Delta X: " + deltaX);
+        Log.Info("Delta Y: " + deltaY);
     }
 
     static void Main()
@@ -65,8 +66,8 @@ internal class Program
             app.InputManager.KeyDownCallbacks.Add(Keys.B, () => TestKey(app));
             app.InputManager.KeyDownCallbacks.Add(Keys.A, () =>
                 {
-                    Console.WriteLine("X: " + app.InputManager.GetMousePosition().X);
-                    Console.WriteLine("Y: " + app.InputManager.GetMousePosition().Y);
+                    Log.Info("X: " + app.InputManager.GetMousePosition().X);
+                    Log.Info("Y: " + app.InputManager.GetMousePosition().Y);
                 });
 
             app.InputManager.mouseMoveAction = (e) =>

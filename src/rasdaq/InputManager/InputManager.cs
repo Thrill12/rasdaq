@@ -1,6 +1,7 @@
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using rasdaq.Logging;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("tests")]
@@ -43,7 +44,7 @@ public class InputManager
     /// </summary>
     internal void SetEventListeners()
     {
-        Console.WriteLine("Setting listeners");
+        Log.Trace("Setting listeners");
         gameWindow.KeyUp += (e) =>
         {
             if (KeyUpCallbacks.ContainsKey(e.Key))
