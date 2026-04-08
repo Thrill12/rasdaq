@@ -61,8 +61,8 @@ public class Sprite : Component
         _texture = texture;
 
         _shader = shader ?? (texture != null
-            ? new Shader(Common.TEXTURE_SHADER, Common.TEXTURE_SHADER_FRAG)
-            : new Shader(Common.COLOR_SHADER, Common.COLOR_SHADER_FRAG));
+        ? new Shader(Common.TEXTURE_SHADER, Common.TEXTURE_SHADER_FRAG)
+        : new Shader(Common.COLOR_SHADER, Common.COLOR_SHADER_FRAG));
 
         _uvs =
         [
