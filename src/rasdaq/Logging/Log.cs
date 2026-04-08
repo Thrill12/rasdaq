@@ -10,7 +10,6 @@ namespace rasdaq.Logging;
 public static class Log
 {
     private static readonly string _sessionTimestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH-mm-ss");
-
     private static LogLevel _logLevel = LogLevel.Trace;
     private static ILoggerFactory _factory = CreateFactory(_logLevel);
 
