@@ -5,6 +5,7 @@ using OpenTK.Windowing.GraphicsLibraryFramework;
 using rasdaq.Core.ECS;
 using rasdaq.Graphics;
 using rasdaq.Input;
+using rasdaq.Logging;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 
@@ -99,7 +100,7 @@ public sealed class Application : IDisposable
         GL.Enable(EnableCap.Blend);
         GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
-        Console.WriteLine("rasdaq started");
+        Log.Debug("rasdaq started");
 
         Renderer.Instance.Init();
 
