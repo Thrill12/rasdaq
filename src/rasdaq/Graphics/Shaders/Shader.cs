@@ -1,12 +1,13 @@
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using rasdaq.Logging;
+using System.Reflection;
 
 namespace rasdaq.Graphics.Shaders;
 
 public class Shader : IDisposable
 {
-    int Handle;
+    private int Handle;
 
     public Shader(string? vertexPath = null, string? fragmentPath = null)
     {
@@ -89,7 +90,7 @@ public class Shader : IDisposable
 
     private static string LoadEmbeddedShader(string filename)
     {
-        var assembly = typeof(Shader).Assembly;
+        Assembly assembly = typeof(Shader).Assembly;
         string resourceName = $"rasdaq.Graphics.Shaders.{filename}";
 
         using Stream stream = assembly.GetManifestResourceStream(resourceName)

@@ -33,7 +33,6 @@ public class InputManager
     /// </summary>
     public Action<MouseMoveEventArgs> mouseMoveAction = e => { };
 
-
     internal InputManager(IGameWindow gameWindow)
     {
         this.gameWindow = gameWindow;

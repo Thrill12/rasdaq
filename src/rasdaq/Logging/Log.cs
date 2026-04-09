@@ -10,14 +10,13 @@ namespace rasdaq.Logging;
 
 public static class Log
 {
-    private static RasdaqLogLevel _logLevel = RasdaqLogLevel.Info;
-    private static ILoggerFactory _factory = CreateFactory(_logLevel);
+    private static ILoggerFactory _factory = CreateFactory(LogLevel);
 
     /// <summary>
     /// Gets the current log level.
     /// rasdaq will not output any logs which are less than LogLevel.
     /// </summary>
-    public static RasdaqLogLevel LogLevel => _logLevel;
+    public static RasdaqLogLevel LogLevel { get; } = RasdaqLogLevel.Info;
 
     /// <summary>
     /// Sets the current log level for rasdaq.
@@ -27,7 +26,7 @@ public static class Log
     /// <param name="newLogLevel"></param>
     public static void SetLogLevel(RasdaqLogLevel newLogLevel)
     {
-        _factory = CreateFactory(_logLevel);
+        _factory = CreateFactory(LogLevel);
     }
 
     /// <summary>
@@ -35,6 +34,11 @@ public static class Log
     /// </summary>
     private static Logger CreateSerilog(RasdaqLogLevel level)
     {
+        if (File.Exists("rasdaq.log"))
+        {
+            File.Delete("rasdaq.log");
+        }
+
         return new LoggerConfiguration()
             .MinimumLevel.Is(ConvertToSerilogLevel(level))
             .WriteTo.File(
@@ -52,15 +56,14 @@ public static class Log
         Logger serilog = CreateSerilog(level);
 
         return LoggerFactory.Create(builder =>
-        {
-            builder.SetMinimumLevel(ConvertToMsLogLevel(level));
-            builder.AddSimpleConsole(options =>
-            {
-                options.SingleLine = true;
-                options.TimestampFormat = "yyyy:MM:dd HH:mm:ss ";
-            });
-            builder.AddSerilog(serilog, dispose: true);
-        });
+            builder.SetMinimumLevel(ConvertToMsLogLevel(level))
+                .AddSimpleConsole(options =>
+                {
+                    options.SingleLine = true;
+                    options.TimestampFormat = "yyyy:MM:dd HH:mm:ss ";
+                })
+                .AddSerilog(serilog, dispose: true)
+        );
     }
 
     private static LogEventLevel ConvertToSerilogLevel(RasdaqLogLevel level) => level switch

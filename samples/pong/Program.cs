@@ -9,10 +9,10 @@ namespace Pong;
 
 internal class Program
 {
-    static bool isMouseLocked = false;
-    static bool logMouseDelta = false;
+    private static bool isMouseLocked = false;
+    private static bool logMouseDelta = false;
 
-    static void TestKey(Application application)
+    private static void TestKey(Application application)
     {
         isMouseLocked = !isMouseLocked;
 
@@ -28,26 +28,26 @@ internal class Program
         Log.Info("testing keys: B");
     }
 
-    static void TestMButton1Down()
+    private static void TestMButton1Down()
     {
         Log.Info("MB1 clicked!");
 
         logMouseDelta = true;
     }
 
-    static void TestMButton1Up()
+    private static void TestMButton1Up()
     {
         Log.Info("MB1 released!");
         logMouseDelta = false;
     }
 
-    static void PrintMouseDelta(float deltaX, float deltaY)
+    private static void PrintMouseDelta(float deltaX, float deltaY)
     {
         Log.Info("Delta X: " + deltaX);
         Log.Info("Delta Y: " + deltaY);
     }
 
-    static void Main()
+    private static void Main()
     {
         try
         {
