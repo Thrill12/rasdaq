@@ -82,8 +82,7 @@ dotnet_code_quality_unused_parameters = all
 dotnet_remove_unnecessary_suppression_exclusions = none
 
 # New line preferences
-dotnet_style_allow_multiple_blank_lines_experimental = true:suggestion
-dotnet_style_allow_statement_immediately_after_block_experimental = false:suggestion
+dotnet_style_allow_multiple_blank_lines_experimental = false
 
 #### C# Coding Conventions ####
 
@@ -122,7 +121,7 @@ csharp_style_prefer_readonly_struct_member = true
 
 # Code-block preferences
 csharp_prefer_braces = true
-csharp_prefer_simple_using_statement = false
+csharp_prefer_simple_using_statement = true
 csharp_prefer_system_threading_lock = true
 csharp_style_namespace_declarations = file_scoped:error
 csharp_style_prefer_method_group_conversion = true
@@ -154,8 +153,9 @@ csharp_using_directive_placement = outside_namespace
 csharp_style_allow_blank_line_after_colon_in_constructor_initializer_experimental = true
 csharp_style_allow_blank_line_after_token_in_arrow_expression_clause_experimental = true
 csharp_style_allow_blank_line_after_token_in_conditional_expression_experimental = true
-csharp_style_allow_blank_lines_between_consecutive_braces_experimental = false:suggestion
-csharp_style_allow_embedded_statements_on_same_line_experimental = true
+csharp_style_allow_blank_lines_between_consecutive_braces_experimental = false
+csharp_style_allow_embedded_statements_on_same_line_experimental = false
+dotnet_style_allow_multiple_blank_lines_experimental = false:error
 
 #### C# Formatting Rules ####
 

@@ -1,11 +1,13 @@
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
+using rasdaq.Logging;
+using System.Reflection;
 
 namespace rasdaq.Graphics.Shaders;
 
 public class Shader : IDisposable
 {
-    int Handle;
+    private int Handle;
 
     public Shader(string? vertexPath = null, string? fragmentPath = null)
     {
@@ -57,7 +59,7 @@ public class Shader : IDisposable
     {
         if (!_disposedValue)
         {
-            Console.WriteLine("Shader not disposed properly.");
+            Log.Warning("Shader not disposed properly.");
         }
     }
 
@@ -88,7 +90,7 @@ public class Shader : IDisposable
 
     private static string LoadEmbeddedShader(string filename)
     {
-        var assembly = typeof(Shader).Assembly;
+        Assembly assembly = typeof(Shader).Assembly;
         string resourceName = $"rasdaq.Graphics.Shaders.{filename}";
 
         using Stream stream = assembly.GetManifestResourceStream(resourceName)
@@ -122,7 +124,7 @@ public class Shader : IDisposable
         if (success == 0)
         {
             string infoLog = GL.GetProgramInfoLog(Handle);
-            Console.WriteLine(infoLog);
+            Log.Warning(infoLog);
         }
     }
 
@@ -133,7 +135,7 @@ public class Shader : IDisposable
         if (success == 0)
         {
             string infoLog = GL.GetShaderInfoLog(VertexShader);
-            Console.WriteLine(infoLog);
+            Log.Warning(infoLog);
         }
 
         GL.CompileShader(FragmentShader);
@@ -142,7 +144,7 @@ public class Shader : IDisposable
         if (success == 0)
         {
             string infoLog = GL.GetShaderInfoLog(FragmentShader);
-            Console.WriteLine(infoLog);
+            Log.Warning(infoLog);
         }
     }
 
@@ -162,7 +164,7 @@ public class Shader : IDisposable
         int location = GetUniformLocation(uniformName);
         if (location == -1)
         {
-            Console.WriteLine($"Uniform '{uniformName}' not found in shader.");
+            Log.Error($"Uniform '{uniformName}' not found in shader.");
             return;
         }
 
@@ -175,7 +177,7 @@ public class Shader : IDisposable
         int location = GetUniformLocation(uniformName);
         if (location == -1)
         {
-            Console.WriteLine($"Uniform '{uniformName}' not found in shader.");
+            Log.Error($"Uniform '{uniformName}' not found in shader.");
             return;
         }
 
@@ -188,7 +190,7 @@ public class Shader : IDisposable
         int location = GetUniformLocation(uniformName);
         if (location == -1)
         {
-            Console.WriteLine($"Uniform '{uniformName}' not found in shader.");
+            Log.Error($"Uniform '{uniformName}' not found in shader.");
             return;
         }
 
@@ -200,7 +202,7 @@ public class Shader : IDisposable
         int location = GetUniformLocation(uniformName);
         if (location == -1)
         {
-            Console.WriteLine($"Uniform '{uniformName}' not found in shader.");
+            Log.Error($"Uniform '{uniformName}' not found in shader.");
             return;
         }
 
@@ -213,7 +215,7 @@ public class Shader : IDisposable
         int location = GetUniformLocation(uniformName);
         if (location == -1)
         {
-            Console.WriteLine($"Uniform '{uniformName}' not found in shader.");
+            Log.Error($"Uniform '{uniformName}' not found in shader.");
             return;
         }
 
