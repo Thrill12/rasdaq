@@ -35,8 +35,6 @@ public static class Log
     /// </summary>
     private static Logger CreateSerilog(RasdaqLogLevel level)
     {
-        Directory.CreateDirectory("logs");
-
         return new LoggerConfiguration()
             .MinimumLevel.Is(ConvertToSerilogLevel(level))
             .WriteTo.File(
