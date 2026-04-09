@@ -10,7 +10,6 @@ namespace rasdaq.Logging;
 
 public static class Log
 {
-    private static readonly string _sessionTimestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH-mm-ss");
     private static RasdaqLogLevel _logLevel = RasdaqLogLevel.Info;
     private static ILoggerFactory _factory = CreateFactory(_logLevel);
 
@@ -41,7 +40,7 @@ public static class Log
         return new LoggerConfiguration()
             .MinimumLevel.Is(ConvertToSerilogLevel(level))
             .WriteTo.File(
-                $"logs/rasdaq {_sessionTimestamp}.log",
+                $"rasdaq.log",
                 outputTemplate: "{Timestamp:yyyy:MM:dd HH:mm:ss} [{Level:u4}] {SourceContext}: {Message}{NewLine}{Exception}"
             )
             .CreateLogger();
