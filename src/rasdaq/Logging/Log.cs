@@ -4,20 +4,21 @@ using Serilog.Core;
 using Serilog.Events;
 using System.Runtime.CompilerServices;
 using ILogger = Microsoft.Extensions.Logging.ILogger;
+using MSLogLevel = Microsoft.Extensions.Logging.LogLevel;
 
 namespace rasdaq.Logging;
 
 public static class Log
 {
     private static readonly string _sessionTimestamp = DateTime.UtcNow.ToString("yyyy-MM-dd HH-mm-ss");
-    private static LogLevel _logLevel = LogLevel.Trace;
+    private static RasdaqLogLevel _logLevel = RasdaqLogLevel.Info;
     private static ILoggerFactory _factory = CreateFactory(_logLevel);
 
     /// <summary>
     /// Gets the current log level.
     /// rasdaq will not output any logs which are less than LogLevel.
     /// </summary>
-    public static LogLevel LogLevel => _logLevel;
+    public static RasdaqLogLevel LogLevel => _logLevel;
 
     /// <summary>
     /// Sets the current log level for rasdaq.
@@ -27,14 +28,13 @@ public static class Log
     /// <param name="newLogLevel"></param>
     public static void SetLogLevel(RasdaqLogLevel newLogLevel)
     {
-        _logLevel = ConvertToMsLogLevel(newLogLevel);
         _factory = CreateFactory(_logLevel);
     }
 
     /// <summary>
     /// Creates Serilog instance. Used for writing logs to files.
     /// </summary>
-    private static Logger CreateSerilog(LogLevel level)
+    private static Logger CreateSerilog(RasdaqLogLevel level)
     {
         Directory.CreateDirectory("logs");
 
@@ -50,13 +50,13 @@ public static class Log
     /// <summary>
     /// Creates ILogger Factory. Used for creating factories that emit to console.
     /// </summary>
-    private static ILoggerFactory CreateFactory(LogLevel level)
+    private static ILoggerFactory CreateFactory(RasdaqLogLevel level)
     {
         Logger serilog = CreateSerilog(level);
 
         return LoggerFactory.Create(builder =>
         {
-            builder.SetMinimumLevel(level);
+            builder.SetMinimumLevel(ConvertToMsLogLevel(level));
             builder.AddSimpleConsole(options =>
             {
                 options.SingleLine = true;
@@ -66,26 +66,26 @@ public static class Log
         });
     }
 
-    private static LogEventLevel ConvertToSerilogLevel(LogLevel level) => level switch
+    private static LogEventLevel ConvertToSerilogLevel(RasdaqLogLevel level) => level switch
     {
-        LogLevel.Trace => LogEventLevel.Verbose,
-        LogLevel.Debug => LogEventLevel.Debug,
-        LogLevel.Information => LogEventLevel.Information,
-        LogLevel.Warning => LogEventLevel.Warning,
-        LogLevel.Error => LogEventLevel.Error,
-        LogLevel.Critical => LogEventLevel.Fatal,
+        RasdaqLogLevel.Trace => LogEventLevel.Verbose,
+        RasdaqLogLevel.Debug => LogEventLevel.Debug,
+        RasdaqLogLevel.Info => LogEventLevel.Information,
+        RasdaqLogLevel.Warning => LogEventLevel.Warning,
+        RasdaqLogLevel.Error => LogEventLevel.Error,
+        RasdaqLogLevel.Critical => LogEventLevel.Fatal,
         _ => LogEventLevel.Information
     };
 
-    private static LogLevel ConvertToMsLogLevel(RasdaqLogLevel level) => level switch
+    private static MSLogLevel ConvertToMsLogLevel(RasdaqLogLevel level) => level switch
     {
-        RasdaqLogLevel.Trace => LogLevel.Trace,
-        RasdaqLogLevel.Debug => LogLevel.Debug,
-        RasdaqLogLevel.Info => LogLevel.Information,
-        RasdaqLogLevel.Warning => LogLevel.Warning,
-        RasdaqLogLevel.Error => LogLevel.Error,
-        RasdaqLogLevel.Critical => LogLevel.Critical,
-        _ => LogLevel.Information
+        RasdaqLogLevel.Trace => MSLogLevel.Trace,
+        RasdaqLogLevel.Debug => MSLogLevel.Debug,
+        RasdaqLogLevel.Info => MSLogLevel.Information,
+        RasdaqLogLevel.Warning => MSLogLevel.Warning,
+        RasdaqLogLevel.Error => MSLogLevel.Error,
+        RasdaqLogLevel.Critical => MSLogLevel.Critical,
+        _ => MSLogLevel.Information
     };
 
     private static ILogger GetLogger(string loggerPath)
