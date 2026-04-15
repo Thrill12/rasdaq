@@ -70,20 +70,20 @@ internal class Program
             //     });
             app.InputManager.KeyDownCallbacks.Add(Keys.W, () =>
             {
-                spr.Transform.Move(0, 0.1f);
+                soldier.Transform.Move(0, 0.1f);
                 System.Console.WriteLine("yo just got");
             });
             app.InputManager.KeyDownCallbacks.Add(Keys.S, () =>
             {
-                spr.Transform.Move(0, -0.1f);
+                soldier.Transform.Move(0, -0.1f);
             });
             app.InputManager.KeyDownCallbacks.Add(Keys.A, () =>
             {
-                spr.Transform.Move(-0.1f, 0);
+                soldier.Transform.Move(-0.1f, 0);
             });
             app.InputManager.KeyDownCallbacks.Add(Keys.D, () =>
             {
-                spr.Transform.Move(0.1f, 0);
+                soldier.Transform.Move(0.1f, 0);
             });
 
             app.InputManager.mouseMoveAction = (e) =>
