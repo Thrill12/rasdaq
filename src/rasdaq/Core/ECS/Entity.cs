@@ -1,4 +1,6 @@
-﻿namespace rasdaq.Core.ECS;
+﻿using rasdaq.Transformations;
+
+namespace rasdaq.Core.ECS;
 
 /// <summary>
 /// Base rasdaq game object class
@@ -6,12 +8,14 @@
 public class Entity
 {
     private readonly string _id;
-    private List<Component> _components = new();
+    private List<Component> _components = [];
+    private Transform _transform = new();
 
     /// <summary>
     /// Unique ID.
     /// </summary>
     public string ID => _id;
+    public Transform Transform => _transform;
 
     public Entity()
     {

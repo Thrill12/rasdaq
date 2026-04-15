@@ -1,4 +1,5 @@
 using OpenTK.Mathematics;
+using rasdaq.Core.ECS;
 
 namespace rasdaq.Transformations;
 
@@ -10,15 +11,6 @@ public class Transform
     private float localRotateY = 0;
     private float localRotateZ = 0;
     internal Matrix4 finalTransformation = Matrix4.Identity;
-
-    public static Matrix4 Test(float deg)
-    {
-        Matrix4 rotation = Matrix4.CreateRotationY(MathHelper.DegreesToRadians(deg));
-        Matrix4 scale = Matrix4.CreateScale(0.5f, 0.5f, 0.5f);
-        Matrix4 trans = rotation * scale;
-
-        return trans;
-    }
 
     public void Move(float x, float y)
     {
@@ -35,10 +27,15 @@ public class Transform
         // shader.SetUniform("transform", trans, true);
     }
 
-    public void RotateZ(float degrees)
+    private void RotateZ(float degrees)
     {
         localRotateZ += degrees;
         Rotate(Matrix4.CreateRotationZ, localRotateZ);
+    }
+
+    public void Rotate2D(float degrees)
+    {
+        RotateZ(degrees);
     }
 
     public void RotateY(float degrees)

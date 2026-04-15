@@ -35,6 +35,11 @@ public class Renderer
     {
         foreach (Sprite sprite in sprites)
         {
+            if (sprite.Entity is null)
+            {
+                continue;
+            }
+
             vertices.Clear();
             AddSpriteVertices(sprite);
 
@@ -45,9 +50,10 @@ public class Renderer
                 vertices.ToArray(),
                 BufferUsageHint.DynamicDraw
             );
-
+            System.Console.WriteLine(sprite.Entity.Transform.GetTransformation());
             sprite.Shader.Use();
-            sprite.Shader.SetUniform("transform", sprite.Transform.GetTransformation(), true);
+
+            sprite.Shader.SetUniform("transform", sprite.Entity.Transform.GetTransformation(), true);
             SetVertexAttributes(sprite);
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, vertices.Count / 9);

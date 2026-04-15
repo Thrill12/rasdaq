@@ -8,7 +8,7 @@ namespace rasdaq.Graphics;
 public class Sprite : Component
 {
     private Shader _shader;
-    private Transform _transform;
+    // private Transform _transform = new();
     private float[] _vertices;
     private float[] _uvs;
     private Color _color;
@@ -18,7 +18,7 @@ public class Sprite : Component
     /// Texture of sprite.
     /// </summary>
     public Texture? Texture => _texture;
-    public Transform Transform => _transform;
+    // public Transform Transform => _transform;
     /// <summary>
     /// Shader of Sprite.
     /// </summary>
@@ -66,8 +66,6 @@ public class Sprite : Component
         _shader = shader ?? (texture != null
             ? new Shader(Common.TEXTURE_SHADER, Common.TEXTURE_SHADER_FRAG)
             : new Shader(Common.COLOR_SHADER, Common.COLOR_SHADER_FRAG));
-
-        _transform = new Transform();
 
         _uvs =
         [
