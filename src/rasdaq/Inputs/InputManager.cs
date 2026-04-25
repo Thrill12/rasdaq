@@ -1,12 +1,11 @@
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
-using OpenTK.Windowing.GraphicsLibraryFramework;
 using rasdaq.Logging;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("tests")]
 
-namespace rasdaq.Input;
+namespace rasdaq.Inputs;
 
 public class InputManager
 {
@@ -46,17 +45,17 @@ public class InputManager
         Log.Trace("Setting listeners");
         gameWindow.KeyUp += (e) =>
         {
-            if (KeyUpCallbacks.ContainsKey(e.Key))
+            if (KeyUpCallbacks.ContainsKey((Keys)e.Key))
             {
-                KeyUpCallbacks[e.Key]();
+                KeyUpCallbacks[(Keys)e.Key]();
             }
         };
 
         gameWindow.KeyDown += (e) =>
         {
-            if (KeyDownCallbacks.ContainsKey(e.Key))
+            if (KeyDownCallbacks.ContainsKey((Keys)e.Key))
             {
-                KeyDownCallbacks[e.Key]();
+                KeyDownCallbacks[(Keys)e.Key]();
             }
         };
 
@@ -64,17 +63,17 @@ public class InputManager
 
         gameWindow.MouseDown += (e) =>
         {
-            if (MouseButtonDownCallbacks.ContainsKey(e.Button))
+            if (MouseButtonDownCallbacks.ContainsKey((MouseButton)e.Button))
             {
-                MouseButtonDownCallbacks[e.Button]();
+                MouseButtonDownCallbacks[(MouseButton)e.Button]();
             }
         };
 
         gameWindow.MouseUp += (e) =>
         {
-            if (MouseButtonUpCallbacks.ContainsKey(e.Button))
+            if (MouseButtonUpCallbacks.ContainsKey((MouseButton)e.Button))
             {
-                MouseButtonUpCallbacks[e.Button]();
+                MouseButtonUpCallbacks[(MouseButton)e.Button]();
             }
         };
     }
@@ -109,4 +108,15 @@ public class InputManager
     {
         return gameWindow.MousePosition;
     }
+
+    /// <summary>
+    /// Returns whether a specific key or set of keys is pressed in the current frame.
+    /// </summary>
+    /// <param name="key">Key to check for</param>
+    /// <returns></returns>
+    public bool IsKeyDown(Keys key)
+    {
+        return gameWindow.IsKeyDown(key);
+    }
 }
+

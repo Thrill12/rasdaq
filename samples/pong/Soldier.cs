@@ -1,4 +1,6 @@
 ﻿using rasdaq.Core.ECS;
+using rasdaq.Inputs;
+using rasdaq.Logging;
 
 namespace pong;
 
@@ -12,12 +14,15 @@ internal class Soldier : Component
     public override void Update(double deltaTime)
     {
         base.Update(deltaTime);
+
+        if (Input.IsKeyDown(Keys.V))
+        {
+            Log.Info("V pressed");
+        }
     }
 
     public override void FrameUpdate(double deltaTime)
     {
         base.Update(deltaTime);
-        // Console.SetCursorPosition(0, 0);
-        // Log.Info("Soldier FPS " + Math.Round(1f / deltaTime));
     }
 }

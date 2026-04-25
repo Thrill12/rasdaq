@@ -1,9 +1,10 @@
-﻿using OpenTK.Windowing.GraphicsLibraryFramework;
-using pong;
+﻿using pong;
 using rasdaq.Core.ECS;
 using rasdaq.Graphics;
 using rasdaq.Logging;
 using Application = rasdaq.Application;
+using Keys = rasdaq.Inputs.Keys;
+using MouseButton = rasdaq.Inputs.MouseButton;
 
 namespace Pong;
 

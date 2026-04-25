@@ -2,7 +2,7 @@ using NUnit.Framework;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
-using rasdaq.Input;
+using rasdaq.Inputs;
 
 namespace tests;
 

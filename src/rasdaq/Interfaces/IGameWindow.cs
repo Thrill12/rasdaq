@@ -1,5 +1,6 @@
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
+using rasdaq.Inputs;
 
 internal interface IGameWindow
 {
@@ -12,4 +13,5 @@ internal interface IGameWindow
     public CursorState CursorState { get; set; }
 
     public Vector2 MousePosition { get; set; }
+    public bool IsKeyDown(Keys key);
 }
