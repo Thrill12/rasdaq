@@ -20,7 +20,7 @@ namespace rasdaq;
 public sealed class Application : IDisposable
 {
     public static Application? Instance { get; private set; }
-    public InputManager InputManager { get; private set; }
+    internal InputManager InputManager { get; set; }
 
     private List<World> _worlds = new();
     private GameWindow _gameWindow;

@@ -7,30 +7,30 @@ using System.Runtime.CompilerServices;
 
 namespace rasdaq.Inputs;
 
-public class InputManager
+internal class InputManager
 {
     private readonly IGameWindow gameWindow;
 
     /// <summary>
     /// Callback to run upon releasing specified keyboard key
     /// </summary>
-    public Dictionary<Keys, Action> KeyUpCallbacks { get; } = [];
+    public Dictionary<Keys, Action> KeyUpCallbacks { get; set; } = [];
     /// <summary>
     /// Callback to run upon pressing down specified keyboard key
     /// </summary>
-    public Dictionary<Keys, Action> KeyDownCallbacks { get; } = [];
+    public Dictionary<Keys, Action> KeyDownCallbacks { get; set; } = [];
     /// <summary>
     /// Callback to run upon releasing specified mouse button
     /// </summary>
-    public Dictionary<MouseButton, Action> MouseButtonUpCallbacks { get; } = [];
+    public Dictionary<MouseButton, Action> MouseButtonUpCallbacks { get; set; } = [];
     /// <summary>
     /// Callback to run upon pressing down specified mouse button
     /// </summary>
-    public Dictionary<MouseButton, Action> MouseButtonDownCallbacks { get; } = [];
+    public Dictionary<MouseButton, Action> MouseButtonDownCallbacks { get; set; } = [];
     /// <summary>
     /// Callback to run when mouse moves
     /// </summary>
-    public Action<MouseMoveEventArgs> mouseMoveAction = e => { };
+    public Action<(float, float)> mouseMoveAction = e => { };
 
     internal InputManager(IGameWindow gameWindow)
     {
@@ -118,5 +118,54 @@ public class InputManager
     {
         return gameWindow.IsKeyDown(key);
     }
-}
 
+    /// <summary>
+    /// Returns whether a specific key or set of keys is pressed in the current frame and released in the previous.
+    /// </summary>
+    /// <param name="key">Key to check for</param>
+    /// <returns></returns>
+    public bool IsKeyPressed(Keys key)
+    {
+        return gameWindow.IsKeyPressed(key);
+    }
+
+    /// <summary>
+    /// Returns whether a specific key or set of keys is released in the current frame and pressed in the previous.
+    /// </summary>
+    /// <param name="key">Key to check for</param>
+    /// <returns></returns>
+    public bool IsKeyReleased(Keys key)
+    {
+        return gameWindow.IsKeyReleased(key);
+    }
+
+    /// <summary>
+    /// Returns whether a specific mouse button is pressed in the current frame.
+    /// </summary>
+    /// <param name="key">Key to check for</param>
+    /// <returns></returns>
+    public bool IsMouseButtonDown(MouseButton button)
+    {
+        return gameWindow.IsMouseButtonDown(button);
+    }
+
+    /// <summary>
+    /// Returns whether a specific mouse button is pressed in the current frame and released in the previous.
+    /// </summary>
+    /// <param name="key">Key to check for</param>
+    /// <returns></returns>
+    public bool IsMouseButtonPressed(MouseButton button)
+    {
+        return gameWindow.IsMouseButtonPressed(button);
+    }
+
+    /// <summary>
+    /// Returns whether a specific mouse button is released in the current frame and pressed in the previous.
+    /// </summary>
+    /// <param name="key">Key to check for</param>
+    /// <returns></returns>
+    public bool IsMouseButtonReleased(MouseButton button)
+    {
+        return gameWindow.IsMouseButtonReleased(button);
+    }
+}

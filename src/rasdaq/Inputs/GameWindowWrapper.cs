@@ -2,7 +2,10 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
 using rasdaq.Inputs;
+using Keys = rasdaq.Inputs.Keys;
+using MouseButton = rasdaq.Inputs.MouseButton;
 using OTKKeys = OpenTK.Windowing.GraphicsLibraryFramework.Keys;
+using OTKMouseButton = OpenTK.Windowing.GraphicsLibraryFramework.MouseButton;
 
 internal class GameWindowWrapper : IGameWindow
 {
@@ -20,6 +23,31 @@ internal class GameWindowWrapper : IGameWindow
         return gameWindow.IsKeyDown((OTKKeys)key);
     }
 
+    public bool IsKeyPressed(Keys key)
+    {
+        return gameWindow.IsKeyPressed((OTKKeys)key);
+    }
+
+    public bool IsKeyReleased(Keys key)
+    {
+        return gameWindow.IsKeyReleased((OTKKeys)key);
+    }
+
+    public bool IsMouseButtonDown(MouseButton button)
+    {
+        return gameWindow.IsMouseButtonDown((OTKMouseButton)button);
+    }
+
+    public bool IsMouseButtonPressed(MouseButton button)
+    {
+        return gameWindow.IsMouseButtonPressed((OTKMouseButton)button);
+    }
+
+    public bool IsMouseButtonReleased(MouseButton button)
+    {
+        return gameWindow.IsMouseButtonReleased((OTKMouseButton)button);
+    }
+
     public event Action<KeyboardKeyEventArgs> KeyDown
     {
         add => gameWindow.KeyDown += value; remove => gameWindow.KeyDown -= value;
@@ -29,9 +57,9 @@ internal class GameWindowWrapper : IGameWindow
         add => gameWindow.KeyUp += value; remove => gameWindow.KeyUp -= value;
     }
 
-    public event Action<MouseMoveEventArgs> MouseMove
+    public event Action<MouseMoveEvent> MouseMove
     {
-        add => gameWindow.MouseMove += value; remove => gameWindow.MouseMove -= value;
+        add => gameWindow.MouseMove += (MouseMoveEventArgs)value; remove => gameWindow.MouseMove -= value;
     }
 
     public event Action<MouseButtonEventArgs> MouseDown
