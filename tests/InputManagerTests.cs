@@ -3,6 +3,8 @@ using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
 using rasdaq.Inputs;
+using Keys = rasdaq.Inputs.Keys;
+using MouseButton = rasdaq.Inputs.MouseButton;
 
 namespace tests;
 
@@ -52,40 +54,76 @@ internal class MockApplication : IGameWindow
 
     public event Action<KeyboardKeyEventArgs>? KeyUp;
 
-    public event Action<MouseMoveEventArgs>? MouseMove;
+    public event Action<MouseMoveEvent>? MouseMove;
     public event Action<MouseButtonEventArgs>? MouseDown;
     public event Action<MouseButtonEventArgs>? MouseUp;
 
+    public List<Keys> currentKeysBeingPressed = new();
+    public List<MouseButton> currentMouseButtonsBeingPressed = new();
+
+    public void SetPressedKeys(Keys newKeys)
+    {
+        currentKeysBeingPressed.Add(newKeys);
+    }
+
+    public void SetMouseButtonPressed(MouseButton newButton)
+    {
+        currentMouseButtonsBeingPressed.Add(newButton);
+    }
+
+    public bool IsKeyDown(Keys key)
+    {
+        return currentKeysBeingPressed.Contains(key);
+    }
+
+    public bool IsKeyPressed(Keys key)
+    {
+        return currentKeysBeingPressed.Contains(key);
+    }
+
+    public bool IsKeyReleased(Keys key)
+    {
+        return !currentKeysBeingPressed.Contains(key);
+    }
+
+    public bool IsMouseButtonDown(MouseButton button)
+    {
+        return currentMouseButtonsBeingPressed.Contains(button);
+    }
+
+    public bool IsMouseButtonPressed(MouseButton button)
+    {
+        return currentMouseButtonsBeingPressed.Contains(button);
+    }
+
+    public bool IsMouseButtonReleased(MouseButton button)
+    {
+        return !currentMouseButtonsBeingPressed.Contains(button);
+    }
+
     public void TriggerKeyDown(Keys key)
     {
-        KeyDown?.Invoke(new KeyboardKeyEventArgs(key, 0, 0, false));
+        KeyDown?.Invoke(new KeyboardKeyEventArgs((OpenTK.Windowing.GraphicsLibraryFramework.Keys)key, 0, 0, false));
     }
 
     public void TriggerKeyUp(Keys key)
     {
-        KeyUp?.Invoke(new KeyboardKeyEventArgs(key, 0, 0, false));
+        KeyUp?.Invoke(new KeyboardKeyEventArgs((OpenTK.Windowing.GraphicsLibraryFramework.Keys)key, 0, 0, false));
     }
 
     public void TriggerMouseButtonDown(MouseButton mouseButton)
     {
-        MouseDown?.Invoke(new MouseButtonEventArgs(mouseButton, InputAction.Press, 0));
+        MouseDown?.Invoke(new MouseButtonEventArgs((OpenTK.Windowing.GraphicsLibraryFramework.MouseButton)mouseButton, InputAction.Press, 0));
     }
 
     public void TriggerMouseButtonUp(MouseButton mouseButton)
     {
-        MouseUp?.Invoke(new MouseButtonEventArgs(mouseButton, InputAction.Release, 0));
+        MouseUp?.Invoke(new MouseButtonEventArgs((OpenTK.Windowing.GraphicsLibraryFramework.MouseButton)mouseButton, InputAction.Release, 0));
     }
 
-    public void TriggerMouseMove(MouseMoveData mouseMoveData)
+    public void TriggerMouseMove(MouseMoveEvent mouseMoveData)
     {
-        MouseMove?.Invoke(
-            new MouseMoveEventArgs(
-                mouseMoveData.X,
-                mouseMoveData.Y,
-                mouseMoveData.deltaX,
-                mouseMoveData.deltaY
-            )
-        );
+        MouseMove?.Invoke(mouseMoveData);
     }
 }
 
@@ -97,7 +135,8 @@ public class InputManagerTests
     [SetUp]
     public void Init()
     {
-
+        mockApplication.currentKeysBeingPressed.Clear();
+        mockApplication.currentMouseButtonsBeingPressed.Clear();
     }
 
     [Test]
@@ -159,17 +198,15 @@ public class InputManagerTests
     [Test]
     public void SetEventListeners_InvokeMouseMove_InvokeMouseMoveCallback()
     {
-        MouseMoveData inputMouseMoveData = new(0, 0, 0, 0);
-        MouseMoveData verifiedMouseMoveData = new(30, 70, 30, 70);
+        MouseMoveEvent inputMouseMoveData = new() { dx = 0, dy = 0 };
+        MouseMoveEvent verifiedMouseMoveData = new() { dx = 70, dy = 30 };
 
         InputManager inputManager = new(mockApplication)
         {
             mouseMoveAction = (e) =>
             {
-                inputMouseMoveData.X = e.X;
-                inputMouseMoveData.Y = e.Y;
-                inputMouseMoveData.deltaX = e.DeltaX;
-                inputMouseMoveData.deltaY = e.DeltaY;
+                inputMouseMoveData.dx = e.dx;
+                inputMouseMoveData.dy = e.dy;
             }
         };
 
@@ -186,6 +223,28 @@ public class InputManagerTests
         InputManager inputManager = new(mockApplication);
 
         Assert.That(inputManager.LockMouse(), Is.EqualTo(CursorState.Grabbed));
+    }
+
+    [Test]
+    public void InputManager_IsKeyDown()
+    {
+        InputManager inputManager = new(mockApplication);
+
+        mockApplication.currentKeysBeingPressed.Add(Keys.A);
+
+        Assert.That(inputManager.IsKeyDown(Keys.A), Is.True);
+        Assert.That(inputManager.IsKeyDown(Keys.B), Is.False);
+    }
+
+    [Test]
+    public void InputManager_IsMouseButtonDown()
+    {
+        InputManager inputManager = new(mockApplication);
+
+        mockApplication.currentMouseButtonsBeingPressed.Add(MouseButton.Left);
+
+        Assert.That(inputManager.IsMouseButtonDown(MouseButton.Left), Is.True);
+        Assert.That(inputManager.IsMouseButtonDown(MouseButton.Right), Is.False);
     }
 
     [Test]
