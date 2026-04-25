@@ -30,7 +30,7 @@ internal class InputManager
     /// <summary>
     /// Callback to run when mouse moves
     /// </summary>
-    public Action<(float, float)> mouseMoveAction = e => { };
+    public Action<MouseMoveEvent> mouseMoveAction { get; set; } = e => { };
 
     internal InputManager(IGameWindow gameWindow)
     {

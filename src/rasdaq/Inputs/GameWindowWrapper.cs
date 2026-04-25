@@ -57,9 +57,29 @@ internal class GameWindowWrapper : IGameWindow
         add => gameWindow.KeyUp += value; remove => gameWindow.KeyUp -= value;
     }
 
+    private readonly Dictionary<Action<MouseMoveEvent>, Action<MouseMoveEventArgs>> _mouseMoveWrappers = new();
     public event Action<MouseMoveEvent> MouseMove
     {
-        add => gameWindow.MouseMove += (MouseMoveEventArgs)value; remove => gameWindow.MouseMove -= value;
+        add
+        {
+            Action<MouseMoveEventArgs> wrapper = args => value(new MouseMoveEvent
+            {
+                dx = args.DeltaX,
+                dy = args.DeltaY
+            });
+
+            _mouseMoveWrappers[value] = wrapper;
+            gameWindow.MouseMove += wrapper;
+        }
+
+        remove
+        {
+            if (_mouseMoveWrappers.TryGetValue(value, out Action<MouseMoveEventArgs>? wrapper))
+            {
+                gameWindow.MouseMove -= wrapper;
+                _mouseMoveWrappers.Remove(value);
+            }
+        }
     }
 
     public event Action<MouseButtonEventArgs> MouseDown

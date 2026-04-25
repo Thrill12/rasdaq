@@ -8,40 +8,45 @@ namespace rasdaq.Inputs;
 /// </summary>
 public static class Input
 {
-    public static void OnKeyDown(Keys key, Action callback)
-    {
-        Application.Instance?.InputManager.KeyDownCallbacks[key] = callback;
-    }
+    /// <summary>
+    /// Callback to run upon releasing specified keyboard key
+    /// </summary>
+    public static Dictionary<Keys, Action> OnKeyUp =>
+        Application.Instance?.InputManager.KeyUpCallbacks ?? throw new NullReferenceException("Application is not initialized.");
 
-    public static void OnKeyUp(Keys key, Action callback)
-    {
-        Application.Instance?.InputManager.KeyUpCallbacks[key] = callback;
-    }
+    /// <summary>
+    /// Callback to run upon pressing down specified keyboard key
+    /// </summary>
+    public static Dictionary<Keys, Action> OnKeyDown =>
+        Application.Instance?.InputManager.KeyDownCallbacks ?? throw new NullReferenceException("Application is not initialized.");
 
-    public static void OnMouseButtonDown(MouseButton button, Action callback)
-    {
-        Application.Instance?.InputManager.MouseButtonDownCallbacks[button] = callback;
-    }
+    /// <summary>
+    /// Callback to run upon releasing specified mouse button
+    /// </summary>
+    public static Dictionary<MouseButton, Action> OnMouseButtonUp =>
+        Application.Instance?.InputManager.MouseButtonUpCallbacks ?? throw new NullReferenceException("Application is not initialized.");
 
-    public static void OnMouseButtonUp(MouseButton button, Action callback)
-    {
-        Application.Instance?.InputManager.MouseButtonUpCallbacks[button] = callback;
-    }
+    /// <summary>
+    /// Callback to run upon pressing down specified mouse button
+    /// </summary>
+    public static Dictionary<MouseButton, Action> OnMouseButtonDown =>
+        Application.Instance?.InputManager.MouseButtonDownCallbacks ?? throw new NullReferenceException("Application is not initialized.");
 
-    public static void OnMouseMove(Action<(float, float)> callback)
+    /// <summary>
+    /// Callback to run when mouse moves
+    /// </summary>
+    public static Action<MouseMoveEvent> OnMouseMove
     {
-        Application.Instance?.InputManager.mouseMoveAction = callback;
-    }
+        get => Application.Instance?.InputManager.mouseMoveAction ?? throw new NullReferenceException("Application is not initialized.");
+        set
+        {
+            if (Application.Instance == null)
+            {
+                throw new NullReferenceException("Application is not initialized.");
+            }
 
-    // And corresponding Remove methods:
-    public static void RemoveKeyDown(Keys key)
-    {
-        Application.Instance?.InputManager.KeyDownCallbacks.Remove(key);
-    }
-
-    public static void RemoveKeyUp(Keys key)
-    {
-        Application.Instance?.InputManager.KeyUpCallbacks.Remove(key);
+            Application.Instance.InputManager.mouseMoveAction = value;
+        }
     }
 
     /// <summary>
@@ -105,7 +110,7 @@ public static class Input
     }
 
     /// <summary>
-    /// Gets the position of the mouse relative to the content area of this window
+    /// Gets the position of the mouse relative to the content area of this window.
     /// </summary>
     /// <returns>Vector2 representing mouse coordinates</returns>
     public static Vector2 GetMousePosition()
@@ -114,7 +119,7 @@ public static class Input
     }
 
     /// <summary>
-    /// Locks mouse cursor to center of screen
+    /// Locks mouse cursor to center of screen.
     /// </summary>
     /// <returns>OpenTK CursorState</returns>
     public static CursorState LockMouse()
@@ -123,7 +128,7 @@ public static class Input
     }
 
     /// <summary>
-    /// Unlocks mouse cursor from center of screen, if locked
+    /// Unlocks mouse cursor from center of screen, if locked.
     /// </summary>
     /// <returns>OpenTK CursorState</returns>
     public static CursorState UnlockMouse()
