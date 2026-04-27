@@ -79,7 +79,16 @@ public class Transform
         if (distanceToCover != Vector2.Zero)
         {
             Console.WriteLine(distanceToCover);
-            var distanceThisFrame = Vector2.Normalize(distanceVelocity) * (float)elapsedTime;
+            Vector2 distanceThisFrame;
+            if (!isDistanceToCoverVector)
+                distanceThisFrame = distanceVelocity * (float)elapsedTime;
+            else
+            {
+                if (velocity == Vector2.Zero)
+                    distanceThisFrame = Vector2.Zero;
+                else
+                    distanceThisFrame = velocity * (float)elapsedTime;
+            }
             Console.WriteLine(velocity);
             Console.WriteLine(distanceThisFrame);
             var deltaX = Math.Abs(distanceToCover.X) >= Math.Abs(distanceThisFrame.X) ? distanceThisFrame.X : distanceToCover.X;
@@ -105,6 +114,17 @@ public class Transform
         distanceToCover = Vector2.Normalize(velocity) * distance;
         this.velocity = velocity;
         this.distanceVelocity = velocity;
+        isDistanceToCoverVector = false;
+    }
+
+    bool isDistanceToCoverVector = false;
+
+    public void MoveVector(Vector2 velocity, float distance)
+    {
+        distanceToCover = Vector2.Normalize(velocity) * distance;
+        this.velocity = velocity;
+        this.distanceVelocity = velocity;
+        isDistanceToCoverVector = true;
     }
 
     internal Matrix4 _GetTransformation(double elapsedTime)
