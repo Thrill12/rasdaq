@@ -19,6 +19,7 @@ public sealed class Application : IDisposable
 {
     public static Application? Instance { get; private set; }
     public InputManager InputManager { get; private set; }
+    private Entity soldier;
 
     private List<World> _worlds = new();
     private GameWindow _gameWindow;
@@ -30,7 +31,7 @@ public sealed class Application : IDisposable
     /// <param name="height"></param>
     /// <param name="title"></param>
     /// <exception cref="InvalidOperationException"></exception>
-    public Application(int width, int height, string title)
+    public Application(int width, int height, string title, Entity soldier)
     {
         if (Instance != null)
         {
@@ -54,7 +55,9 @@ public sealed class Application : IDisposable
         _gameWindow.RenderFrame += OnRenderFrame;
         _gameWindow.FramebufferResize += OnFramebufferResize;
 
+
         InputManager = new InputManager(new GameWindowWrapper(_gameWindow));
+        this.soldier = soldier;
     }
 
     internal void RegisterWorld(World world)
@@ -77,6 +80,25 @@ public sealed class Application : IDisposable
         {
             _gameWindow.Close();
         }
+
+        if (_gameWindow.KeyboardState.IsKeyDown(Keys.W))
+        {
+            soldier.Transform.MoveOnce(new OpenTK.Mathematics.Vector2(0, 100));
+        }
+
+        if (_gameWindow.KeyboardState.IsKeyDown(Keys.S))
+        {
+            soldier.Transform.MoveOnce(new OpenTK.Mathematics.Vector2(0, -100));
+        }
+        if (_gameWindow.KeyboardState.IsKeyDown(Keys.A))
+        {
+            soldier.Transform.MoveOnce(new OpenTK.Mathematics.Vector2(-100, 0));
+        }
+        if (_gameWindow.KeyboardState.IsKeyDown(Keys.D))
+        {
+            soldier.Transform.MoveOnce(new OpenTK.Mathematics.Vector2(100, 0));
+        }
+
 
         foreach (World world in _worlds)
         {
@@ -113,7 +135,7 @@ public sealed class Application : IDisposable
     {
         GL.Clear(ClearBufferMask.ColorBufferBit);
 
-        Renderer.Instance.Render();
+        Renderer.Instance.Render(args.Time);
 
         _gameWindow.SwapBuffers();
     }

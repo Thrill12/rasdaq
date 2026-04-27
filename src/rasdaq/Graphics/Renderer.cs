@@ -1,5 +1,6 @@
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
+using System.Diagnostics;
 
 namespace rasdaq.Graphics;
 
@@ -23,7 +24,7 @@ public class Renderer
         GL.BindVertexArray(vertexArrayObject);
         GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferObject);
 
-        vertices = new();
+        vertices = [];
     }
 
     public void LoadSprite(Sprite sprite)
@@ -31,7 +32,7 @@ public class Renderer
         sprites.Add(sprite);
     }
 
-    internal void Render()
+    internal void Render(double elapsedTime)
     {
         foreach (Sprite sprite in sprites)
         {
@@ -50,10 +51,20 @@ public class Renderer
                 vertices.ToArray(),
                 BufferUsageHint.DynamicDraw
             );
-            System.Console.WriteLine(sprite.Entity.Transform.GetTransformation());
+            // Console.WriteLine(sprite.Entity.Transform.GetTransformation());
             sprite.Shader.Use();
 
-            sprite.Shader.SetUniform("transform", sprite.Entity.Transform.GetTransformation(), true);
+            var ortho = Matrix4.CreateOrthographicOffCenter(-2.0f, 2.0f, -2.0f, 2.0f, 0.1f, 100.0f);
+            // // var Width =
+            // // Matrix4 ortho = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
+
+            Matrix4 view = Matrix4.CreateTranslation(0.0f, 0.0f, -3.0f);
+            sprite.Shader.SetUniform("projection", ortho, true);
+            sprite.Shader.SetUniform("view", view, true);
+            var yo = sprite.Entity.Transform._GetTransformation(elapsedTime);
+            // System.Console.WriteLine(yo);
+            sprite.Shader.SetUniform("transform", yo, true);
+            // sprite.Shader.SetUniform("transform", Matrix4.CreateRotationX(MathHelper.DegreesToRadians(-55.0f)), true);
             SetVertexAttributes(sprite);
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, vertices.Count / 9);
