@@ -88,7 +88,7 @@ internal class Program
             //     soldier.Transform.Move(new Vector2(50000, 0));
             // });
 
-            soldier.Transform.MoveDistance(new Vector2(100, 0), 10f);
+            soldier.Transform.MoveVector(new Vector2(90, 0), 1000f);
             app.InputManager.mouseMoveAction = (e) =>
             {
                 if (logMouseDelta)
