@@ -59,7 +59,7 @@ internal class Program
             // Entity soldier = new();
             soldier.AddComponent(new Soldier());
 
-            Sprite spr = new(1.1f, 1.1f, tex);
+            Sprite spr = new(456, 456, tex);
             soldier.AddComponent(spr);
 
             world.AddEntity(soldier);
