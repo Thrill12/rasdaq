@@ -47,7 +47,6 @@ public class Transform
     {
         if (distanceToCover != Vector2.Zero)
         {
-            Console.WriteLine(distanceToCover);
             Vector2 distanceThisFrame;
             if (!isDistanceToCoverVector)
                 distanceThisFrame = distanceVelocity * (float)elapsedTime;
@@ -58,8 +57,6 @@ public class Transform
                 else
                     distanceThisFrame = velocity * (float)elapsedTime;
             }
-            Console.WriteLine(velocity);
-            Console.WriteLine(distanceThisFrame);
             var deltaX = Math.Abs(distanceToCover.X) >= Math.Abs(distanceThisFrame.X) ? distanceThisFrame.X : distanceToCover.X;
             var deltaY = Math.Abs(distanceToCover.Y) >= Math.Abs(distanceThisFrame.Y) ? distanceThisFrame.Y : distanceToCover.Y;
 
@@ -93,9 +90,22 @@ public class Transform
         isDistanceToCoverVector = true;
     }
 
+    private Vector2d scaleFactor = Vector2d.One;
+
+    public void Scale(double xScaleFactor = 1.0, double yScaleFactor = 1.0)
+    {
+        scaleFactor = new Vector2d(xScaleFactor, yScaleFactor);
+    }
+
+
+
     internal Matrix4 _GetTransformation(double elapsedTime)
     {
+        Console.WriteLine("localX: " + localX);
+        Console.WriteLine("localY: " + localY);
         SetFrameMovement(elapsedTime);
-        return Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(localRotateZ)) * Matrix4.CreateTranslation(localX / 1920 * 2f, localY / 1080 * 2f, 0);
+        return Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(localRotateZ)) *
+            Matrix4.CreateScale((float)scaleFactor.X, (float)scaleFactor.Y, 1.0f) *
+            Matrix4.CreateTranslation(localX, localY, 0);
     }
 }
