@@ -101,8 +101,6 @@ public class Transform
 
     internal Matrix4 _GetTransformation(double elapsedTime)
     {
-        Console.WriteLine("localX: " + localX);
-        Console.WriteLine("localY: " + localY);
         SetFrameMovement(elapsedTime);
         return Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(localRotateZ)) *
             Matrix4.CreateScale((float)scaleFactor.X, (float)scaleFactor.Y, 1.0f) *
