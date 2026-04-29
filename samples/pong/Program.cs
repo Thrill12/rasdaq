@@ -59,7 +59,7 @@ internal class Program
             // Entity soldier = new();
             soldier.AddComponent(new Soldier());
 
-            Sprite spr = new(456, 456, tex);
+            Sprite spr = new(456, 456, tex, 400, 300);
             soldier.AddComponent(spr);
 
             world.AddEntity(soldier);
@@ -88,7 +88,7 @@ internal class Program
             //     soldier.Transform.Move(new Vector2(50000, 0));
             // });
 
-            soldier.Transform.MoveDistance(new Vector2(90, 0), 500);
+            // soldier.Transform.MoveDistance(new Vector2(90, 0), 500);
             app.InputManager.mouseMoveAction = (e) =>
             {
                 if (logMouseDelta)
