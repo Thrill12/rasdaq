@@ -135,7 +135,7 @@ public sealed class Application : IDisposable
     {
         GL.Clear(ClearBufferMask.ColorBufferBit);
 
-        Renderer.Instance.Render(args.Time);
+        Renderer.Instance.Render(args.Time, _gameWindow.Size);
 
         _gameWindow.SwapBuffers();
     }

@@ -32,7 +32,7 @@ public class Renderer
         sprites.Add(sprite);
     }
 
-    internal void Render(double elapsedTime)
+    internal void Render(double elapsedTime, Vector2i windowSize)
     {
         foreach (Sprite sprite in sprites)
         {
@@ -54,17 +54,11 @@ public class Renderer
             // Console.WriteLine(sprite.Entity.Transform.GetTransformation());
             sprite.Shader.Use();
 
-            var ortho = Matrix4.CreateOrthographicOffCenter(-2.0f, 2.0f, -2.0f, 2.0f, 0.1f, 100.0f);
-            // // var Width =
-            // // Matrix4 ortho = Matrix4.CreatePerspectiveFieldOfView(MathHelper.DegreesToRadians(45.0f), 800.0f / 600.0f, 0.1f, 100.0f);
-
-            Matrix4 view = Matrix4.CreateTranslation(0.0f, 0.0f, -3.0f);
+            var ortho = Matrix4.CreateOrthographicOffCenter(0.0f, windowSize.X, 0.0f, windowSize.Y, 0.1f, 100.0f);
+            Matrix4 view = Matrix4.CreateTranslation(0.0f, 0.0f, -50.0f);
             sprite.Shader.SetUniform("projection", ortho, true);
             sprite.Shader.SetUniform("view", view, true);
-            var yo = sprite.Entity.Transform._GetTransformation(elapsedTime);
-            // System.Console.WriteLine(yo);
-            sprite.Shader.SetUniform("transform", yo, true);
-            // sprite.Shader.SetUniform("transform", Matrix4.CreateRotationX(MathHelper.DegreesToRadians(-55.0f)), true);
+            sprite.Shader.SetUniform("transform", sprite.Entity.Transform._GetTransformation(elapsedTime), true);
             SetVertexAttributes(sprite);
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, vertices.Count / 9);
