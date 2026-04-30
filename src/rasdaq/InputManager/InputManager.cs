@@ -43,7 +43,7 @@ public class InputManager
     /// </summary>
     internal void SetEventListeners()
     {
-        Console.WriteLine("Setting listeners");
+        // Console.WriteLine("Setting listeners");
         gameWindow.KeyUp += (e) =>
         {
             if (KeyUpCallbacks.ContainsKey(e.Key))
