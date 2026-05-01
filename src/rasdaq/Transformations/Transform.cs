@@ -85,7 +85,7 @@ public class Transform
 
     public void MoveDistance(Vector2 velocity, float distance)
     {
-        distanceToCover = Vector2.Normalize(velocity) * distance;
+        distanceToCover = Vector2.Normalize(velocity) * Math.Abs(distance);
         distanceCovered = Vector2.Zero;
         distanceVelocity = velocity;
         isDistanceToCoverVector = false;
@@ -93,7 +93,7 @@ public class Transform
 
     public void MoveVector(Vector2 velocity, float distance)
     {
-        distanceToCover = Vector2.Normalize(velocity) * distance;
+        distanceToCover = Vector2.Normalize(velocity) * Math.Abs(distance);
         distanceCovered = Vector2.Zero;
         distanceVelocity = velocity;
         isDistanceToCoverVector = true;
