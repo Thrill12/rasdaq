@@ -56,7 +56,6 @@ public sealed class Application : IDisposable
         _gameWindow.RenderFrame += OnRenderFrame;
         _gameWindow.FramebufferResize += OnFramebufferResize;
 
-
         InputManager = new InputManager(new GameWindowWrapper(_gameWindow));
         this.soldier = soldier;
     }
@@ -99,7 +98,6 @@ public sealed class Application : IDisposable
         {
             soldier.Transform.MoveOnce(new OpenTK.Mathematics.Vector2(100, 0));
         }
-
 
         foreach (World world in _worlds)
         {
