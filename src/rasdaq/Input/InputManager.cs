@@ -43,11 +43,7 @@ public class InputManager
     /// </summary>
     internal void SetEventListeners()
     {
-<<<<<<< HEAD:src/rasdaq/InputManager/InputManager.cs
-        // Console.WriteLine("Setting listeners");
-=======
         Log.Trace("Setting listeners");
->>>>>>> origin/main:src/rasdaq/Input/InputManager.cs
         gameWindow.KeyUp += (e) =>
         {
             if (KeyUpCallbacks.ContainsKey(e.Key))
