@@ -33,6 +33,14 @@ public class TransformTests
 
     }
 
+    private void RunTransformFrames(Transform transform, int frames, float deltaTime = 1)
+    {
+        for (int frame = 0; frame < frames; frame++)
+        {
+            transform._GetTransformation(deltaTime);
+        }
+    }
+
     [Test]
     public void Rotate2D_SetDegrees_RotateZDegrees()
     {
@@ -112,65 +120,165 @@ public class TransformTests
     public void MoveDistance_SetTenRight_MoveTenRightOverTwoFrames()
     {
         var transform = new Transform();
-        Vector2 velocity = new(1, 0);
+        Vector2 velocity = new(5, 0);
         float distance = 10f;
 
         transform.MoveDistance(velocity, distance);
 
-        Vector2 vectorAfter10Sec = new(velocity.X * 10, velocity.Y);
+        Vector2 vectorAfter10Sec = new(velocity.X * 2, velocity.Y);
 
-        // frame 1
-        transform._GetTransformation(5);
-        // frame 2
-        transform._GetTransformation(5);
+        RunTransformFrames(transform, 2);
 
         Assert.That(new Vector2(transform.WorldX, transform.WorldY), Is.EqualTo(vectorAfter10Sec));
     }
 
+    [Test]
+    public void MoveDistance_SetElevenRight_MoveElevenRightOverThreeFrames()
+    {
+        var transform = new Transform();
+        Vector2 velocity = new(5, 0);
+        float distance = 11f;
 
-    // [Test]
-    // public void Sprite_WithVertices_SetsPropertiesCorrectly()
-    // {
-    //     float[] vertices = [0f, 0f, 0f, 1f, 0f, 0f, 0f, 1f, 0f];
-    //     Color color = Color.Red;
+        transform.MoveDistance(velocity, distance);
 
-    //     var sprite = new Sprite(vertices, color, null, new MockShader());
+        Vector2 vectorAfter3Frames = new(11, velocity.Y);
 
-    //     Assert.That(sprite.Vertices, Is.EqualTo(vertices));
-    //     Assert.That(sprite.Color, Is.EqualTo(color));
-    //     Assert.That(sprite.Texture, Is.Null);
-    // }
+        RunTransformFrames(transform, 3);
 
-    // [Test]
-    // public void Sprite_WithWidthHeight_GeneratesCorrectQuadVertices()
-    // {
-    //     float width = 2f,
-    //         height = 3f;
+        Assert.That(new Vector2(transform.WorldX, transform.WorldY), Is.EqualTo(vectorAfter3Frames));
+    }
 
-    //     var sprite = new Sprite(width, height, Color.White, new MockShader());
+    [Test]
+    public void MoveDistance_SetTenRightWithVelocity_MoveTenRightWithVelocity()
+    {
+        var transform = new Transform();
+        Vector2 velocity = new(1, 0);
+        Vector2 distanceVelocity = new(10, 0);
+        float distance = 10f;
 
-    //     Assert.That(sprite.Vertices.Length, Is.EqualTo(18)); // 6 vertices * 3 floats
-    //     Assert.That(sprite.Vertices[0], Is.EqualTo(-1f)); // left
-    //     Assert.That(sprite.Vertices[1], Is.EqualTo(-1.5f)); // bottom
-    //     Assert.That(sprite.Vertices[3], Is.EqualTo(1f)); // right
-    //     Assert.That(sprite.Vertices[7], Is.EqualTo(1.5f)); // top
-    // }
+        transform.MoveDistance(distanceVelocity, distance);
+        transform.SetVelocity(velocity);
+        Vector2 vectorAfterFrame = new(velocity.X + distanceVelocity.X, velocity.Y + distanceVelocity.Y);
 
-    // [Test]
-    // public void Sprite_WithTexture_LoadsTexture()
-    // {
-    //     Texture tex = new MockTexture();
-    //     var sprite = new Sprite(1f, 1f, Color.White, tex, new MockShader());
+        RunTransformFrames(transform, 1);
+        Assert.That(new Vector2(transform.WorldX, transform.WorldY), Is.EqualTo(vectorAfterFrame));
+    }
 
-    //     Assert.That(sprite.Texture, Is.Not.Null);
-    //     Assert.That(sprite.Color, Is.EqualTo(Color.White));
-    // }
+    [Test]
+    public void MoveDistance_SetTenRightWithVelocity_MovetWithVelocityTwoFrames()
+    {
+        var transform = new Transform();
+        Vector2 velocity = new(5, 0);
+        Vector2 distanceVelocity = new(5, 0);
+        float distance = 10f;
 
-    // [Test]
-    // public void Sprite_DefaultColor_IsWhite()
-    // {
-    //     var sprite = new Sprite(1f, 1f, null, null, new MockShader());
+        transform.MoveDistance(distanceVelocity, distance);
+        transform.SetVelocity(velocity);
+        // velocity * 2 frames + distanceVelocity only one frame as met distance on first frame
+        Vector2 vectorAfterFrame = new(velocity.X * 2 + distanceVelocity.X, velocity.Y * 2 + distanceVelocity.Y);
 
-    //     Assert.That(sprite.Color, Is.EqualTo(Color.White));
-    // }
+        RunTransformFrames(transform, 2);
+        Assert.That(new Vector2(transform.WorldX, transform.WorldY), Is.EqualTo(vectorAfterFrame));
+    }
+
+    [Test]
+    public void MoveDistance_SetTenRightWithCounterVelocity_MovetWithVelocityTwoFrames()
+    {
+        var transform = new Transform();
+        Vector2 velocity = new(-10, 0);
+        Vector2 distanceVelocity = new(5, 0);
+        float distance = 5f;
+
+        transform.MoveDistance(distanceVelocity, distance);
+        transform.SetVelocity(velocity);
+        // velocity * 2 frames + distanceVelocity only one frame as met distance on first frame
+        Vector2 vectorAfterFrame = new(velocity.X * 2 + distanceVelocity.X, velocity.Y * 2 + distanceVelocity.Y);
+
+        RunTransformFrames(transform, 2);
+        Assert.That(new Vector2(transform.WorldX, transform.WorldY), Is.EqualTo(vectorAfterFrame));
+    }
+
+    [Test]
+    public void MoveDistance_SetNegativeDistance_IgnoreDistanceDirectionTwoFrames()
+    {
+        var transform = new Transform();
+        Vector2 distanceVelocity = new(5, 0);
+        float distance = -5f;
+
+        transform.MoveDistance(distanceVelocity, distance);
+        Vector2 vectorAfter2Frames = new(distanceVelocity.X, distanceVelocity.Y);
+
+        RunTransformFrames(transform, 2);
+        Assert.That(new Vector2(transform.WorldX, transform.WorldY), Is.EqualTo(vectorAfter2Frames));
+    }
+
+
+    [Test]
+    public void MoveVector_SetTenRight_MoveTenRight()
+    {
+        var transform = new Transform();
+        Vector2 velocity = new(10, 0);
+        float distance = 10f;
+
+        transform.MoveVector(velocity, distance);
+
+        Vector2 vectorAfter1Frame = new(velocity.X, velocity.Y);
+
+        RunTransformFrames(transform, 1);
+        Assert.That(new Vector2(transform.WorldX, transform.WorldY), Is.EqualTo(vectorAfter1Frame));
+    }
+
+    [Test]
+    public void MoveVector_SetTenRightWithVelocity_MoveTenRightWithVelocity()
+    {
+        var transform = new Transform();
+        Vector2 velocity = new(1, 0);
+        Vector2 distanceVelocity = new(10, 0);
+        float distance = 10f;
+
+        transform.MoveVector(distanceVelocity, distance);
+        transform.SetVelocity(velocity);
+        Vector2 vectorAfterFrame = new(velocity.X + distanceVelocity.X, velocity.Y + distanceVelocity.Y);
+
+        RunTransformFrames(transform, 1);
+        Assert.That(new Vector2(transform.WorldX, transform.WorldY), Is.EqualTo(vectorAfterFrame));
+    }
+
+    [Test]
+    public void MoveVector_SetTenRightWithCounterVelocity_MoveTenRight()
+    {
+        var transform = new Transform();
+        Vector2 velocity = new(-0.5f, 0);
+        Vector2 distanceVelocity = new(1f, 0);
+        float distance = 10f;
+
+        transform.MoveVector(distanceVelocity, distance);
+        transform.SetVelocity(velocity);
+
+        // should be 9.5
+        RunTransformFrames(transform, 19);
+
+        // now set velocity to 0.1 in the same direction
+        velocity = new(0.1f, 0);
+        transform.SetVelocity(velocity);
+
+        // should move 10f and then velocity units in next two frames
+        Vector2 vectorAfterFrame = new(distanceVelocity.X * 10 + (velocity.X * 2), 0);
+        RunTransformFrames(transform, 2);
+
+        Assert.That(transform.WorldX, Is.EqualTo(vectorAfterFrame.X).Within(0.001f));
+        Assert.That(transform.WorldY, Is.EqualTo(vectorAfterFrame.Y).Within(0.001f));
+
+    }
+
+
+    [Test]
+    public void Scale_SetScale_TransformToScale()
+    {
+        var transform = new Transform();
+        double xScaleFactor = 2.0f;
+        transform.Scale(xScaleFactor);
+
+        Assert.That(transform._GetTransformation(1), Is.EqualTo(Matrix4.CreateScale((float)xScaleFactor, 1, 1)));
+    }
 }
