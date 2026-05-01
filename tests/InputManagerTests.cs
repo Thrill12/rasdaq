@@ -2,7 +2,6 @@ using NUnit.Framework;
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
-using rasdaq;
 using rasdaq.Input;
 
 namespace tests;
@@ -25,7 +24,10 @@ internal class MouseMoveData(float X, float Y, float DeltaX, float DeltaY)
     public override bool Equals(object? obj)
     {
         if (obj is not MouseMoveData)
+        {
             return false;
+        }
+
         MouseMoveData other = (MouseMoveData)obj;
 
         return X == other.X &&
@@ -40,7 +42,6 @@ internal class MouseMoveData(float X, float Y, float DeltaX, float DeltaY)
     }
 }
 
-
 internal class MockApplication : IGameWindow
 {
     public CursorState CursorState { get; set; } = CursorState.Normal;
@@ -54,7 +55,6 @@ internal class MockApplication : IGameWindow
     public event Action<MouseMoveEventArgs>? MouseMove;
     public event Action<MouseButtonEventArgs>? MouseDown;
     public event Action<MouseButtonEventArgs>? MouseUp;
-
 
     public void TriggerKeyDown(Keys key)
     {
@@ -92,7 +92,7 @@ internal class MockApplication : IGameWindow
 [TestFixture]
 public class InputManagerTests
 {
-    MockApplication mockApplication = new();
+    private MockApplication mockApplication = new();
 
     [SetUp]
     public void Init()
@@ -105,7 +105,7 @@ public class InputManagerTests
     {
         bool isKeyDown = false;
 
-        var inputManager = new InputManager(mockApplication);
+        InputManager inputManager = new(mockApplication);
         inputManager.KeyDownCallbacks.Add(Keys.A, () => isKeyDown = true);
         inputManager.SetEventListeners();
 
@@ -119,7 +119,7 @@ public class InputManagerTests
     {
         bool isKeyUp = false;
 
-        var inputManager = new InputManager(mockApplication);
+        InputManager inputManager = new(mockApplication);
         inputManager.KeyUpCallbacks.Add(Keys.A, () => isKeyUp = true);
         inputManager.SetEventListeners();
 
@@ -133,7 +133,7 @@ public class InputManagerTests
     {
         bool isMouseDown = false;
 
-        var inputManager = new InputManager(mockApplication);
+        InputManager inputManager = new(mockApplication);
         inputManager.MouseButtonDownCallbacks.Add(MouseButton.Button1, () => isMouseDown = true);
         inputManager.SetEventListeners();
 
@@ -147,7 +147,7 @@ public class InputManagerTests
     {
         bool isMouseUp = false;
 
-        var inputManager = new InputManager(mockApplication);
+        InputManager inputManager = new(mockApplication);
         inputManager.MouseButtonUpCallbacks.Add(MouseButton.Button1, () => isMouseUp = true);
         inputManager.SetEventListeners();
 
@@ -162,7 +162,7 @@ public class InputManagerTests
         MouseMoveData inputMouseMoveData = new(0, 0, 0, 0);
         MouseMoveData verifiedMouseMoveData = new(30, 70, 30, 70);
 
-        var inputManager = new InputManager(mockApplication)
+        InputManager inputManager = new(mockApplication)
         {
             mouseMoveAction = (e) =>
             {

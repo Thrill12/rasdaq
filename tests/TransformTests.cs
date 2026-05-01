@@ -212,7 +212,6 @@ public class TransformTests
         Assert.That(new Vector2(transform.WorldX, transform.WorldY), Is.EqualTo(vectorAfter2Frames));
     }
 
-
     [Test]
     public void MoveVector_SetTenRight_MoveTenRight()
     {
@@ -270,7 +269,6 @@ public class TransformTests
         Assert.That(transform.WorldY, Is.EqualTo(vectorAfterFrame.Y).Within(0.001f));
 
     }
-
 
     [Test]
     public void Scale_SetScale_TransformToScale()

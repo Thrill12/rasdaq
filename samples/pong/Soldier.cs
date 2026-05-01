@@ -31,6 +31,6 @@ internal class Soldier : Component
         // spr?.Transform.Move(0, move);
         Entity?.Transform.Rotate2D(0f);
         // Console.SetCursorPosition(0, 0);
-        // Console.WriteLine("Soldier FPS " + Math.Round(1f / deltaTime));
+        // Log.Info("Soldier FPS " + Math.Round(1f / deltaTime));
     }
 }

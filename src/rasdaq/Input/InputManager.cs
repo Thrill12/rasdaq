@@ -1,6 +1,7 @@
 using OpenTK.Mathematics;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.GraphicsLibraryFramework;
+using rasdaq.Logging;
 using System.Runtime.CompilerServices;
 
 [assembly: InternalsVisibleTo("tests")]
@@ -32,7 +33,6 @@ public class InputManager
     /// </summary>
     public Action<MouseMoveEventArgs> mouseMoveAction = e => { };
 
-
     internal InputManager(IGameWindow gameWindow)
     {
         this.gameWindow = gameWindow;
@@ -43,7 +43,11 @@ public class InputManager
     /// </summary>
     internal void SetEventListeners()
     {
+<<<<<<< HEAD:src/rasdaq/InputManager/InputManager.cs
         // Console.WriteLine("Setting listeners");
+=======
+        Log.Trace("Setting listeners");
+>>>>>>> origin/main:src/rasdaq/Input/InputManager.cs
         gameWindow.KeyUp += (e) =>
         {
             if (KeyUpCallbacks.ContainsKey(e.Key))
