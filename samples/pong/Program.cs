@@ -53,17 +53,26 @@ internal class Program
         try
         {
             Entity soldier = new();
+            Entity enemy = new();
+            // TODO remove soldier from constructor, this was for testing purposes only
             using Application app = new(800, 600, "rasdaq", soldier);
+
             Texture tex = new("assets/andrei.png");
+            Texture evilTex = new("assets/evil_enemy.jpg");
 
             World world = new();
-            // Entity soldier = new();
+
             soldier.AddComponent(new Soldier());
+            enemy.AddComponent(new Soldier());
 
             Sprite spr = new(456, 456, tex, 400, 300);
+            Sprite evilSpr = new(304, 230, evilTex, 800, 600);
+
             soldier.AddComponent(spr);
+            enemy.AddComponent(evilSpr);
 
             world.AddEntity(soldier);
+            world.AddEntity(enemy);
 
             app.InputManager.KeyDownCallbacks.Add(Keys.B, () => TestKey(app));
             app.InputManager.KeyDownCallbacks.Add(Keys.A, () =>
@@ -80,6 +89,12 @@ internal class Program
                     PrintMouseDelta(e.DeltaX, e.DeltaY);
                 }
             };
+
+            // set camera follow on spr sprite
+            app.InputManager.KeyDownCallbacks.Add(Keys.C, () =>
+            { Camera.SpriteToFollow = spr; });
+            app.InputManager.KeyUpCallbacks.Add(Keys.C, () =>
+            { Camera.SpriteToFollow = null; });
 
             app.InputManager.MouseButtonDownCallbacks.Add(MouseButton.Button1, TestMButton1Down);
             app.InputManager.MouseButtonUpCallbacks.Add(MouseButton.Button1, TestMButton1Up);
