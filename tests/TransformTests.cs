@@ -1,28 +1,9 @@
 using NUnit.Framework;
 using NUnit.Framework.Internal;
 using OpenTK.Mathematics;
-using rasdaq.Graphics;
-using rasdaq.Graphics.Shaders;
 using rasdaq.Transformations;
-using System.Drawing;
 
 namespace tests;
-
-// class MockShader : Shader
-// {
-//     public MockShader() : base()
-//     {
-
-//     }
-// }
-
-// class MockTexture : Texture
-// {
-//     public MockTexture() : base()
-//     {
-
-//     }
-// }
 
 [TestFixture]
 public class TransformTests
