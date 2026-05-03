@@ -1,12 +1,16 @@
 using OpenTK.Mathematics;
+using rasdaq.Graphics;
 using rasdaq.Graphics.Shaders;
 
-public class Camera
+public static class Camera
 {
     public static Vector3 CameraPosition { get; private set; } = new(0.0f, 0.0f, 3.0f);
+    public static Sprite? SpriteToFollow { private get; set; }
 
     internal static void SetCameraThisFrame(Vector2i windowSize, Matrix4 model, Shader shader)
     {
+        if (SpriteToFollow?.Entity is not null)
+            SetCameraPosition(SpriteToFollow.Entity.Transform.WorldX, SpriteToFollow.Entity.Transform.WorldY);
         shader.SetUniform("projection", SetProjectionThisFrame(windowSize), true);
         shader.SetUniform("view", GetView(), true);
         shader.SetUniform("transform", model, true);
