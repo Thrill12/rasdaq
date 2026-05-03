@@ -2,6 +2,8 @@ using OpenTK.Mathematics;
 using rasdaq.Graphics;
 using rasdaq.Graphics.Shaders;
 
+namespace rasdaq.Transformations;
+
 public static class Camera
 {
     public static Vector3 CameraPosition { get; private set; } = new(0.0f, 0.0f, 3.0f);
@@ -19,11 +21,6 @@ public static class Camera
     private static Matrix4 SetProjectionThisFrame(Vector2i windowSize)
     {
         return Matrix4.CreateOrthographicOffCenter(0, windowSize.X, 0, windowSize.Y, 0.1f, 100);
-    }
-
-    public static Matrix2d GetCameraCoords()
-    {
-        return Matrix2d.Identity;
     }
 
     private static Matrix4 GetView()
