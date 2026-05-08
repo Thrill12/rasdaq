@@ -1,6 +1,8 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
+
+using rasdaq.Audio;
 using rasdaq.Core.ECS;
 using rasdaq.Graphics;
 using rasdaq.Inputs;
@@ -21,6 +23,8 @@ public sealed class Application : IDisposable
 {
     public static Application? Instance { get; private set; }
     internal InputManager InputManager { get; set; }
+
+    public AudioManager AudioManager { get; private set; }
 
     private List<World> _worlds = new();
     private GameWindow _gameWindow;
@@ -57,6 +61,7 @@ public sealed class Application : IDisposable
         _gameWindow.FramebufferResize += OnFramebufferResize;
 
         InputManager = new InputManager(new GameWindowWrapper(_gameWindow));
+        AudioManager = new AudioManager();
     }
 
     internal void RegisterWorld(World world)
