@@ -1,6 +1,8 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
+
+using rasdaq.Audio;
 using rasdaq.Core.ECS;
 using rasdaq.Graphics;
 using rasdaq.Inputs;
@@ -58,6 +60,11 @@ public class Application : IDisposable
         _worlds.Remove(world);
     }
 
+    public AudioManager AudioManager { get; private set; }
+
+    private List<World> _worlds = new();
+    private GameWindow _gameWindow;
+
     /// <summary>
     /// Starts the application window.
     /// </summary>
@@ -85,7 +92,7 @@ public class Application : IDisposable
         GameWindow.RenderFrame += OnRenderFrame;
         GameWindow.FramebufferResize += OnFramebufferResize;
 
-        InputManager = new InputManager(new GameWindowWrapper(GameWindow));
+        InputManager = new InputManager(new GameWindowWrapper(_gameWindow));
 
         InputManager.SetEventListeners();
         GameWindow.Run();
