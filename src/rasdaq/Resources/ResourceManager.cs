@@ -10,7 +10,9 @@ public static class ResourceManager
 
     static ResourceManager()
     {
+        // Match file extensions with specific loaders here.
         _loaders["txt"] = new TextLoader();
+        _loaders["png"] = new TextureLoader();
     }
 
     /// <summary>

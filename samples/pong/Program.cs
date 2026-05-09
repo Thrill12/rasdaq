@@ -52,10 +52,9 @@ internal class Program
     {
         try
         {
-
             using Application app = new(800, 600, "rasdaq");
 
-            Texture tex = new("assets/andrei.png");
+            Texture tex = ResourceManager.Load<Texture>("assets/andrei.png");
 
             World world = new();
             Entity soldier = new();
@@ -80,8 +79,6 @@ internal class Program
                     PrintMouseDelta(e.DeltaX, e.DeltaY);
                 }
             };
-
-            Log.SetLogLevel(RasdaqLogLevel.Trace);
 
             app.InputManager.MouseButtonDownCallbacks.Add(MouseButton.Button1, TestMButton1Down);
             app.InputManager.MouseButtonUpCallbacks.Add(MouseButton.Button1, TestMButton1Up);
