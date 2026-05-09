@@ -16,7 +16,7 @@ public static class Log
     /// Gets the current log level.
     /// rasdaq will not output any logs which are less than LogLevel.
     /// </summary>
-    public static RasdaqLogLevel LogLevel { get; } = RasdaqLogLevel.Info;
+    public static RasdaqLogLevel LogLevel { get; private set; } = RasdaqLogLevel.Info;
 
     /// <summary>
     /// Sets the current log level for rasdaq.
@@ -26,7 +26,11 @@ public static class Log
     /// <param name="newLogLevel"></param>
     public static void SetLogLevel(RasdaqLogLevel newLogLevel)
     {
-        _factory = CreateFactory(LogLevel);
+        _factory.Dispose();
+
+        LogLevel = newLogLevel;
+
+        _factory = CreateFactory(newLogLevel);
     }
 
     /// <summary>
@@ -34,11 +38,6 @@ public static class Log
     /// </summary>
     private static Logger CreateSerilog(RasdaqLogLevel level)
     {
-        if (File.Exists("rasdaq.log"))
-        {
-            File.Delete("rasdaq.log");
-        }
-
         return new LoggerConfiguration()
             .MinimumLevel.Is(ConvertToSerilogLevel(level))
             .WriteTo.File(

@@ -4,6 +4,7 @@ using rasdaq.Core.ECS;
 using rasdaq.Graphics;
 using rasdaq.Logging;
 using Application = rasdaq.Application;
+using ResourceManager = rasdaq.Resources.ResourceManager;
 
 namespace Pong;
 
@@ -51,7 +52,9 @@ internal class Program
     {
         try
         {
+
             using Application app = new(800, 600, "rasdaq");
+
             Texture tex = new("assets/andrei.png");
 
             World world = new();
@@ -78,14 +81,22 @@ internal class Program
                 }
             };
 
+            Log.SetLogLevel(RasdaqLogLevel.Trace);
+
             app.InputManager.MouseButtonDownCallbacks.Add(MouseButton.Button1, TestMButton1Down);
             app.InputManager.MouseButtonUpCallbacks.Add(MouseButton.Button1, TestMButton1Up);
+
+            string he = ResourceManager.Load<string>("assets/save.txt");
+            string he2 = ResourceManager.Load<string>("assets/save.txt");
+            Log.Info(he);
+            Log.Info(he2);
 
             app.Run();
         }
         catch (Exception ex)
         {
             File.WriteAllText("crash.log", ex.ToString());
+            throw new Exception(ex.Message + "\n Check 'rasdaq.log' for more details.");
         }
     }
 }
