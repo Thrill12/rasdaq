@@ -1,5 +1,7 @@
 ﻿using OpenTK.Audio.OpenAL;
 
+using rasdaq.Logging;
+
 namespace rasdaq.Audio;
 
 public class Audio : IDisposable
@@ -13,7 +15,10 @@ public class Audio : IDisposable
         ALError error = AL.GetError();
         if (error != ALError.NoError)
         {
-            throw new Exception("OpenAL error while trying to create audio buffer: " + error);
+            string err = $"OpenAL error while trying to create audio buffer: {error}";
+
+            Log.Error(err);
+            throw new Exception(err);
         }
     }
 
