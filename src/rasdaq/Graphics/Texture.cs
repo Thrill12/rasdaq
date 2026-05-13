@@ -22,6 +22,9 @@ public class Texture
         stream.CopyTo(memoryStream);
         StbiImage image = Stbi.LoadFromMemory(memoryStream, 4);
         byte[] pixelData = image.Data.ToArray();
+
+        // OpenGL expects a static memory location for pixel data. This 
+        // allocates that memory, instead of relying on C# automatic memory handling.
         GCHandle handle = GCHandle.Alloc(pixelData, GCHandleType.Pinned);
 
         try
