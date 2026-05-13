@@ -12,7 +12,7 @@ public class AudioManager
         if (error != AlcError.NoError)
         {
             string err = $"OpenAL error: {error}";
-            Log.Error(err)
+            Log.Error(err);
             throw new Exception(err);
         }
     }
