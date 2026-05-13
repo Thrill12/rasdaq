@@ -83,10 +83,10 @@ internal class Program
             app.InputManager.MouseButtonDownCallbacks.Add(MouseButton.Button1, TestMButton1Down);
             app.InputManager.MouseButtonUpCallbacks.Add(MouseButton.Button1, TestMButton1Up);
 
-            string he = ResourceManager.Load<string>("assets/save.txt");
-            string he2 = ResourceManager.Load<string>("assets/save.txt");
-            Log.Info(he);
-            Log.Info(he2);
+            string save1 = ResourceManager.Load<string>("assets/save.txt");
+            string save2 = ResourceManager.Load<string>("assets/save.txt");
+            Log.Info(save1);
+            Log.Info(save2);
 
             app.Run();
         }
