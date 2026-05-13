@@ -1,5 +1,7 @@
 ﻿using OpenTK.Audio.OpenAL;
 
+using rasdaq.Logging;
+
 namespace rasdaq.Audio;
 
 public class AudioManager
@@ -9,7 +11,9 @@ public class AudioManager
         AlcError error = ALC.GetError(device);
         if (error != AlcError.NoError)
         {
-            throw new Exception("OpenAL error: " + error);
+            string err = $"OpenAL error: {error}";
+            Log.Error(err)
+            throw new Exception(err);
         }
     }
 
@@ -18,7 +22,9 @@ public class AudioManager
         ALError error = AL.GetError();
         if (error != ALError.NoError)
         {
-            throw new Exception("OpenAL error: " + error);
+            string err = $"OpenAL error: {error}";
+            Log.Error(err);
+            throw new Exception(err);
         }
     }
 
@@ -32,7 +38,9 @@ public class AudioManager
         ALDevice device = ALC.OpenDevice(null);
         if (device == ALDevice.Null)
         {
-            throw new Exception("Failed to open the default audio device.");
+            string err = "Failed to open the default audio device.";
+            Log.Error(err);
+            throw new Exception(err);
         }
 
         // Create a context for the device.
@@ -40,7 +48,9 @@ public class AudioManager
         if (context == ALContext.Null)
         {
             ALC.CloseDevice(device);
-            throw new Exception("Failed to create an OpenAL context.");
+            string err = "Failed to create an OpenAL context.";
+            Log.Error(err);
+            throw new Exception(err);
         }
 
         // Check if we have any errors.
@@ -78,7 +88,9 @@ public class AudioManager
             }
             else
             {
-                throw new Exception("Unsupported bits per sample: " + wavData.Format.BitsPerSample);
+                string err = $"Unsupported bits per sample: {wavData.Format.BitsPerSample}";
+                Log.Error(err);
+                throw new Exception(err);
             }
         }
         else if (wavData.Format.NumChannels == 2)
@@ -93,12 +105,16 @@ public class AudioManager
             }
             else
             {
-                throw new Exception("Unsupported bits per sample: " + wavData.Format.BitsPerSample);
+                string err = $"Unsupported bits per sample: {wavData.Format.BitsPerSample}";
+                Log.Error(err);
+                throw new Exception(err);
             }
         }
         else
         {
-            throw new Exception("Unsupported number of channels: " + wavData.Format.NumChannels);
+            string err = $"Unsupported number of channels: {wavData.Format.NumChannels}";
+            Log.Error(err);
+            throw new Exception(err);
         }
 
         // Load the audio data into the OpenAL buffer.
@@ -113,11 +129,11 @@ public class AudioManager
     /// <summary>
     /// Add a loaded audio file to an audio source, so that it can be played.
     /// </summary>
-    /// <param name="audioHandle">Integer handle of loaded audio file</param>
-    /// <param name="sourceHandle">Integer handle of audio source</param>
+    /// <param name="audio">Audio file</param>
+    /// <param name="audioSource">Audio source</param>
     public void AttachAudioToSource(Audio audio, AudioSource audioSource)
     {
-        AL.Source(audio.Handle, ALSourcei.Buffer, audioSource.Handle);
+        AL.Source(audioSource.Handle, ALSourcei.Buffer, audio.Handle);
         CheckALError();
     }
 
