@@ -5,6 +5,7 @@ namespace rasdaq.Audio;
 public class Audio : IDisposable
 {
     public int Handle;
+
     public Audio()
     {
         Handle = AL.GenBuffer();
