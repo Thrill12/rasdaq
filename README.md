@@ -7,6 +7,11 @@ rasdaq uses a simple Entity Component System Architecture (ECS). It contains:
 - Basic 2D Sprite renderer
 - Logging
 
+## Documentation
+
+You can find our documentation here:
+https://thrill12.github.io/rasdaq/docs/introduction.html
+
 ## Tests
 
 To run tests, execute the command `dotnet test` from the root directory
