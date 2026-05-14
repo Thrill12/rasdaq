@@ -1,14 +1,15 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
-using OpenTK.Windowing.GraphicsLibraryFramework;
 using rasdaq.Core.ECS;
 using rasdaq.Graphics;
-using rasdaq.Input;
+using rasdaq.Inputs;
 using rasdaq.Logging;
 using rasdaq.Transformations;
 using System.Drawing;
 using System.Runtime.CompilerServices;
+using Keys = rasdaq.Inputs.Keys;
+using OTKKeys = OpenTK.Windowing.GraphicsLibraryFramework.Keys;
 
 [assembly: InternalsVisibleTo("tests")]
 
@@ -20,8 +21,8 @@ namespace rasdaq;
 public sealed class Application : IDisposable
 {
     public static Application? Instance { get; private set; }
-    public InputManager InputManager { get; private set; }
     private Entity soldier;
+    internal InputManager InputManager { get; set; }
 
     private List<World> _worlds = new();
     private GameWindow _gameWindow;
@@ -77,25 +78,25 @@ public sealed class Application : IDisposable
 
     private void OnUpdateFrame(FrameEventArgs args)
     {
-        if (_gameWindow.KeyboardState.IsKeyDown(Keys.Escape))
+        if (_gameWindow.KeyboardState.IsKeyDown((OTKKeys)Keys.Escape))
         {
             _gameWindow.Close();
         }
 
-        if (_gameWindow.KeyboardState.IsKeyDown(Keys.W))
+        if (_gameWindow.KeyboardState.IsKeyDown(OTKKeys.W))
         {
             soldier.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(0, 100));
         }
 
-        if (_gameWindow.KeyboardState.IsKeyDown(Keys.S))
+        if (_gameWindow.KeyboardState.IsKeyDown(OTKKeys.S))
         {
             soldier.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(0, -100));
         }
-        if (_gameWindow.KeyboardState.IsKeyDown(Keys.A))
+        if (_gameWindow.KeyboardState.IsKeyDown(OTKKeys.A))
         {
             soldier.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(-100, 0));
         }
-        if (_gameWindow.KeyboardState.IsKeyDown(Keys.D))
+        if (_gameWindow.KeyboardState.IsKeyDown(OTKKeys.D))
         {
             soldier.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(100, 0));
         }

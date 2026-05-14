@@ -1,11 +1,13 @@
-﻿using OpenTK.Mathematics;
-using OpenTK.Windowing.GraphicsLibraryFramework;
 using pong;
 using rasdaq.Core.ECS;
 using rasdaq.Graphics;
+using rasdaq.Inputs;
 using rasdaq.Logging;
 using rasdaq.Transformations;
 using Application = rasdaq.Application;
+using Keys = rasdaq.Inputs.Keys;
+using MouseButton = rasdaq.Inputs.MouseButton;
+using ResourceManager = rasdaq.Resources.ResourceManager;
 
 namespace Pong;
 
@@ -20,11 +22,11 @@ internal class Program
 
         if (isMouseLocked)
         {
-            application.InputManager.LockMouse();
+            Input.LockMouse();
         }
         else
         {
-            application.InputManager.UnlockMouse();
+            Input.UnlockMouse();
         }
 
         Log.Info("testing keys: B");
@@ -55,11 +57,12 @@ internal class Program
         {
             Entity soldier = new(344, 144, 50);
             Entity enemy = new(0, 0, 1);
+
             // TODO remove soldier from constructor, this was for testing purposes only
             using Application app = new(800, 600, "rasdaq", soldier);
 
-            Texture tex = new("assets/andrei.png");
-            Texture evilTex = new("assets/evil_enemy.jpg");
+            Texture tex = ResourceManager.Load<Texture>("assets/andrei.png");
+            Texture evilTex = ResourceManager.Load<Texture>("assets/evil_enemy.png");
 
             World world = new();
 
@@ -77,42 +80,35 @@ internal class Program
 
             soldier.AddComponent(new PhysicsBody());
 
-            app.InputManager.KeyDownCallbacks.Add(Keys.B, () => TestKey(app));
-            app.InputManager.KeyDownCallbacks.Add(Keys.A, () =>
+            Input.OnKeyDownEvent.Add(Keys.B, () => TestKey(app));
+            Input.OnKeyDownEvent.Add(Keys.A, () =>
                 {
-                    Log.Info("X: " + app.InputManager.GetMousePosition().X);
-                    Log.Info("Y: " + app.InputManager.GetMousePosition().Y);
+                    Log.Info("X: " + Input.GetMousePosition().X);
+                    Log.Info("Y: " + Input.GetMousePosition().Y);
                 });
 
-            // soldier.body.MoveDistance(new Vector2(90, 0), 100, true);
-            app.InputManager.mouseMoveAction = (e) =>
+            Input.OnMouseMoveEvent = (e) =>
             {
                 if (logMouseDelta)
                 {
-                    PrintMouseDelta(e.DeltaX, e.DeltaY);
+                    PrintMouseDelta(e.dx, e.dy);
                 }
             };
 
-            // set camera follow on spr sprite
-            // app.InputManager.KeyDownCallbacks.Add(Keys.C, () =>
-            // { Camera.SpriteToFollow = spr; });
-            // app.InputManager.KeyUpCallbacks.Add(Keys.C, () =>
-            // { Camera.SpriteToFollow = null; });
+            Input.OnMouseButtonDownEvent.Add(MouseButton.Button1, TestMButton1Down);
+            Input.OnMouseButtonUpEvent.Add(MouseButton.Button1, TestMButton1Up);
 
-            // // set camera follow on spr sprite
-            // app.InputManager.KeyDownCallbacks.Add(Keys.I, () =>
-            // { Camera.SpriteToFollow = evilSpr; });
-            // app.InputManager.KeyUpCallbacks.Add(Keys.I, () =>
-            // { Camera.SpriteToFollow = null; });
-
-            app.InputManager.MouseButtonDownCallbacks.Add(MouseButton.Button1, TestMButton1Down);
-            app.InputManager.MouseButtonUpCallbacks.Add(MouseButton.Button1, TestMButton1Up);
+            string save1 = ResourceManager.Load<string>("assets/save.txt");
+            string save2 = ResourceManager.Load<string>("assets/save.txt");
+            Log.Info(save1);
+            Log.Info(save2);
 
             app.Run();
         }
         catch (Exception ex)
         {
             File.WriteAllText("crash.log", ex.ToString());
+            throw new Exception(ex.Message + "\n Check 'rasdaq.log' for more details.");
         }
     }
 }

@@ -1,5 +1,7 @@
 ﻿using rasdaq.Core.ECS;
 using rasdaq.Graphics;
+using rasdaq.Inputs;
+using rasdaq.Logging;
 
 namespace pong;
 
@@ -8,6 +10,16 @@ internal class Soldier : Component
     public override void Start()
     {
         base.Start();
+
+        Input.OnKeyDownEvent.Add(Keys.W, () =>
+        {
+            Log.Info("User pressed W based on an event");
+        });
+
+        Input.OnKeyUpEvent.Add(Keys.B, () =>
+        {
+            Log.Info("Hello");
+        });
     }
 
     public override void Update(double deltaTime)
@@ -15,22 +27,18 @@ internal class Soldier : Component
         base.Update(deltaTime);
     }
 
-    int counter = 0;
-    float move = -0.0001f;
-
     public override void FrameUpdate(double deltaTime)
     {
         base.Update(deltaTime);
-        Sprite? spr = Entity?.GetComponent<Sprite>();
-        if (counter % 2000 == 0)
-        {
-            move *= -1;
-        }
-        counter++;
 
-        // spr?.Transform.Move(0, move);
         Entity?.Transform.rotatedDegrees = 25f;
+
         // Console.SetCursorPosition(0, 0);
         // Log.Info("Soldier FPS " + Math.Round(1f / deltaTime));
+
+        if (Input.IsKeyPressed(Keys.V))
+        {
+            Log.Info("V pressed");
+        }
     }
 }
