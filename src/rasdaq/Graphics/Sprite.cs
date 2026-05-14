@@ -10,8 +10,7 @@ namespace rasdaq.Graphics;
 public class Sprite : Component
 {
     private Shader _shader;
-    // private Transform _transform = new();
-    private float[] _vertices;
+    private float[] _ndcVertices;
     private float[] _uvs;
     private Color _color;
     private Texture? _texture;
@@ -30,7 +29,9 @@ public class Sprite : Component
     /// </summary>
     public Color Color => _color;
     public float[] UVs => _uvs;
-    public float[] Vertices => _vertices;
+    public float[] NdcVertices => _ndcVertices;
+    public float width;
+    public float height;
 
     internal override void Init()
     {
@@ -42,26 +43,41 @@ public class Sprite : Component
         _shader = newShader;
     }
 
-    public Sprite(float width, float height, Color color, float centreX = 0, float centreY = 0, Shader? shader = null) :
-        this(width, height, centreX, centreY, color, null, shader)
+    /// <summary>
+    /// Create Sprite object with color
+    /// </summary>
+    /// <param name="width">width of sprite, in pixels</param>
+    /// <param name="height">height of sprite, in pixels</param>
+    /// <param name="color">color of sprite</param>
+    /// <param name="shader">Shader object for the sprite</param>
+    public Sprite(float width, float height, Color color, Shader? shader = null) :
+        this(width, height, color, null, shader)
     { }
 
-    public Sprite(float width, float height, Texture texture, float centreX = 0, float centreY = 0, Shader? shader = null) :
-        this(width, height, centreX, centreY, Color.White, texture, shader)
+    /// <summary>
+    /// Create sprite object with texture (such as image)
+    /// </summary>
+    /// <param name="width">width of sprite, in pixels</param>
+    /// <param name="height">height of sprite, in pixels</param>
+    /// <param name="texture">texture of sprite</param>
+    /// <param name="shader">Shader object for the sprite</param>
+    public Sprite(float width, float height, Texture texture, Shader? shader = null) :
+        this(width, height, Color.White, texture, shader)
     { }
 
-    public Sprite(float width, float height, float centreX = 0, float centreY = 0, Color? color = null, Texture? texture = null, Shader? shader = null) :
-        this(BuildVertices(width, height, centreX, centreY), color, texture, shader)
-    { }
-
-    public void SetWidthHeight(float width, float height, float centreX = 0, float centreY = 0)
+    /// <summary>
+    /// Create sprite object with texture and a color tint
+    /// </summary>
+    /// <param name="width">width of sprite, in pixels</param>
+    /// <param name="height">height of sprite, in pixels</param>
+    /// <param name="color">color tint of sprite</param>
+    /// <param name="texture">texture of sprite</param>
+    /// <param name="shader">Shader object for the sprite</param>
+    public Sprite(float width, float height, Color? color = null, Texture? texture = null, Shader? shader = null)
     {
-        _vertices = BuildVertices(width, height, centreX, centreY);
-    }
-
-    public Sprite(float[] vertices, Color? color = null, Texture? texture = null, Shader? shader = null)
-    {
-        _vertices = vertices;
+        _ndcVertices = BuildVertices();
+        this.width = width;
+        this.height = height;
         _color = color ?? Color.White;
         _texture = texture;
 
@@ -86,39 +102,41 @@ public class Sprite : Component
         ];
     }
 
-    private static float[] BuildVertices(float width, float height, float centreX, float centreY)
+    // private Sprite(float[] vertices, Color? color = null, Texture? texture = null, Shader? shader = null)
+    // {
+    //     _vertices = vertices;
+    //     _color = color ?? Color.White;
+    //     _texture = texture;
+
+    //     _shader = shader ?? (texture != null
+    //         ? new Shader(Common.TEXTURE_SHADER, Common.TEXTURE_SHADER_FRAG)
+    //         : new Shader(Common.COLOR_SHADER, Common.COLOR_SHADER_FRAG));
+
+    //     _uvs =
+    //     [
+    //         0.0f,
+    //         0.0f, // BL
+    //         1.0f,
+    //         0.0f, // BR
+    //         1.0f,
+    //         1.0f, // TR
+    //         0.0f,
+    //         1.0f, // TL
+    //         1.0f,
+    //         1.0f, // TR (repeated)
+    //         0.0f,
+    //         0.0f, // BL (repeated)
+    //     ];
+    // }
+
+    private static float[] BuildVertices()
     {
-        float hw = width / 2;
-        float hh = height / 2;
+        float leftX = 0;
+        float rightX = 1;
 
-        float leftX = centreX - hw;
-        float rightX = centreX + hw;
+        float topY = 1;
+        float bottomY = 0;
 
-        float topY = centreY + hh;
-        float bottomY = centreY - hh;
-
-        //     return
-        //     [
-        //         -hw,
-        //         -hh,
-        //         0.0f, // BL
-        //         hw,
-        //         -hh,
-        //         0.0f, // BR
-        //         hw,
-        //         hh,
-        //         0.0f, // TR
-        //         -hw,
-        //         hh,
-        //         0.0f, // TL
-        //         hw,
-        //         hh,
-        //         0.0f, // TR (repeated)
-        //         -hw,
-        //         -hh,
-        //         0.0f, // BL (repeated)
-        //     ];
-        // }
         return
         [
             leftX, bottomY, 0, // BL

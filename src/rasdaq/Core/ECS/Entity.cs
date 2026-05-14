@@ -5,22 +5,19 @@ namespace rasdaq.Core.ECS;
 /// <summary>
 /// Base rasdaq game object class
 /// </summary>
-public class Entity
+/// <param name="x">x coordinate of the object</param>
+/// <param name="y">y coordinate of the object</param>
+public class Entity(float x = 0, float y = 0, float zOrdering = 0)
 {
-    private readonly string _id;
+    private readonly string _id = Guid.NewGuid().ToString("N");
     private List<Component> _components = [];
-    private Transform _transform = new();
+    private Transform _transform = new(x, y, zOrdering);
 
     /// <summary>
     /// Unique ID.
     /// </summary>
     public string ID => _id;
     public Transform Transform => _transform;
-
-    public Entity()
-    {
-        _id = Guid.NewGuid().ToString("N");
-    }
 
     /// <summary>
     /// Adds a component to the entity

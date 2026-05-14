@@ -53,8 +53,8 @@ internal class Program
     {
         try
         {
-            Entity soldier = new();
-            Entity enemy = new();
+            Entity soldier = new(344, 144, 50);
+            Entity enemy = new(0, 0, 1);
             // TODO remove soldier from constructor, this was for testing purposes only
             using Application app = new(800, 600, "rasdaq", soldier);
 
@@ -66,14 +66,16 @@ internal class Program
             soldier.AddComponent(new Soldier());
             enemy.AddComponent(new Soldier());
 
-            Sprite spr = new(456, 456, tex, 400, 300);
-            Sprite evilSpr = new(304, 230, evilTex, 800, 600);
+            Sprite spr = new(456, 456, tex);
+            Sprite evilSpr = new(304, 230, evilTex);
 
             soldier.AddComponent(spr);
             enemy.AddComponent(evilSpr);
 
             world.AddEntity(soldier);
             world.AddEntity(enemy);
+
+            soldier.AddComponent(new PhysicsBody());
 
             app.InputManager.KeyDownCallbacks.Add(Keys.B, () => TestKey(app));
             app.InputManager.KeyDownCallbacks.Add(Keys.A, () =>
@@ -82,7 +84,7 @@ internal class Program
                     Log.Info("Y: " + app.InputManager.GetMousePosition().Y);
                 });
 
-            soldier.Transform.MoveVector(new Vector2(90, 0), 100);
+            // soldier.body.MoveDistance(new Vector2(90, 0), 100, true);
             app.InputManager.mouseMoveAction = (e) =>
             {
                 if (logMouseDelta)
@@ -92,10 +94,16 @@ internal class Program
             };
 
             // set camera follow on spr sprite
-            app.InputManager.KeyDownCallbacks.Add(Keys.C, () =>
-            { Camera.SpriteToFollow = spr; });
-            app.InputManager.KeyUpCallbacks.Add(Keys.C, () =>
-            { Camera.SpriteToFollow = null; });
+            // app.InputManager.KeyDownCallbacks.Add(Keys.C, () =>
+            // { Camera.SpriteToFollow = spr; });
+            // app.InputManager.KeyUpCallbacks.Add(Keys.C, () =>
+            // { Camera.SpriteToFollow = null; });
+
+            // // set camera follow on spr sprite
+            // app.InputManager.KeyDownCallbacks.Add(Keys.I, () =>
+            // { Camera.SpriteToFollow = evilSpr; });
+            // app.InputManager.KeyUpCallbacks.Add(Keys.I, () =>
+            // { Camera.SpriteToFollow = null; });
 
             app.InputManager.MouseButtonDownCallbacks.Add(MouseButton.Button1, TestMButton1Down);
             app.InputManager.MouseButtonUpCallbacks.Add(MouseButton.Button1, TestMButton1Up);

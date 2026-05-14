@@ -29,7 +29,7 @@ internal class Soldier : Component
         counter++;
 
         // spr?.Transform.Move(0, move);
-        Entity?.Transform.Rotate2D(0f);
+        Entity?.Transform.rotatedDegrees = 25f;
         // Console.SetCursorPosition(0, 0);
         // Log.Info("Soldier FPS " + Math.Round(1f / deltaTime));
     }

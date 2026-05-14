@@ -8,6 +8,7 @@ namespace rasdaq.Graphics;
 public class Renderer
 {
     public static Renderer Instance { get; private set; } = new Renderer();
+    public Camera Camera { get; set; } = new Camera();
 
     private int vertexBufferObject;
     private int vertexArrayObject;
@@ -35,6 +36,11 @@ public class Renderer
 
     internal void Render(double elapsedTime, Vector2i windowSize)
     {
+        // get view
+        var view = Camera.GetView();
+        // get projection
+        var projection = Matrix4.CreateOrthographicOffCenter(0, windowSize.X, 0, windowSize.Y, -1000.1f, 1001);
+
         foreach (Sprite sprite in sprites)
         {
             if (sprite.Entity is null)
@@ -52,9 +58,15 @@ public class Renderer
                 vertices.ToArray(),
                 BufferUsageHint.DynamicDraw
             );
+
             sprite.Shader.Use();
 
-            Camera.SetCameraThisFrame(windowSize, sprite.Entity.Transform._GetTransformation(elapsedTime), sprite.Shader);
+            var model = sprite.Entity.Transform.GetRenderedTransform(sprite.width, sprite.height);
+
+            // set uniform: projection view model/transformation
+            sprite.Shader.SetUniform("projection", projection, true);
+            sprite.Shader.SetUniform("view", view, true);
+            sprite.Shader.SetUniform("transform", model, true);
 
             SetVertexAttributes(sprite);
 
@@ -123,11 +135,11 @@ public class Renderer
 
     private void AddSpriteVertices(Sprite sprite)
     {
-        for (int i = 0, uvIndex = 0; i < sprite.Vertices.Length; i += 3, uvIndex += 2)
+        for (int i = 0, uvIndex = 0; i < sprite.NdcVertices.Length; i += 3, uvIndex += 2)
         {
-            vertices.Add(sprite.Vertices[i]);
-            vertices.Add(sprite.Vertices[i + 1]);
-            vertices.Add(sprite.Vertices[i + 2]);
+            vertices.Add(sprite.NdcVertices[i]);
+            vertices.Add(sprite.NdcVertices[i + 1]);
+            vertices.Add(sprite.NdcVertices[i + 2]);
 
             vertices.Add(sprite.UVs[uvIndex]);
             vertices.Add(sprite.UVs[uvIndex + 1]);

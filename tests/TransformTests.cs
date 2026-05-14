@@ -110,7 +110,7 @@ public class TransformTests
 
         RunTransformFrames(transform, 2);
 
-        Assert.That(new Vector2(transform.WorldX, transform.WorldY), Is.EqualTo(vectorAfter10Sec));
+        Assert.That(new Vector2(transform.LocalX, transform.LocalY), Is.EqualTo(vectorAfter10Sec));
     }
 
     [Test]
@@ -126,7 +126,7 @@ public class TransformTests
 
         RunTransformFrames(transform, 3);
 
-        Assert.That(new Vector2(transform.WorldX, transform.WorldY), Is.EqualTo(vectorAfter3Frames));
+        Assert.That(new Vector2(transform.LocalX, transform.LocalY), Is.EqualTo(vectorAfter3Frames));
     }
 
     [Test]
@@ -142,7 +142,7 @@ public class TransformTests
         Vector2 vectorAfterFrame = new(velocity.X + distanceVelocity.X, velocity.Y + distanceVelocity.Y);
 
         RunTransformFrames(transform, 1);
-        Assert.That(new Vector2(transform.WorldX, transform.WorldY), Is.EqualTo(vectorAfterFrame));
+        Assert.That(new Vector2(transform.LocalX, transform.LocalY), Is.EqualTo(vectorAfterFrame));
     }
 
     [Test]
@@ -159,7 +159,7 @@ public class TransformTests
         Vector2 vectorAfterFrame = new(velocity.X * 2 + distanceVelocity.X, velocity.Y * 2 + distanceVelocity.Y);
 
         RunTransformFrames(transform, 2);
-        Assert.That(new Vector2(transform.WorldX, transform.WorldY), Is.EqualTo(vectorAfterFrame));
+        Assert.That(new Vector2(transform.LocalX, transform.LocalY), Is.EqualTo(vectorAfterFrame));
     }
 
     [Test]
@@ -176,7 +176,7 @@ public class TransformTests
         Vector2 vectorAfterFrame = new(velocity.X * 2 + distanceVelocity.X, velocity.Y * 2 + distanceVelocity.Y);
 
         RunTransformFrames(transform, 2);
-        Assert.That(new Vector2(transform.WorldX, transform.WorldY), Is.EqualTo(vectorAfterFrame));
+        Assert.That(new Vector2(transform.LocalX, transform.LocalY), Is.EqualTo(vectorAfterFrame));
     }
 
     [Test]
@@ -190,7 +190,7 @@ public class TransformTests
         Vector2 vectorAfter2Frames = new(distanceVelocity.X, distanceVelocity.Y);
 
         RunTransformFrames(transform, 2);
-        Assert.That(new Vector2(transform.WorldX, transform.WorldY), Is.EqualTo(vectorAfter2Frames));
+        Assert.That(new Vector2(transform.LocalX, transform.LocalY), Is.EqualTo(vectorAfter2Frames));
     }
 
     [Test]
@@ -205,7 +205,7 @@ public class TransformTests
         Vector2 vectorAfter1Frame = new(velocity.X, velocity.Y);
 
         RunTransformFrames(transform, 1);
-        Assert.That(new Vector2(transform.WorldX, transform.WorldY), Is.EqualTo(vectorAfter1Frame));
+        Assert.That(new Vector2(transform.LocalX, transform.LocalY), Is.EqualTo(vectorAfter1Frame));
     }
 
     [Test]
@@ -221,7 +221,7 @@ public class TransformTests
         Vector2 vectorAfterFrame = new(velocity.X + distanceVelocity.X, velocity.Y + distanceVelocity.Y);
 
         RunTransformFrames(transform, 1);
-        Assert.That(new Vector2(transform.WorldX, transform.WorldY), Is.EqualTo(vectorAfterFrame));
+        Assert.That(new Vector2(transform.LocalX, transform.LocalY), Is.EqualTo(vectorAfterFrame));
     }
 
     [Test]
@@ -246,8 +246,8 @@ public class TransformTests
         Vector2 vectorAfterFrame = new(distanceVelocity.X * 10 + (velocity.X * 2), 0);
         RunTransformFrames(transform, 2);
 
-        Assert.That(transform.WorldX, Is.EqualTo(vectorAfterFrame.X).Within(0.001f));
-        Assert.That(transform.WorldY, Is.EqualTo(vectorAfterFrame.Y).Within(0.001f));
+        Assert.That(transform.LocalX, Is.EqualTo(vectorAfterFrame.X).Within(0.001f));
+        Assert.That(transform.LocalY, Is.EqualTo(vectorAfterFrame.Y).Within(0.001f));
 
     }
 

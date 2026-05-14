@@ -6,6 +6,7 @@ using rasdaq.Core.ECS;
 using rasdaq.Graphics;
 using rasdaq.Input;
 using rasdaq.Logging;
+using rasdaq.Transformations;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 
@@ -83,20 +84,20 @@ public sealed class Application : IDisposable
 
         if (_gameWindow.KeyboardState.IsKeyDown(Keys.W))
         {
-            soldier.Transform.MoveOnce(new OpenTK.Mathematics.Vector2(0, 100));
+            soldier.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(0, 100));
         }
 
         if (_gameWindow.KeyboardState.IsKeyDown(Keys.S))
         {
-            soldier.Transform.MoveOnce(new OpenTK.Mathematics.Vector2(0, -100));
+            soldier.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(0, -100));
         }
         if (_gameWindow.KeyboardState.IsKeyDown(Keys.A))
         {
-            soldier.Transform.MoveOnce(new OpenTK.Mathematics.Vector2(-100, 0));
+            soldier.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(-100, 0));
         }
         if (_gameWindow.KeyboardState.IsKeyDown(Keys.D))
         {
-            soldier.Transform.MoveOnce(new OpenTK.Mathematics.Vector2(100, 0));
+            soldier.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(100, 0));
         }
 
         foreach (World world in _worlds)
