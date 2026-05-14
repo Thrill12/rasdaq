@@ -4,6 +4,7 @@ using rasdaq.Graphics;
 using rasdaq.Inputs;
 using rasdaq.Logging;
 using Application = rasdaq.Application;
+using ResourceManager = rasdaq.Resources.ResourceManager;
 using Keys = rasdaq.Inputs.Keys;
 using MouseButton = rasdaq.Inputs.MouseButton;
 
@@ -54,7 +55,8 @@ internal class Program
         try
         {
             using Application app = new(800, 600, "rasdaq");
-            Texture tex = new("assets/andrei.png");
+
+            Texture tex = ResourceManager.Load<Texture>("assets/andrei.png");
 
             World world = new();
             Entity soldier = new();
@@ -83,11 +85,17 @@ internal class Program
             Input.OnMouseButtonDownEvent.Add(MouseButton.Button1, TestMButton1Down);
             Input.OnMouseButtonUpEvent.Add(MouseButton.Button1, TestMButton1Up);
 
+            string save1 = ResourceManager.Load<string>("assets/save.txt");
+            string save2 = ResourceManager.Load<string>("assets/save.txt");
+            Log.Info(save1);
+            Log.Info(save2);
+
             app.Run();
         }
         catch (Exception ex)
         {
             File.WriteAllText("crash.log", ex.ToString());
+            throw new Exception(ex.Message + "\n Check 'rasdaq.log' for more details.");
         }
     }
 }
