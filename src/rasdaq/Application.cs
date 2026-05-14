@@ -21,7 +21,6 @@ namespace rasdaq;
 public sealed class Application : IDisposable
 {
     public static Application? Instance { get; private set; }
-    private Entity soldier;
     internal InputManager InputManager { get; set; }
 
     private List<World> _worlds = new();
@@ -34,7 +33,7 @@ public sealed class Application : IDisposable
     /// <param name="height"></param>
     /// <param name="title"></param>
     /// <exception cref="InvalidOperationException"></exception>
-    public Application(int width, int height, string title, Entity soldier)
+    public Application(int width, int height, string title)
     {
         if (Instance != null)
         {
@@ -59,7 +58,6 @@ public sealed class Application : IDisposable
         _gameWindow.FramebufferResize += OnFramebufferResize;
 
         InputManager = new InputManager(new GameWindowWrapper(_gameWindow));
-        this.soldier = soldier;
     }
 
     internal void RegisterWorld(World world)
@@ -81,24 +79,6 @@ public sealed class Application : IDisposable
         if (_gameWindow.KeyboardState.IsKeyDown((OTKKeys)Keys.Escape))
         {
             _gameWindow.Close();
-        }
-
-        if (_gameWindow.KeyboardState.IsKeyDown(OTKKeys.W))
-        {
-            soldier.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(0, 100));
-        }
-
-        if (_gameWindow.KeyboardState.IsKeyDown(OTKKeys.S))
-        {
-            soldier.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(0, -100));
-        }
-        if (_gameWindow.KeyboardState.IsKeyDown(OTKKeys.A))
-        {
-            soldier.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(-100, 0));
-        }
-        if (_gameWindow.KeyboardState.IsKeyDown(OTKKeys.D))
-        {
-            soldier.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(100, 0));
         }
 
         foreach (World world in _worlds)

@@ -2,6 +2,7 @@
 using rasdaq.Graphics;
 using rasdaq.Inputs;
 using rasdaq.Logging;
+using rasdaq.Transformations;
 
 namespace pong;
 
@@ -40,5 +41,24 @@ internal class Soldier : Component
         {
             Log.Info("V pressed");
         }
+        if (Input.IsKeyDown(Keys.W))
+        {
+            Entity?.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(0, 100));
+        }
+
+        if (Input.IsKeyDown(Keys.S))
+        {
+            Entity?.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(0, -100));
+        }
+        if (Input.IsKeyDown(Keys.A))
+        {
+            Entity?.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(-100, 0));
+        }
+        if (Input.IsKeyDown(Keys.D))
+        {
+            Entity?.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(100, 0));
+        }
     }
 }
+
+internal class Enemy : Component { }

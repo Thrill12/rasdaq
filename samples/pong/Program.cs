@@ -59,7 +59,7 @@ internal class Program
             Entity enemy = new(0, 0, 1);
 
             // TODO remove soldier from constructor, this was for testing purposes only
-            using Application app = new(800, 600, "rasdaq", soldier);
+            using Application app = new(800, 600, "rasdaq");
 
             Texture tex = ResourceManager.Load<Texture>("assets/andrei.png");
             Texture evilTex = ResourceManager.Load<Texture>("assets/evil_enemy.jpg");
@@ -67,7 +67,7 @@ internal class Program
             World world = new();
 
             soldier.AddComponent(new Soldier());
-            enemy.AddComponent(new Soldier());
+            enemy.AddComponent(new Enemy());
 
             Sprite spr = new(456, 456, tex);
             Sprite evilSpr = new(304, 230, evilTex);
@@ -94,6 +94,24 @@ internal class Program
                     PrintMouseDelta(e.dx, e.dy);
                 }
             };
+
+            if (Input.IsKeyDown(Keys.W))
+            {
+                soldier.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(0, 100));
+            }
+
+            if (Input.IsKeyDown(Keys.S))
+            {
+                soldier.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(0, -100));
+            }
+            if (Input.IsKeyDown(Keys.A))
+            {
+                soldier.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(-100, 0));
+            }
+            if (Input.IsKeyDown(Keys.D))
+            {
+                soldier.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(100, 0));
+            }
 
             Input.OnMouseButtonDownEvent.Add(MouseButton.Button1, TestMButton1Down);
             Input.OnMouseButtonUpEvent.Add(MouseButton.Button1, TestMButton1Up);
