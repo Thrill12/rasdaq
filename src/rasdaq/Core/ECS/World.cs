@@ -1,6 +1,4 @@
-﻿using rasdaq.Logging;
-
-namespace rasdaq.Core.ECS;
+﻿namespace rasdaq.Core.ECS;
 
 /// <summary>
 /// A world is a container for entities and their components. 
@@ -38,8 +36,6 @@ public class World
         {
             Application.Instance.RegisterWorld(this);
         }
-        Log.Trace("World constructor");
-        Start();
     }
 
     /// <summary>
@@ -88,8 +84,6 @@ public class World
         {
             e.Start();
         }
-
-        Log.Trace("World started");
     }
 
     internal void Update(double deltaTime)

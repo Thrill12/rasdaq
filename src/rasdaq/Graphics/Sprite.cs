@@ -1,6 +1,5 @@
 ﻿using rasdaq.Core.ECS;
 using rasdaq.Graphics.Shaders;
-using rasdaq.Logging;
 using System.Drawing;
 
 namespace rasdaq.Graphics;
@@ -30,8 +29,7 @@ public class Sprite : Component
 
     internal override void Init()
     {
-        Log.Trace("Initializing sprite");
-        Renderer.LoadSprite(this);
+        Renderer.Instance.LoadSprite(this);
     }
 
     public void SetShader(Shader newShader)

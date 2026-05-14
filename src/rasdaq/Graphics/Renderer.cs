@@ -1,5 +1,4 @@
 using OpenTK.Graphics.OpenGL4;
-using rasdaq.Logging;
 
 namespace rasdaq.Graphics;
 
@@ -10,7 +9,7 @@ internal class Renderer
     private int vertexBufferObject;
     private int vertexArrayObject;
 
-    private static List<Sprite> sprites = new();
+    private List<Sprite> sprites = new();
 
     private List<float> vertices = new();
     public List<float> Vertices => vertices;
@@ -24,13 +23,10 @@ internal class Renderer
         GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferObject);
 
         vertices = new();
-
-        Log.Trace("Renderer started with " + sprites.Count + " sprites");
     }
 
-    internal static void LoadSprite(Sprite sprite)
+    internal void LoadSprite(Sprite sprite)
     {
-        Log.Trace("Loading sprite...");
         sprites.Add(sprite);
     }
 
