@@ -62,7 +62,7 @@ internal class Program
             using Application app = new(800, 600, "rasdaq", soldier);
 
             Texture tex = ResourceManager.Load<Texture>("assets/andrei.png");
-            Texture evilTex = ResourceManager.Load<Texture>("assets/evil_enemy.png");
+            Texture evilTex = ResourceManager.Load<Texture>("assets/evil_enemy.jpg");
 
             World world = new();
 
@@ -80,7 +80,7 @@ internal class Program
 
             soldier.AddComponent(new PhysicsBody());
 
-            Input.OnKeyDownEvent.Add(Keys.B, () => TestKey(app));
+            // Input.OnKeyDownEvent.Add(Keys.B, () => TestKey(app));
             Input.OnKeyDownEvent.Add(Keys.A, () =>
                 {
                     Log.Info("X: " + Input.GetMousePosition().X);

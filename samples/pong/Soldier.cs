@@ -11,15 +11,15 @@ internal class Soldier : Component
     {
         base.Start();
 
-        Input.OnKeyDownEvent.Add(Keys.W, () =>
-        {
-            Log.Info("User pressed W based on an event");
-        });
+        // Input.OnKeyDownEvent.Add(Keys.W, () =>
+        // {
+        //     Log.Info("User pressed W based on an event");
+        // });
 
-        Input.OnKeyUpEvent.Add(Keys.B, () =>
-        {
-            Log.Info("Hello");
-        });
+        // Input.OnKeyUpEvent.Add(Keys.B, () =>
+        // {
+        //     Log.Info("Hello");
+        // });
     }
 
     public override void Update(double deltaTime)
