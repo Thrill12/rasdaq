@@ -13,29 +13,42 @@ public class Entity
     /// </summary>
     public string ID => _id;
 
+    /// <summary>
+    /// Creates an <c>Entity</c> instance. An <c>ID</c> is generated automatically once the <c>Entity</c> is created.
+    /// </summary>
     public Entity()
     {
         _id = Guid.NewGuid().ToString("N");
     }
 
     /// <summary>
-    /// Adds a component to the entity
+    /// Adds a <c>Component</c> to the entity
     /// </summary>
-    /// <param name="c"></param>
-    public void AddComponent(Component c)
+    /// <param name="comp"></param>
+    public void AddComponent(Component comp)
     {
-        c.Entity = this;
-        _components.Add(c);
+        comp.Entity = this;
+        _components.Add(comp);
     }
 
     /// <summary>
-    /// Get the first component with the given type.
+    /// Get the first <c>Component</c> with the given type attached to this entity.
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns>The first component of type T on the entity</returns>
     public T? GetComponent<T>() where T : Component
     {
         return _components.OfType<T>().FirstOrDefault();
+    }
+
+    /// <summary>
+    /// Get all <c>Components</c> of a certain type attached to this entity.
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
+    /// <returns></returns>
+    public IEnumerable<T>? GetComponents<T>() where T : Component
+    {
+        return _components.OfType<T>();
     }
 
     internal void Start()
@@ -61,20 +74,4 @@ public class Entity
     {
         _components.ForEach(c => c.LateUpdate(dt));
     }
-}
-
-/// <summary>
-/// Component that can be added to entities.
-/// </summary>
-public abstract class Component
-{
-    /// <summary>
-    /// Associated entity.
-    /// </summary>
-    public Entity? Entity { get; internal set; }
-    internal virtual void Init() { }
-    public virtual void Start() { }
-    public virtual void Update(double deltaTime) { }
-    public virtual void FrameUpdate(double deltaTime) { }
-    public virtual void LateUpdate(double deltaTime) { }
 }

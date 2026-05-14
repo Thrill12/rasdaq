@@ -24,6 +24,9 @@ public class World
     /// </summary>
     public List<Entity> Entities => _entities;
 
+    /// <summary>
+    /// Creates an instance of a <c>World</c>. An <c>ID</c> is generated automatically once the <c>World</c> is created.
+    /// </summary>
     public World()
     {
         _id = Guid.NewGuid().ToString("N");
@@ -36,7 +39,7 @@ public class World
     }
 
     /// <summary>
-    /// Adds the specified entity to the world entities.
+    /// Adds an <c>Entity</c> to the <c>World</c>.
     /// </summary>
     /// <param name="e"></param>
     public void AddEntity(Entity e)
@@ -45,7 +48,7 @@ public class World
     }
 
     /// <summary>
-    /// Removes the specified entity from the world entities.
+    /// Removes an <c>Entity</c> from the <c>World</c>.
     /// </summary>
     /// <param name="e"></param>
     public void RemoveEntity(Entity e)

@@ -19,6 +19,7 @@ namespace rasdaq;
 public sealed class Application : IDisposable
 {
     public static Application? Instance { get; private set; }
+
     public InputManager InputManager { get; private set; }
 
     private List<World> _worlds = new();
@@ -26,10 +27,15 @@ public sealed class Application : IDisposable
 
     /// <summary>
     /// Main entry point of a rasdaq-based application.
+    /// 
+    /// When creating an application, it is recommended to implement "using" pattern:
+    /// <code>
+    ///     using Application app = new(800, 600, "rasdaq");
+    /// </code>
     /// </summary>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
-    /// <param name="title"></param>
+    /// <param name="width">Width of window in pixels</param>
+    /// <param name="height">Height of window in pixels</param>
+    /// <param name="title">Title of window</param>
     /// <exception cref="InvalidOperationException"></exception>
     public Application(int width, int height, string title)
     {
@@ -64,7 +70,7 @@ public sealed class Application : IDisposable
     }
 
     /// <summary>
-    /// Starts the application window.
+    /// Starts the application window. You must call this in order to start the game.
     /// </summary>
     public void Run()
     {
@@ -125,7 +131,7 @@ public sealed class Application : IDisposable
     }
 
     /// <summary>
-    /// Cleans up resources.
+    /// Cleans up resources. Used once the Application instance is removed.
     /// </summary>
     public void Dispose()
     {

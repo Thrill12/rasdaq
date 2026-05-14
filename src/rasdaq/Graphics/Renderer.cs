@@ -2,7 +2,7 @@ using OpenTK.Graphics.OpenGL4;
 
 namespace rasdaq.Graphics;
 
-public class Renderer
+internal class Renderer
 {
     public static Renderer Instance { get; private set; } = new Renderer();
 
@@ -14,7 +14,7 @@ public class Renderer
     private List<float> vertices = new List<float>();
     public List<float> Vertices => vertices;
 
-    public void Init()
+    internal void Init()
     {
         vertexBufferObject = GL.GenBuffer();
         vertexArrayObject = GL.GenVertexArray();
@@ -25,7 +25,7 @@ public class Renderer
         vertices = new();
     }
 
-    public void LoadSprite(Sprite sprite)
+    internal void LoadSprite(Sprite sprite)
     {
         sprites.Add(sprite);
     }

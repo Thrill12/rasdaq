@@ -24,8 +24,8 @@ public class Sprite : Component
     /// Colour of Sprite.
     /// </summary>
     public Color Color => _color;
-    public float[] UVs => _uvs;
-    public float[] Vertices => _vertices;
+    internal float[] UVs => _uvs;
+    internal float[] Vertices => _vertices;
 
     internal override void Init()
     {
@@ -37,24 +37,51 @@ public class Sprite : Component
         _shader = newShader;
     }
 
+    /// <summary>
+    /// Create an instance of <c>Sprite</c>.
+    /// </summary>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <param name="color"></param>
+    /// <param name="shader"></param>
     public Sprite(float width, float height, Color color, Shader? shader = null) :
         this(width, height, color, null, shader)
     { }
 
+    /// <summary>
+    /// Create an instance of <c>Sprite</c>.
+    /// </summary>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <param name="texture"></param>
+    /// <param name="shader"></param>
     public Sprite(float width, float height, Texture texture, Shader? shader = null) :
         this(width, height, Color.White, texture, shader)
     { }
 
+    /// <summary>
+    /// Create an instance of <c>Sprite</c>.
+    /// </summary>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <param name="color"></param>
+    /// <param name="texture"></param>
+    /// <param name="shader"></param>
     public Sprite(float width, float height, Color? color = null, Texture? texture = null, Shader? shader = null) :
         this(BuildVertices(width, height), color, texture, shader)
     { }
 
+    /// <summary>
+    /// Set width and height of the sprite.
+    /// </summary>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
     public void SetWidthHeight(float width, float height)
     {
         _vertices = BuildVertices(width, height);
     }
 
-    public Sprite(float[] vertices, Color? color = null, Texture? texture = null, Shader? shader = null)
+    internal Sprite(float[] vertices, Color? color = null, Texture? texture = null, Shader? shader = null)
     {
         _vertices = vertices;
         _color = color ?? Color.White;

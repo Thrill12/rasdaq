@@ -3,6 +3,9 @@ using rasdaq.Resources.Loaders;
 
 namespace rasdaq.Resources;
 
+/// <summary>
+/// Class responsible for caching resource references, and loading files into rasdaq types.
+/// </summary>
 public static class ResourceManager
 {
     private static Dictionary<string, object> _cache = new();

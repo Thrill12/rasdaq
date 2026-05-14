@@ -13,13 +13,13 @@ public static class Log
     private static ILoggerFactory _factory = CreateFactory(LogLevel);
 
     /// <summary>
-    /// Gets the current log level.
-    /// rasdaq will not output any logs which are less than LogLevel.
+    /// Get the current log level.
+    /// rasdaq will not output any logs which are less than <c>LogLevel</c>.
     /// </summary>
     public static RasdaqLogLevel LogLevel { get; private set; } = RasdaqLogLevel.Info;
 
     /// <summary>
-    /// Sets the current log level for rasdaq.
+    /// Set the current log level for rasdaq.
     /// Will not emit logs for anything below the level set.
     /// Trace and Debug should not be used in production - these may contain rasdaq logs.
     /// </summary>
@@ -34,7 +34,7 @@ public static class Log
     }
 
     /// <summary>
-    /// Creates Serilog instance. Used for writing logs to files.
+    /// Create Serilog instance. Used for writing logs to files.
     /// </summary>
     private static Logger CreateSerilog(RasdaqLogLevel level)
     {
@@ -48,7 +48,7 @@ public static class Log
     }
 
     /// <summary>
-    /// Creates ILogger Factory. Used for creating factories that emit to console.
+    /// Create ILogger Factory. Used for creating factories that emit to console.
     /// </summary>
     private static ILoggerFactory CreateFactory(RasdaqLogLevel level)
     {
@@ -65,27 +65,33 @@ public static class Log
         );
     }
 
-    private static LogEventLevel ConvertToSerilogLevel(RasdaqLogLevel level) => level switch
+    private static LogEventLevel ConvertToSerilogLevel(RasdaqLogLevel level)
     {
-        RasdaqLogLevel.Trace => LogEventLevel.Verbose,
-        RasdaqLogLevel.Debug => LogEventLevel.Debug,
-        RasdaqLogLevel.Info => LogEventLevel.Information,
-        RasdaqLogLevel.Warning => LogEventLevel.Warning,
-        RasdaqLogLevel.Error => LogEventLevel.Error,
-        RasdaqLogLevel.Critical => LogEventLevel.Fatal,
-        _ => LogEventLevel.Information
-    };
+        return level switch
+        {
+            RasdaqLogLevel.Trace => LogEventLevel.Verbose,
+            RasdaqLogLevel.Debug => LogEventLevel.Debug,
+            RasdaqLogLevel.Info => LogEventLevel.Information,
+            RasdaqLogLevel.Warning => LogEventLevel.Warning,
+            RasdaqLogLevel.Error => LogEventLevel.Error,
+            RasdaqLogLevel.Critical => LogEventLevel.Fatal,
+            _ => LogEventLevel.Information
+        };
+    }
 
-    private static MSLogLevel ConvertToMsLogLevel(RasdaqLogLevel level) => level switch
+    private static MSLogLevel ConvertToMsLogLevel(RasdaqLogLevel level)
     {
-        RasdaqLogLevel.Trace => MSLogLevel.Trace,
-        RasdaqLogLevel.Debug => MSLogLevel.Debug,
-        RasdaqLogLevel.Info => MSLogLevel.Information,
-        RasdaqLogLevel.Warning => MSLogLevel.Warning,
-        RasdaqLogLevel.Error => MSLogLevel.Error,
-        RasdaqLogLevel.Critical => MSLogLevel.Critical,
-        _ => MSLogLevel.Information
-    };
+        return level switch
+        {
+            RasdaqLogLevel.Trace => MSLogLevel.Trace,
+            RasdaqLogLevel.Debug => MSLogLevel.Debug,
+            RasdaqLogLevel.Info => MSLogLevel.Information,
+            RasdaqLogLevel.Warning => MSLogLevel.Warning,
+            RasdaqLogLevel.Error => MSLogLevel.Error,
+            RasdaqLogLevel.Critical => MSLogLevel.Critical,
+            _ => MSLogLevel.Information
+        };
+    }
 
     private static ILogger GetLogger(string loggerPath)
     {
@@ -94,7 +100,7 @@ public static class Log
     }
 
     /// <summary>
-    /// Logs a piece of tracing to the console.
+    /// Log a piece of tracing to the console.
     /// rasdaq uses this to emit debugging information.
     /// Should not be emitted in production.
     /// </summary>
@@ -106,7 +112,7 @@ public static class Log
     }
 
     /// <summary>
-    /// Logs a piece of debug to the console. 
+    /// Log a piece of debug to the console. 
     /// rasdaq uses this to emit debugging information.
     /// Should not be emitted in production.
     /// </summary>
@@ -118,7 +124,7 @@ public static class Log
     }
 
     /// <summary>
-    /// Logs information to the console.
+    /// Log information to the console.
     /// </summary>
     /// <param name="message"></param>
     /// <param name="callerPath"></param>
@@ -128,7 +134,7 @@ public static class Log
     }
 
     /// <summary>
-    /// Logs a warning to the console.
+    /// Log a warning to the console.
     /// </summary>
     /// <param name="message"></param>
     public static void Warning(string message, [CallerFilePath] string callerPath = "")
@@ -137,7 +143,7 @@ public static class Log
     }
 
     /// <summary>
-    /// Logs an error message to the console.
+    /// Log an error message to the console.
     /// </summary>
     /// <param name="message"></param>
     public static void Error(string message, [CallerFilePath] string callerPath = "")
@@ -146,7 +152,7 @@ public static class Log
     }
 
     /// <summary>
-    /// Logs a critical message to the console.
+    /// Log a critical message to the console.
     /// </summary>
     /// <param name="message"></param>
     public static void Critical(string message, [CallerFilePath] string callerPath = "")
@@ -155,7 +161,7 @@ public static class Log
     }
 
     /// <summary>
-    /// Logs an exception to the console, with an optional message.
+    /// Log an exception to the console, with an optional message.
     /// </summary>
     /// <param name="ex"></param>
     /// <param name="message"></param>
