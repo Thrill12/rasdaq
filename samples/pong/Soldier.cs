@@ -10,12 +10,12 @@ internal class Soldier : Component
     {
         base.Start();
 
-        Input.OnKeyDown.Add(Keys.W, () =>
+        Input.OnKeyDownEvent.Add(Keys.W, () =>
         {
             Log.Info("User pressed W based on an event");
         });
 
-        Input.OnKeyUp.Add(Keys.B, () =>
+        Input.OnKeyUpEvent.Add(Keys.B, () =>
         {
             Log.Info("Hello");
         });

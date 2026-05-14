@@ -65,14 +65,14 @@ internal class Program
 
             world.AddEntity(soldier);
 
-            Input.OnKeyDown.Add(Keys.B, () => TestKey(app));
-            Input.OnKeyDown.Add(Keys.A, () =>
+            Input.OnKeyDownEvent.Add(Keys.B, () => TestKey(app));
+            Input.OnKeyDownEvent.Add(Keys.A, () =>
                 {
                     Log.Info("X: " + Input.GetMousePosition().X);
                     Log.Info("Y: " + Input.GetMousePosition().Y);
                 });
 
-            Input.OnMouseMove = (e) =>
+            Input.OnMouseMoveEvent = (e) =>
             {
                 if (logMouseDelta)
                 {
@@ -80,8 +80,8 @@ internal class Program
                 }
             };
 
-            Input.OnMouseButtonDown.Add(MouseButton.Button1, TestMButton1Down);
-            Input.OnMouseButtonUp.Add(MouseButton.Button1, TestMButton1Up);
+            Input.OnMouseButtonDownEvent.Add(MouseButton.Button1, TestMButton1Down);
+            Input.OnMouseButtonUpEvent.Add(MouseButton.Button1, TestMButton1Up);
 
             app.Run();
         }

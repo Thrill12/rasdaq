@@ -11,31 +11,31 @@ public static class Input
     /// <summary>
     /// Callback to run upon releasing specified keyboard key
     /// </summary>
-    public static Dictionary<Keys, Action> OnKeyUp =>
+    public static Dictionary<Keys, Action> OnKeyUpEvent =>
         Application.Instance?.InputManager.KeyUpCallbacks ?? throw new NullReferenceException("Application is not initialized.");
 
     /// <summary>
     /// Callback to run upon pressing down specified keyboard key
     /// </summary>
-    public static Dictionary<Keys, Action> OnKeyDown =>
+    public static Dictionary<Keys, Action> OnKeyDownEvent =>
         Application.Instance?.InputManager.KeyDownCallbacks ?? throw new NullReferenceException("Application is not initialized.");
 
     /// <summary>
     /// Callback to run upon releasing specified mouse button
     /// </summary>
-    public static Dictionary<MouseButton, Action> OnMouseButtonUp =>
+    public static Dictionary<MouseButton, Action> OnMouseButtonUpEvent =>
         Application.Instance?.InputManager.MouseButtonUpCallbacks ?? throw new NullReferenceException("Application is not initialized.");
 
     /// <summary>
     /// Callback to run upon pressing down specified mouse button
     /// </summary>
-    public static Dictionary<MouseButton, Action> OnMouseButtonDown =>
+    public static Dictionary<MouseButton, Action> OnMouseButtonDownEvent =>
         Application.Instance?.InputManager.MouseButtonDownCallbacks ?? throw new NullReferenceException("Application is not initialized.");
 
     /// <summary>
     /// Callback to run when mouse moves
     /// </summary>
-    public static Action<MouseMoveEvent> OnMouseMove
+    public static Action<MouseMoveEvent> OnMouseMoveEvent
     {
         get => Application.Instance?.InputManager.mouseMoveAction ?? throw new NullReferenceException("Application is not initialized.");
         set
