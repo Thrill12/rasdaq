@@ -4,9 +4,9 @@ using rasdaq.Graphics;
 using rasdaq.Inputs;
 using rasdaq.Logging;
 using Application = rasdaq.Application;
-using ResourceManager = rasdaq.Resources.ResourceManager;
 using Keys = rasdaq.Inputs.Keys;
 using MouseButton = rasdaq.Inputs.MouseButton;
+using ResourceManager = rasdaq.Resources.ResourceManager;
 
 namespace Pong;
 
