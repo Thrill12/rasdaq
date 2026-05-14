@@ -20,7 +20,6 @@ namespace rasdaq;
 public sealed class Application : IDisposable
 {
     public static Application? Instance { get; private set; }
-    internal InputManager InputManager { get; set; }
 
     private List<World> _worlds = new();
     private GameWindow _gameWindow;
@@ -60,8 +59,6 @@ public sealed class Application : IDisposable
         _gameWindow.Load += OnLoad;
         _gameWindow.RenderFrame += OnRenderFrame;
         _gameWindow.FramebufferResize += OnFramebufferResize;
-
-        InputManager = new InputManager(new GameWindowWrapper(_gameWindow));
     }
 
     internal void RegisterWorld(World world)
@@ -74,7 +71,6 @@ public sealed class Application : IDisposable
     /// </summary>
     public void Run()
     {
-        InputManager.SetEventListeners();
         _gameWindow.Run();
     }
 
