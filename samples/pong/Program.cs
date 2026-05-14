@@ -4,6 +4,7 @@ using rasdaq.Core.ECS;
 using rasdaq.Graphics;
 using rasdaq.Logging;
 using Application = rasdaq.Application;
+
 using ResourceManager = rasdaq.Resources.ResourceManager;
 
 namespace Pong;
