@@ -20,21 +20,17 @@ namespace rasdaq;
 public sealed class Application : IDisposable
 {
     public static Application? Instance { get; private set; }
+    internal InputManager InputManager { get; set; }
 
     private List<World> _worlds = new();
     private GameWindow _gameWindow;
 
     /// <summary>
     /// Main entry point of a rasdaq-based application.
-    ///
-    /// When creating an application, it is recommended to implement "using" pattern:
-    /// <code>
-    ///     using Application app = new(800, 600, "rasdaq");
-    /// </code>
     /// </summary>
-    /// <param name="width">Width of window in pixels</param>
-    /// <param name="height">Height of window in pixels</param>
-    /// <param name="title">Title of window</param>
+    /// <param name="width"></param>
+    /// <param name="height"></param>
+    /// <param name="title"></param>
     /// <exception cref="InvalidOperationException"></exception>
     public Application(int width, int height, string title)
     {
@@ -59,6 +55,8 @@ public sealed class Application : IDisposable
         _gameWindow.Load += OnLoad;
         _gameWindow.RenderFrame += OnRenderFrame;
         _gameWindow.FramebufferResize += OnFramebufferResize;
+
+        InputManager = new InputManager(new GameWindowWrapper(_gameWindow));
     }
 
     internal void RegisterWorld(World world)
@@ -67,10 +65,11 @@ public sealed class Application : IDisposable
     }
 
     /// <summary>
-    /// Starts the application window. You must call this in order to start the game.
+    /// Starts the application window.
     /// </summary>
     public void Run()
     {
+        InputManager.SetEventListeners();
         _gameWindow.Run();
     }
 
@@ -127,7 +126,7 @@ public sealed class Application : IDisposable
     }
 
     /// <summary>
-    /// Cleans up resources. Used once the Application instance is removed.
+    /// Cleans up resources.
     /// </summary>
     public void Dispose()
     {
