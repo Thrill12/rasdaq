@@ -7,8 +7,6 @@ using rasdaq.Inputs;
 using rasdaq.Logging;
 using System.Drawing;
 using System.Runtime.CompilerServices;
-using Keys = rasdaq.Inputs.Keys;
-using OTKKeys = OpenTK.Windowing.GraphicsLibraryFramework.Keys;
 
 [assembly: InternalsVisibleTo("tests")]
 
@@ -75,11 +73,6 @@ public sealed class Application : IDisposable
 
     private void OnUpdateFrame(FrameEventArgs args)
     {
-        if (_gameWindow.KeyboardState.IsKeyDown((OTKKeys)Keys.Escape))
-        {
-            _gameWindow.Close();
-        }
-
         foreach (World world in _worlds)
         {
             world.GameLoop.Tick(args.Time);
