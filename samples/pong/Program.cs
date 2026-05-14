@@ -1,9 +1,11 @@
-﻿using OpenTK.Windowing.GraphicsLibraryFramework;
-using pong;
+﻿using pong;
 using rasdaq.Core.ECS;
 using rasdaq.Graphics;
+using rasdaq.Inputs;
 using rasdaq.Logging;
 using Application = rasdaq.Application;
+using Keys = rasdaq.Inputs.Keys;
+using MouseButton = rasdaq.Inputs.MouseButton;
 using ResourceManager = rasdaq.Resources.ResourceManager;
 
 namespace Pong;
@@ -19,11 +21,11 @@ internal class Program
 
         if (isMouseLocked)
         {
-            application.InputManager.LockMouse();
+            Input.LockMouse();
         }
         else
         {
-            application.InputManager.UnlockMouse();
+            Input.UnlockMouse();
         }
 
         Log.Info("testing keys: B");
@@ -65,23 +67,23 @@ internal class Program
 
             world.AddEntity(soldier);
 
-            app.InputManager.KeyDownCallbacks.Add(Keys.B, () => TestKey(app));
-            app.InputManager.KeyDownCallbacks.Add(Keys.A, () =>
+            Input.OnKeyDownEvent.Add(Keys.B, () => TestKey(app));
+            Input.OnKeyDownEvent.Add(Keys.A, () =>
                 {
-                    Log.Info("X: " + app.InputManager.GetMousePosition().X);
-                    Log.Info("Y: " + app.InputManager.GetMousePosition().Y);
+                    Log.Info("X: " + Input.GetMousePosition().X);
+                    Log.Info("Y: " + Input.GetMousePosition().Y);
                 });
 
-            app.InputManager.mouseMoveAction = (e) =>
+            Input.OnMouseMoveEvent = (e) =>
             {
                 if (logMouseDelta)
                 {
-                    PrintMouseDelta(e.DeltaX, e.DeltaY);
+                    PrintMouseDelta(e.dx, e.dy);
                 }
             };
 
-            app.InputManager.MouseButtonDownCallbacks.Add(MouseButton.Button1, TestMButton1Down);
-            app.InputManager.MouseButtonUpCallbacks.Add(MouseButton.Button1, TestMButton1Up);
+            Input.OnMouseButtonDownEvent.Add(MouseButton.Button1, TestMButton1Down);
+            Input.OnMouseButtonUpEvent.Add(MouseButton.Button1, TestMButton1Up);
 
             string save1 = ResourceManager.Load<string>("assets/save.txt");
             string save2 = ResourceManager.Load<string>("assets/save.txt");

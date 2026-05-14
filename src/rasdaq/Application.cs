@@ -1,13 +1,14 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
-using OpenTK.Windowing.GraphicsLibraryFramework;
 using rasdaq.Core.ECS;
 using rasdaq.Graphics;
-using rasdaq.Input;
+using rasdaq.Inputs;
 using rasdaq.Logging;
 using System.Drawing;
 using System.Runtime.CompilerServices;
+using Keys = rasdaq.Inputs.Keys;
+using OTKKeys = OpenTK.Windowing.GraphicsLibraryFramework.Keys;
 
 [assembly: InternalsVisibleTo("tests")]
 
@@ -19,7 +20,7 @@ namespace rasdaq;
 public sealed class Application : IDisposable
 {
     public static Application? Instance { get; private set; }
-    public InputManager InputManager { get; private set; }
+    internal InputManager InputManager { get; set; }
 
     private List<World> _worlds = new();
     private GameWindow _gameWindow;
@@ -74,7 +75,7 @@ public sealed class Application : IDisposable
 
     private void OnUpdateFrame(FrameEventArgs args)
     {
-        if (_gameWindow.KeyboardState.IsKeyDown(Keys.Escape))
+        if (_gameWindow.KeyboardState.IsKeyDown((OTKKeys)Keys.Escape))
         {
             _gameWindow.Close();
         }
