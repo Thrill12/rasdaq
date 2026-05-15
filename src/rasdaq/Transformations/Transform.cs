@@ -1,23 +1,21 @@
-using OpenTK.Mathematics;
+using OVector2 = OpenTK.Mathematics.Vector2;
 using System.Runtime.CompilerServices;
+using OpenTK.Mathematics;
 
 [assembly: InternalsVisibleTo("tests")]
 
 namespace rasdaq.Transformations;
 
-public class Transform(float x, float y, float z)
+public class Transform(Vector3 spawnPosition)
 {
-    public float x = x;
-    public float y = y;
-    public float zOrdering = z;
-    public float scaleX = 1.0f;
-    public float scaleY = 1.0f;
+    public Vector3 position = spawnPosition;
+    public Vector2 scale = new(1, 1);
     public float rotatedDegrees = 0.0f;
 
-    internal void CoordUpdate(Vector2 delta)
+    internal void CoordUpdate(OVector2 delta)
     {
-        x += delta.X;
-        y += delta.Y;
+        position.X += delta.X;
+        position.Y += delta.Y;
     }
 
     internal Matrix4 Get2DRotation()
@@ -33,7 +31,7 @@ public class Transform(float x, float y, float z)
     /// <returns>Matrix transformation of scale</returns>
     internal Matrix4 ScaleFromNDC(float imageWidth, float imageHeight)
     {
-        return Matrix4.CreateScale(imageWidth, imageHeight, 1.0f) * Scale(scaleX, scaleY);
+        return Matrix4.CreateScale(imageWidth, imageHeight, 1.0f) * Scale((float)scale.X, (float)scale.Y);
     }
 
     internal static Matrix4 Scale(float xScale, float yScale)
@@ -43,7 +41,7 @@ public class Transform(float x, float y, float z)
 
     internal Matrix4 Translate()
     {
-        return Matrix4.CreateTranslation(x, y, zOrdering);
+        return Matrix4.CreateTranslation((float)position.X, (float)position.Y, (float)position.Z);
     }
 
     internal Matrix4 GetRenderedTransform(float imageWidth, float imageHeight)

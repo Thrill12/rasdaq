@@ -7,11 +7,11 @@ namespace rasdaq.Core.ECS;
 /// </summary>
 /// <param name="x">x coordinate of the object</param>
 /// <param name="y">y coordinate of the object</param>
-public class Entity(float x = 0, float y = 0, float zOrdering = 0)
+public class Entity(Vector3 spawnPosition)
 {
     private readonly string _id = Guid.NewGuid().ToString("N");
     private List<Component> _components = [];
-    private Transform _transform = new(x, y, zOrdering);
+    private Transform _transform = new(spawnPosition);
 
     /// <summary>
     /// Unique ID.
