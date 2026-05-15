@@ -29,6 +29,16 @@ public class Entity
     }
 
     /// <summary>
+    /// Removes a component from the entity. Will call the <c>Destroy</c> function before removing the component.
+    /// </summary>
+    /// <param name="c"></param>
+    public void RemoveComponent(Component c)
+    {
+        c.Destroy();
+        _components.Remove(c);
+    }
+
+    /// <summary>
     /// Get the first component with the given type.
     /// </summary>
     /// <typeparam name="T"></typeparam>
@@ -78,4 +88,5 @@ public abstract class Component
     public virtual void Update(double deltaTime) { }
     public virtual void FrameUpdate(double deltaTime) { }
     public virtual void LateUpdate(double deltaTime) { }
+    public virtual void Destroy() { }
 }
