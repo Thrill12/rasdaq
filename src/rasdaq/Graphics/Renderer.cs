@@ -32,8 +32,9 @@ public class Renderer
 
     internal void Render()
     {
-        foreach (Sprite sprite in sprites)
+        for (int i = 0; i < sprites.Count; i++)
         {
+            Sprite sprite = sprites[i];
             vertices.Clear();
             AddSpriteVertices(sprite);
 

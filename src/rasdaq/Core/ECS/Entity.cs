@@ -40,11 +40,12 @@ public class Entity
 
     internal void Start()
     {
-        _components.ForEach(c =>
+        for (int i = 0; i < _components.Count; i++)
         {
+            Component c = _components[i];
             c.Init();
             c.Start();
-        });
+        }
     }
 
     internal void Update(double dt)
