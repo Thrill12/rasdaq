@@ -6,7 +6,7 @@ namespace rasdaq.Audio;
 
 public class AudioManager
 {
-    private static void CheckALCError(ALDevice device)
+    internal static void CheckALCError(ALDevice device)
     {
         AlcError error = ALC.GetError(device);
         if (error != AlcError.NoError)
@@ -17,7 +17,7 @@ public class AudioManager
         }
     }
 
-    private static void CheckALError()
+    internal static void CheckALError()
     {
         ALError error = AL.GetError();
         if (error != ALError.NoError)

@@ -1,14 +1,15 @@
 ﻿using OpenTK.Audio.OpenAL;
 
+using rasdaq.Core.ECS;
 using rasdaq.Logging;
 
 namespace rasdaq.Audio;
 
-public class AudioSource : IDisposable
+public class AudioSource : Component, IDisposable
 {
-    public int Handle;
+    internal int? Handle = null;
 
-    public AudioSource()
+    internal override void Init()
     {
         Handle = AL.GenSource();
         // Check for errors
@@ -22,8 +23,33 @@ public class AudioSource : IDisposable
         }
     }
 
+    public void Play()
+    {
+        if (!Handle.HasValue)
+        {
+            Log.Error("Audio source handle is null. Cannot play audio.");
+            return;
+        }
+        AL.SourcePlay(Handle.Value);
+        AudioManager.CheckALError();
+    }
+
+    public void Stop()
+    {
+        if (!Handle.HasValue)
+        {
+            Log.Error("Audio source handle is null. Cannot play audio.");
+            return;
+        }
+        AL.SourceStop(Handle.Value);
+        AudioManager.CheckALError();
+    }
+
     public void Dispose()
     {
-        AL.DeleteSource(Handle);
+        if (Handle.HasValue)
+        {
+            AL.DeleteSource(Handle.Value);
+        }
     }
 }
