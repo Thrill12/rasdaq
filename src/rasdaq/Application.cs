@@ -4,7 +4,6 @@ using OpenTK.Windowing.Desktop;
 using rasdaq.Core.ECS;
 using rasdaq.Graphics;
 using rasdaq.Inputs;
-using rasdaq.Logging;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 using Keys = rasdaq.Inputs.Keys;
@@ -100,8 +99,6 @@ public sealed class Application : IDisposable
         // Allows rendering png transparency
         GL.Enable(EnableCap.Blend);
         GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
-
-        Log.Debug("rasdaq started");
 
         Renderer.Instance.Init();
 

@@ -78,40 +78,57 @@ public class World
     internal void Start()
     {
         FlushPendingEntities();
+
         for (int i = 0; i < _entities.Count; i++)
         {
             Entity e = _entities[i];
             e.Start();
+            e.Started = true;
         }
     }
 
     internal void Update(double deltaTime)
     {
         FlushPendingEntities();
+
         for (int i = 0; i < _entities.Count; i++)
         {
             Entity e = _entities[i];
             e.Update(deltaTime);
+            EnsureEntityStart(e);
         }
     }
 
     internal void FrameUpdate(double deltaTime)
     {
         FlushPendingEntities();
+
         for (int i = 0; i < _entities.Count; i++)
         {
             Entity e = _entities[i];
             e.FrameUpdate(deltaTime);
+            EnsureEntityStart(e);
         }
     }
 
     internal void LateUpdate(double deltaTime)
     {
         FlushPendingEntities();
+
         for (int i = 0; i < _entities.Count; i++)
         {
             Entity e = _entities[i];
             e.LateUpdate(deltaTime);
+            EnsureEntityStart(e);
+        }
+    }
+
+    private static void EnsureEntityStart(Entity c)
+    {
+        if (!c.Started)
+        {
+            c.Start();
+            c.Started = true;
         }
     }
 }

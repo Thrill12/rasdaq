@@ -54,6 +54,8 @@ internal class Program
 
             //Texture tex = ResourceManager.Load<Texture>("assets/andrei.png");
 
+            Log.SetLogLevel(RasdaqLogLevel.Info);
+
             World world = new();
             Entity soldier = new();
             soldier.AddComponent(new Soldier());
@@ -88,7 +90,7 @@ internal class Program
         catch (Exception ex)
         {
             File.WriteAllText("crash.log", ex.ToString());
-            throw new Exception(ex.Message + "\n Check 'rasdaq.log' for more details.");
+            throw new Exception(ex.Message + "\n Check 'rasdaq.log' for more details. \n" + ex.StackTrace);
         }
     }
 }

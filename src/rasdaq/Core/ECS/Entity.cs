@@ -12,6 +12,11 @@ public class Entity
     private List<Component> _pendingRemove = new();
 
     /// <summary>
+    /// Determines if component has performed its start method.
+    /// </summary>
+    internal bool Started { get; set; }
+
+    /// <summary>
     /// Unique ID.
     /// </summary>
     public string ID => _id;
@@ -76,40 +81,57 @@ public class Entity
     internal void Start()
     {
         FlushPendingComponents();
+
         for (int i = 0; i < _components.Count; i++)
         {
             Component c = _components[i];
             c.Start();
+            c.Started = true;
         }
     }
 
     internal void Update(double dt)
     {
         FlushPendingComponents();
+
         for (int i = 0; i < _components.Count; i++)
         {
             Component c = _components[i];
             c.Update(dt);
+            EnsureComponentStart(c);
         }
     }
 
     internal void FrameUpdate(double dt)
     {
         FlushPendingComponents();
+
         for (int i = 0; i < _components.Count; i++)
         {
             Component c = _components[i];
             c.FrameUpdate(dt);
+            EnsureComponentStart(c);
         }
     }
 
     internal void LateUpdate(double dt)
     {
         FlushPendingComponents();
+
         for (int i = 0; i < _components.Count; i++)
         {
             Component c = _components[i];
             c.LateUpdate(dt);
+            EnsureComponentStart(c);
+        }
+    }
+
+    private static void EnsureComponentStart(Component c)
+    {
+        if (!c.Started)
+        {
+            c.Start();
+            c.Started = true;
         }
     }
 }

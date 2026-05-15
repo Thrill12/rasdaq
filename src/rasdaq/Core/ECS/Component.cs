@@ -11,6 +11,11 @@ public abstract class Component
     /// </summary>
     public Entity? Entity { get; internal set; }
 
+    /// <summary>
+    /// Determines if component has performed its start method.
+    /// </summary>
+    internal bool Started { get; set; }
+
     public Component()
     {
         Init();
