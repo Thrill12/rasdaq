@@ -22,7 +22,7 @@ internal class Soldier : Component
     {
         base.Update(deltaTime);
 
-        if (Input.IsKeyPressed(Keys.V))
+        if (Input.IsKeyDown(Keys.V))
         {
             Texture tex = ResourceManager.Load<Texture>("assets/andrei.png");
             Random rand = new();
@@ -36,7 +36,7 @@ internal class Soldier : Component
             Log.Info(sprites.Count.ToString());
         }
 
-        if (Input.IsKeyPressed(Keys.Backspace))
+        if (Input.IsKeyDown(Keys.Backspace))
         {
             if (sprites.Count > 0)
             {
