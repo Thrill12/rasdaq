@@ -1,12 +1,8 @@
 ﻿using pong;
 using rasdaq.Core.ECS;
-using rasdaq.Graphics;
 using rasdaq.Inputs;
 using rasdaq.Logging;
 using Application = rasdaq.Application;
-using Keys = rasdaq.Inputs.Keys;
-using MouseButton = rasdaq.Inputs.MouseButton;
-using ResourceManager = rasdaq.Resources.ResourceManager;
 
 namespace Pong;
 
@@ -56,39 +52,36 @@ internal class Program
         {
             using Application app = new(800, 600, "rasdaq");
 
-            Texture tex = ResourceManager.Load<Texture>("assets/andrei.png");
+            //Texture tex = ResourceManager.Load<Texture>("assets/andrei.png");
 
             World world = new();
             Entity soldier = new();
             soldier.AddComponent(new Soldier());
 
-            Sprite spr = new(1.1f, 1.1f, tex);
-            soldier.AddComponent(spr);
-
             world.AddEntity(soldier);
 
-            Input.OnKeyDownEvent.Add(Keys.B, () => TestKey(app));
-            Input.OnKeyDownEvent.Add(Keys.A, () =>
-                {
-                    Log.Info("X: " + Input.GetMousePosition().X);
-                    Log.Info("Y: " + Input.GetMousePosition().Y);
-                });
+            //Input.OnKeyDownEvent.Add(Keys.B, () => TestKey(app));
+            //Input.OnKeyDownEvent.Add(Keys.A, () =>
+            //    {
+            //        Log.Info("X: " + Input.GetMousePosition().X);
+            //        Log.Info("Y: " + Input.GetMousePosition().Y);
+            //    });
 
-            Input.OnMouseMoveEvent = (e) =>
-            {
-                if (logMouseDelta)
-                {
-                    PrintMouseDelta(e.dx, e.dy);
-                }
-            };
+            //Input.OnMouseMoveEvent = (e) =>
+            //{
+            //    if (logMouseDelta)
+            //    {
+            //        PrintMouseDelta(e.dx, e.dy);
+            //    }
+            //};
 
-            Input.OnMouseButtonDownEvent.Add(MouseButton.Button1, TestMButton1Down);
-            Input.OnMouseButtonUpEvent.Add(MouseButton.Button1, TestMButton1Up);
+            //Input.OnMouseButtonDownEvent.Add(MouseButton.Button1, TestMButton1Down);
+            //Input.OnMouseButtonUpEvent.Add(MouseButton.Button1, TestMButton1Up);
 
-            string save1 = ResourceManager.Load<string>("assets/save.txt");
-            string save2 = ResourceManager.Load<string>("assets/save.txt");
-            Log.Info(save1);
-            Log.Info(save2);
+            //string save1 = ResourceManager.Load<string>("assets/save.txt");
+            //string save2 = ResourceManager.Load<string>("assets/save.txt");
+            //Log.Info(save1);
+            //Log.Info(save2);
 
             app.Run();
         }

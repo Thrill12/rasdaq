@@ -1,12 +1,15 @@
 ﻿namespace rasdaq.Core.ECS;
 
 /// <summary>
-/// Base rasdaq game object class
+/// Base rasdaq game object class.
 /// </summary>
 public class Entity
 {
     private readonly string _id;
     private List<Component> _components = new();
+
+    private List<Component> _pendingAdd = new();
+    private List<Component> _pendingRemove = new();
 
     /// <summary>
     /// Unique ID.
@@ -19,23 +22,45 @@ public class Entity
     }
 
     /// <summary>
-    /// Adds a component to the entity
+    /// Add a component to the entity.
     /// </summary>
     /// <param name="c"></param>
     public void AddComponent(Component c)
     {
         c.Entity = this;
-        _components.Add(c);
+        _pendingAdd.Add(c);
     }
 
     /// <summary>
-    /// Removes a component from the entity. Will call the <c>Destroy</c> function before removing the component.
+    /// Remove a component from the entity. Will call the <c>Destroy</c> function before removing the component.
     /// </summary>
     /// <param name="c"></param>
     public void RemoveComponent(Component c)
     {
-        c.Destroy();
-        _components.Remove(c);
+        _pendingRemove.Add(c);
+    }
+
+    /// <summary>
+    /// Processes components queued for addition/removal. Used
+    /// to prevent adding or removing components at runtime
+    /// causing components to be skipped, or updated twice.
+    /// </summary>
+    private void FlushPendingComponents()
+    {
+        for (int i = 0; i < _pendingAdd.Count; i++)
+        {
+            Component c = _pendingAdd[i];
+            _components.Add(c);
+        }
+        _pendingAdd.Clear();
+
+        for (int i = 0; i < _pendingRemove.Count; i++)
+        {
+            Component c = _pendingRemove[i];
+            c.Destroy();
+            _components.Remove(c);
+        }
+        _pendingRemove.Clear();
     }
 
     /// <summary>
@@ -50,26 +75,41 @@ public class Entity
 
     internal void Start()
     {
+        FlushPendingComponents();
         for (int i = 0; i < _components.Count; i++)
         {
             Component c = _components[i];
-            c.Init();
             c.Start();
         }
     }
 
     internal void Update(double dt)
     {
-        _components.ForEach(c => c.Update(dt));
+        FlushPendingComponents();
+        for (int i = 0; i < _components.Count; i++)
+        {
+            Component c = _components[i];
+            c.Update(dt);
+        }
     }
 
     internal void FrameUpdate(double dt)
     {
-        _components.ForEach(c => c.FrameUpdate(dt));
+        FlushPendingComponents();
+        for (int i = 0; i < _components.Count; i++)
+        {
+            Component c = _components[i];
+            c.FrameUpdate(dt);
+        }
     }
 
     internal void LateUpdate(double dt)
     {
-        _components.ForEach(c => c.LateUpdate(dt));
+        FlushPendingComponents();
+        for (int i = 0; i < _components.Count; i++)
+        {
+            Component c = _components[i];
+            c.LateUpdate(dt);
+        }
     }
 }

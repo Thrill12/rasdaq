@@ -1,8 +1,8 @@
 ﻿namespace rasdaq.Core.ECS;
 
 /// <summary>
-/// A world is a container for entities and their components. 
-/// It is responsible for the entity lifecycle and management.
+/// A world is a container for entities. 
+/// It is responsible for their lifecycle and management.
 /// </summary>
 public class World
 {
@@ -20,7 +20,7 @@ public class World
     /// </summary>
     public string ID => _id;
     /// <summary>
-    /// Gets the collection of entities managed by this world.
+    /// Get the collection of entities managed by this world.
     /// </summary>
     public List<Entity> Entities => _entities;
 
@@ -36,7 +36,7 @@ public class World
     }
 
     /// <summary>
-    /// Adds the specified entity to the world entities.
+    /// Add the specified entity to the world entities.
     /// </summary>
     /// <param name="e"></param>
     public void AddEntity(Entity e)
@@ -45,7 +45,7 @@ public class World
     }
 
     /// <summary>
-    /// Removes the specified entity from the world entities.
+    /// Remove the specified entity from the world entities.
     /// </summary>
     /// <param name="e"></param>
     public void RemoveEntity(Entity e)
@@ -60,25 +60,27 @@ public class World
     /// </summary>
     private void FlushPendingEntities()
     {
-        foreach (var e in _pendingAdd)
+        for (int i = 0; i < _pendingAdd.Count; i++)
         {
+            Entity e = _pendingAdd[i];
             _entities.Add(e);
         }
-
         _pendingAdd.Clear();
-        foreach (var e in _pendingRemove)
+
+        for (int i = 0; i < _pendingRemove.Count; i++)
         {
+            Entity e = _pendingRemove[i];
             _entities.Remove(e);
         }
-
         _pendingRemove.Clear();
     }
 
     internal void Start()
     {
         FlushPendingEntities();
-        foreach (var e in _entities)
+        for (int i = 0; i < _entities.Count; i++)
         {
+            Entity e = _entities[i];
             e.Start();
         }
     }
@@ -86,8 +88,9 @@ public class World
     internal void Update(double deltaTime)
     {
         FlushPendingEntities();
-        foreach (var e in _entities)
+        for (int i = 0; i < _entities.Count; i++)
         {
+            Entity e = _entities[i];
             e.Update(deltaTime);
         }
     }
@@ -95,8 +98,9 @@ public class World
     internal void FrameUpdate(double deltaTime)
     {
         FlushPendingEntities();
-        foreach (var e in _entities)
+        for (int i = 0; i < _entities.Count; i++)
         {
+            Entity e = _entities[i];
             e.FrameUpdate(deltaTime);
         }
     }
@@ -104,8 +108,9 @@ public class World
     internal void LateUpdate(double deltaTime)
     {
         FlushPendingEntities();
-        foreach (var e in _entities)
+        for (int i = 0; i < _entities.Count; i++)
         {
+            Entity e = _entities[i];
             e.LateUpdate(deltaTime);
         }
     }

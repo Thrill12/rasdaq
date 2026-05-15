@@ -10,7 +10,14 @@ public abstract class Component
     /// Associated entity.
     /// </summary>
     public Entity? Entity { get; internal set; }
+
+    public Component()
+    {
+        Init();
+    }
+
     internal virtual void Init() { }
+
     /// <summary>
     /// Called at the start of a <c>Component</c>'s life.
     /// </summary>
@@ -30,4 +37,8 @@ public abstract class Component
     /// </summary>
     /// <param name="deltaTime"></param>
     public virtual void LateUpdate(double deltaTime) { }
+    /// <summary>
+    /// Called before the component is destroyed.
+    /// </summary>
+    public virtual void Destroy() { }
 }

@@ -9,10 +9,13 @@ public class Renderer
     private int vertexBufferObject;
     private int vertexArrayObject;
 
-    private List<Sprite> sprites = new List<Sprite>();
+    private List<Sprite> sprites = new();
 
-    private List<float> vertices = new List<float>();
+    private List<float> vertices = new();
     public List<float> Vertices => vertices;
+
+    private List<Sprite> _pendingAdd = new();
+    private List<Sprite> _pendingRemove = new();
 
     public void Init()
     {
@@ -27,11 +30,34 @@ public class Renderer
 
     public void LoadSprite(Sprite sprite)
     {
-        sprites.Add(sprite);
+        _pendingAdd.Add(sprite);
+    }
+
+    public void RemoveSprite(Sprite sprite)
+    {
+        _pendingRemove.Add(sprite);
+    }
+
+    private void FlushPendingEntities()
+    {
+        for (int i = 0; i < _pendingAdd.Count; i++)
+        {
+            Sprite s = _pendingAdd[i];
+            sprites.Add(s);
+        }
+        _pendingAdd.Clear();
+
+        for (int i = 0; i < _pendingRemove.Count; i++)
+        {
+            Sprite s = _pendingRemove[i];
+            sprites.Remove(s);
+        }
+        _pendingRemove.Clear();
     }
 
     internal void Render()
     {
+        FlushPendingEntities();
         for (int i = 0; i < sprites.Count; i++)
         {
             Sprite sprite = sprites[i];
@@ -137,8 +163,9 @@ public class Renderer
         GL.DeleteVertexArray(vertexArrayObject);
         GL.BindVertexArray(0);
 
-        foreach (Sprite sprite in sprites)
+        for (int i = 0; i < sprites.Count; i++)
         {
+            Sprite sprite = sprites[i];
             sprite.Shader.Dispose();
         }
     }
