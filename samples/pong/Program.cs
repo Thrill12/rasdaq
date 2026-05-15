@@ -55,8 +55,8 @@ internal class Program
     {
         try
         {
-            Entity soldier = new(344, 144, 50);
-            Entity enemy = new(0, 0, 1);
+            Entity soldier = new(new Vector3(344, 144, 50));
+            Entity enemy = new(new Vector3(0, 0, 1));
 
             // TODO remove soldier from constructor, this was for testing purposes only
             using Application app = new(800, 600, "rasdaq");
@@ -94,24 +94,6 @@ internal class Program
                     PrintMouseDelta(e.dx, e.dy);
                 }
             };
-
-            if (Input.IsKeyDown(Keys.W))
-            {
-                soldier.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(0, 100));
-            }
-
-            if (Input.IsKeyDown(Keys.S))
-            {
-                soldier.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(0, -100));
-            }
-            if (Input.IsKeyDown(Keys.A))
-            {
-                soldier.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(-100, 0));
-            }
-            if (Input.IsKeyDown(Keys.D))
-            {
-                soldier.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(100, 0));
-            }
 
             Input.OnMouseButtonDownEvent.Add(MouseButton.Button1, TestMButton1Down);
             Input.OnMouseButtonUpEvent.Add(MouseButton.Button1, TestMButton1Up);

@@ -43,20 +43,20 @@ internal class Soldier : Component
         }
         if (Input.IsKeyDown(Keys.W))
         {
-            Entity?.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(0, 100));
+            Entity?.GetComponent<PhysicsBody>()?.MoveOnce(new Vector2(0, 100));
         }
 
         if (Input.IsKeyDown(Keys.S))
         {
-            Entity?.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(0, -100));
+            Entity?.GetComponent<PhysicsBody>()?.MoveOnce(new Vector2(0, -100));
         }
         if (Input.IsKeyDown(Keys.A))
         {
-            Entity?.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(-100, 0));
+            Entity?.GetComponent<PhysicsBody>()?.MoveOnce(new Vector2(-100, 0));
         }
         if (Input.IsKeyDown(Keys.D))
         {
-            Entity?.GetComponent<PhysicsBody>()?.MoveOnce(new OpenTK.Mathematics.Vector2(100, 0));
+            Entity?.GetComponent<PhysicsBody>()?.MoveOnce(new Vector2(100, 0));
         }
     }
 }
