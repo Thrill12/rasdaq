@@ -9,7 +9,7 @@ public class EntityTests
     [Test]
     public void GetComponent_ReturnsCorrectType()
     {
-        var entity = new Entity();
+        var entity = new Entity(Vector3.Zero);
         var tracker = new LifecycleTracker();
         entity.AddComponent(tracker);
 
@@ -22,7 +22,7 @@ public class EntityTests
     [Test]
     public void GetComponent_ReturnsNull_WhenNotPresent()
     {
-        var entity = new Entity();
+        var entity = new Entity(Vector3.Zero);
 
         var result = entity.GetComponent<LifecycleTracker>();
 
@@ -32,7 +32,7 @@ public class EntityTests
     [Test]
     public void AddComponent_SetsEntityReference()
     {
-        var entity = new Entity();
+        var entity = new Entity(Vector3.Zero);
         var tracker = new LifecycleTracker();
         entity.AddComponent(tracker);
 

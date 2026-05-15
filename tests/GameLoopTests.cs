@@ -13,7 +13,7 @@ public class GameLoopTests
         World world = new();
         GameLoop loop = world.GameLoop;
 
-        Entity trackerEntity = new();
+        Entity trackerEntity = new(Vector3.Zero);
         LifecycleTracker tracker = new();
         trackerEntity.AddComponent(tracker);
 
@@ -38,7 +38,7 @@ public class GameLoopTests
         World world = new();
         GameLoop loop = world.GameLoop;
 
-        Entity trackerEntity = new();
+        Entity trackerEntity = new(Vector3.Zero);
         LifecycleTracker tracker = new();
         trackerEntity.AddComponent(tracker);
 
