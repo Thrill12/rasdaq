@@ -10,7 +10,6 @@ internal class Soldier : Component
     {
         base.Start();
 
-
     }
 
     public override void Update(double deltaTime)
