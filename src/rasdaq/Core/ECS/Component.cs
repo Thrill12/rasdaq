@@ -1,7 +1,7 @@
 ﻿namespace rasdaq.Core.ECS;
 
 /// <summary>
-/// Component that can be added to entities. 
+/// Component that can be added to entities.
 /// You may create subclasses in order to attach to entities.
 /// </summary>
 public abstract class Component
