@@ -131,11 +131,17 @@ public class Sprite : Component
 
     private static float[] BuildVertices()
     {
-        float leftX = 0;
-        float rightX = 1;
+        float leftX = -0.5f;
+        float rightX = 0.5f;
 
-        float topY = 1;
-        float bottomY = 0;
+        float topY = 0.5f;
+        float bottomY = -0.5f;
+
+        // float leftX = 0f;
+        // float rightX = 1f;
+
+        // float topY = 1f;
+        // float bottomY = 0f;
 
         return
         [
