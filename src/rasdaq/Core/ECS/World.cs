@@ -54,7 +54,7 @@ public class World
     /// <param name="e"></param>
     public void RemoveEntity(Entity e)
     {
-        _entities.Add(e);
+        _entities.Remove(e);
     }
 
     internal void Start()
