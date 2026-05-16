@@ -4,10 +4,9 @@ using OpenTK.Windowing.Desktop;
 using rasdaq.Core.ECS;
 using rasdaq.Graphics;
 using rasdaq.Inputs;
+using rasdaq.Interfaces;
 using System.Drawing;
 using System.Runtime.CompilerServices;
-using Keys = rasdaq.Inputs.Keys;
-using OTKKeys = OpenTK.Windowing.GraphicsLibraryFramework.Keys;
 
 [assembly: InternalsVisibleTo("tests")]
 
@@ -16,22 +15,33 @@ namespace rasdaq;
 /// <summary>
 /// Main rasdaq application class.
 /// </summary>
-public sealed class Application : IDisposable
+public class Application : IDisposable
 {
+    /// <summary>
+    /// The <c>Application</c> instance is created when <c>Run</c> is called.
+    /// </summary>
     public static Application? Instance { get; private set; }
-    internal InputManager InputManager { get; set; }
+    public List<World> Worlds => _worlds.Objects;
 
-    private List<World> _worlds = new();
-    private GameWindow _gameWindow;
+    internal InputManager? InputManager { get; set; }
+
+    private FlushEnumerable<World> _worlds = new();
+    private GameWindow? _gameWindow;
+
+    internal void AddWorld(World world)
+    {
+        _worlds.Add(world);
+    }
+
+    internal void RemoveWorld(World world)
+    {
+        _worlds.Add(world);
+    }
 
     /// <summary>
-    /// Main entry point of a rasdaq-based application.
+    /// Starts the application window.
     /// </summary>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
-    /// <param name="title"></param>
-    /// <exception cref="InvalidOperationException"></exception>
-    public Application(int width, int height, string title)
+    public void Run(int width, int height, string title)
     {
         if (Instance != null)
         {
@@ -56,33 +66,9 @@ public sealed class Application : IDisposable
         _gameWindow.FramebufferResize += OnFramebufferResize;
 
         InputManager = new InputManager(new GameWindowWrapper(_gameWindow));
-    }
 
-    internal void RegisterWorld(World world)
-    {
-        _worlds.Add(world);
-    }
-
-    /// <summary>
-    /// Starts the application window.
-    /// </summary>
-    public void Run()
-    {
         InputManager.SetEventListeners();
         _gameWindow.Run();
-    }
-
-    private void OnUpdateFrame(FrameEventArgs args)
-    {
-        if (_gameWindow.KeyboardState.IsKeyDown((OTKKeys)Keys.Escape))
-        {
-            _gameWindow.Close();
-        }
-
-        foreach (World world in _worlds)
-        {
-            world.GameLoop.Tick(args.Time);
-        }
     }
 
     /// <summary>
@@ -102,9 +88,26 @@ public sealed class Application : IDisposable
 
         Renderer.Instance.Init();
 
-        foreach (World world in _worlds)
+        Init();
+        _worlds.FlushPending();
+
+        Start();
+        _worlds.FlushPending();
+
+        for (int i = 0; i < Worlds.Count; i++)
         {
+            World world = Worlds[i];
             world.Start();
+        }
+    }
+
+    private void OnUpdateFrame(FrameEventArgs args)
+    {
+        _worlds.FlushPending();
+        for (int i = 0; i < Worlds.Count; i++)
+        {
+            World world = Worlds[i];
+            world.GameLoop.Tick(args.Time);
         }
     }
 
@@ -114,7 +117,7 @@ public sealed class Application : IDisposable
 
         Renderer.Instance.Render();
 
-        _gameWindow.SwapBuffers();
+        _gameWindow?.SwapBuffers();
     }
 
     private void OnFramebufferResize(FramebufferResizeEventArgs args)
@@ -127,7 +130,17 @@ public sealed class Application : IDisposable
     /// </summary>
     public void Dispose()
     {
-        _gameWindow.Dispose();
+        _gameWindow?.Dispose();
         Instance = null;
     }
+
+    /// <summary>
+    /// Executes before any <c>World</c> start function, once the application window starts.
+    /// </summary>
+    public virtual void Start() { }
+
+    /// <summary>
+    /// Executes before <c>Start</c>, once the application window starts.
+    /// </summary>
+    public virtual void Init() { }
 }

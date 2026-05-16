@@ -1,18 +1,22 @@
-﻿namespace rasdaq.Core.ECS;
+﻿using rasdaq.Interfaces;
+
+namespace rasdaq.Core.ECS;
 
 /// <summary>
 /// Base rasdaq game object class.
 /// </summary>
 public class Entity
 {
-    private readonly string _id;
-    private List<Component> _components = new();
+    /// <summary>
+    /// Return list of components attached to the entity.
+    /// </summary>
+    public List<Component> Components => _components.Objects;
 
-    private List<Component> _pendingAdd = new();
-    private List<Component> _pendingRemove = new();
+    private readonly string _id;
+    private FlushEnumerable<Component> _components = new();
 
     /// <summary>
-    /// Determines if component has performed its start method.
+    /// Determines if entity has performed its start method.
     /// </summary>
     internal bool Started { get; set; }
 
@@ -21,9 +25,14 @@ public class Entity
     /// </summary>
     public string ID => _id;
 
-    public Entity()
+    public Entity(World? world = null)
     {
         _id = Guid.NewGuid().ToString("N");
+
+        if (world != null)
+        {
+            world.AddEntity(this);
+        }
     }
 
     /// <summary>
@@ -33,39 +42,17 @@ public class Entity
     public void AddComponent(Component c)
     {
         c.Entity = this;
-        _pendingAdd.Add(c);
+        _components.Add(c);
     }
 
     /// <summary>
-    /// Remove a component from the entity. Will call the <c>Destroy</c> function before removing the component.
+    /// Remove a component from the entity. Will call the <c>Destroy</c> function on the component before removing.
     /// </summary>
     /// <param name="c"></param>
     public void RemoveComponent(Component c)
     {
-        _pendingRemove.Add(c);
-    }
-
-    /// <summary>
-    /// Processes components queued for addition/removal. Used
-    /// to prevent adding or removing components at runtime
-    /// causing components to be skipped, or updated twice.
-    /// </summary>
-    private void FlushPendingComponents()
-    {
-        for (int i = 0; i < _pendingAdd.Count; i++)
-        {
-            Component c = _pendingAdd[i];
-            _components.Add(c);
-        }
-        _pendingAdd.Clear();
-
-        for (int i = 0; i < _pendingRemove.Count; i++)
-        {
-            Component c = _pendingRemove[i];
-            c.Destroy();
-            _components.Remove(c);
-        }
-        _pendingRemove.Clear();
+        c.Destroy();
+        _components.Remove(c);
     }
 
     /// <summary>
@@ -75,16 +62,16 @@ public class Entity
     /// <returns>The first component of type T on the entity</returns>
     public T? GetComponent<T>() where T : Component
     {
-        return _components.OfType<T>().FirstOrDefault();
+        return _components.Objects.OfType<T>().FirstOrDefault();
     }
 
     internal void Start()
     {
-        FlushPendingComponents();
+        _components.FlushPending();
 
-        for (int i = 0; i < _components.Count; i++)
+        for (int i = 0; i < _components.Objects.Count; i++)
         {
-            Component c = _components[i];
+            Component c = _components.Objects[i];
             c.Start();
             c.Started = true;
         }
@@ -92,46 +79,37 @@ public class Entity
 
     internal void Update(double dt)
     {
-        FlushPendingComponents();
+        _components.FlushPending();
 
-        for (int i = 0; i < _components.Count; i++)
+        for (int i = 0; i < _components.Objects.Count; i++)
         {
-            Component c = _components[i];
+            Component c = _components.Objects[i];
+            Utils.EnsureStartableStart(c);
             c.Update(dt);
-            EnsureComponentStart(c);
         }
     }
 
     internal void FrameUpdate(double dt)
     {
-        FlushPendingComponents();
+        _components.FlushPending();
 
-        for (int i = 0; i < _components.Count; i++)
+        for (int i = 0; i < _components.Objects.Count; i++)
         {
-            Component c = _components[i];
+            Component c = _components.Objects[i];
+            Utils.EnsureStartableStart(c);
             c.FrameUpdate(dt);
-            EnsureComponentStart(c);
         }
     }
 
     internal void LateUpdate(double dt)
     {
-        FlushPendingComponents();
+        _components.FlushPending();
 
-        for (int i = 0; i < _components.Count; i++)
+        for (int i = 0; i < _components.Objects.Count; i++)
         {
-            Component c = _components[i];
+            Component c = _components.Objects[i];
+            Utils.EnsureStartableStart(c);
             c.LateUpdate(dt);
-            EnsureComponentStart(c);
-        }
-    }
-
-    private static void EnsureComponentStart(Component c)
-    {
-        if (!c.Started)
-        {
-            c.Start();
-            c.Started = true;
         }
     }
 }

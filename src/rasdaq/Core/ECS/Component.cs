@@ -14,7 +14,7 @@ public abstract class Component
     /// <summary>
     /// Determines if component has performed its start method.
     /// </summary>
-    internal bool Started { get; set; }
+    public bool Started { get; set; }
 
     public Component()
     {

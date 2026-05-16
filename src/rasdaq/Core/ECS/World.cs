@@ -1,4 +1,6 @@
-﻿namespace rasdaq.Core.ECS;
+﻿using rasdaq.Interfaces;
+
+namespace rasdaq.Core.ECS;
 
 /// <summary>
 /// A world is a container for entities. 
@@ -6,23 +8,25 @@
 /// </summary>
 public class World
 {
-    private readonly string _id;
-    private GameLoop _gameLoop;
-
-    private List<Entity> _entities = new();
-    private List<Entity> _pendingAdd = new();
-    private List<Entity> _pendingRemove = new();
-
-    internal GameLoop GameLoop => _gameLoop;
-
     /// <summary>
     /// Unique ID representing the world.
     /// </summary>
     public string ID => _id;
+
+    private readonly string _id;
+    private GameLoop _gameLoop;
+    private FlushEnumerable<Entity> _entities = new();
+
+    /// <summary>
+    /// Determines if world has performed its start method.
+    /// </summary>
+    internal bool Started { get; set; }
+    internal GameLoop GameLoop => _gameLoop;
+
     /// <summary>
     /// Get the collection of entities managed by this world.
     /// </summary>
-    public List<Entity> Entities => _entities;
+    public List<Entity> Entities => _entities.Objects;
 
     public World()
     {
@@ -31,7 +35,7 @@ public class World
 
         if (Application.Instance != null)
         {
-            Application.Instance.RegisterWorld(this);
+            Application.Instance.AddWorld(this);
         }
     }
 
@@ -41,7 +45,7 @@ public class World
     /// <param name="e"></param>
     public void AddEntity(Entity e)
     {
-        _pendingAdd.Add(e);
+        _entities.Add(e);
     }
 
     /// <summary>
@@ -50,38 +54,16 @@ public class World
     /// <param name="e"></param>
     public void RemoveEntity(Entity e)
     {
-        _pendingRemove.Add(e);
-    }
-
-    /// <summary>
-    /// Processes entities queued for addition/removal. Used
-    /// to prevent adding or removing entities at runtime
-    /// causing entities to be skipped, or updated twice.
-    /// </summary>
-    private void FlushPendingEntities()
-    {
-        for (int i = 0; i < _pendingAdd.Count; i++)
-        {
-            Entity e = _pendingAdd[i];
-            _entities.Add(e);
-        }
-        _pendingAdd.Clear();
-
-        for (int i = 0; i < _pendingRemove.Count; i++)
-        {
-            Entity e = _pendingRemove[i];
-            _entities.Remove(e);
-        }
-        _pendingRemove.Clear();
+        _entities.Add(e);
     }
 
     internal void Start()
     {
-        FlushPendingEntities();
+        _entities.FlushPending();
 
-        for (int i = 0; i < _entities.Count; i++)
+        for (int i = 0; i < Entities.Count; i++)
         {
-            Entity e = _entities[i];
+            Entity e = Entities[i];
             e.Start();
             e.Started = true;
         }
@@ -89,46 +71,37 @@ public class World
 
     internal void Update(double deltaTime)
     {
-        FlushPendingEntities();
+        _entities.FlushPending();
 
-        for (int i = 0; i < _entities.Count; i++)
+        for (int i = 0; i < Entities.Count; i++)
         {
-            Entity e = _entities[i];
+            Entity e = Entities[i];
+            Utils.EnsureStartableStart(e);
             e.Update(deltaTime);
-            EnsureEntityStart(e);
         }
     }
 
     internal void FrameUpdate(double deltaTime)
     {
-        FlushPendingEntities();
+        _entities.FlushPending();
 
-        for (int i = 0; i < _entities.Count; i++)
+        for (int i = 0; i < Entities.Count; i++)
         {
-            Entity e = _entities[i];
+            Entity e = Entities[i];
+            Utils.EnsureStartableStart(e);
             e.FrameUpdate(deltaTime);
-            EnsureEntityStart(e);
         }
     }
 
     internal void LateUpdate(double deltaTime)
     {
-        FlushPendingEntities();
+        _entities.FlushPending();
 
-        for (int i = 0; i < _entities.Count; i++)
+        for (int i = 0; i < Entities.Count; i++)
         {
-            Entity e = _entities[i];
+            Entity e = Entities[i];
+            Utils.EnsureStartableStart(e);
             e.LateUpdate(deltaTime);
-            EnsureEntityStart(e);
-        }
-    }
-
-    private static void EnsureEntityStart(Entity c)
-    {
-        if (!c.Started)
-        {
-            c.Start();
-            c.Started = true;
         }
     }
 }
