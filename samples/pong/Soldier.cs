@@ -1,4 +1,5 @@
-﻿using rasdaq.Core.ECS;
+﻿using rasdaq;
+using rasdaq.Core.ECS;
 using rasdaq.Graphics;
 using rasdaq.Inputs;
 using rasdaq.Logging;
@@ -58,7 +59,20 @@ internal class Soldier : Component
         {
             Entity?.GetComponent<PhysicsBody>()?.MoveOnce(new Vector2(100, 0));
         }
+        if (Input.IsKeyDown(Keys.H))
+        {
+            Renderer.Instance.Camera.SetPosition(Entity?.Transform.position.X - 960 ?? 0, Entity?.Transform.position.Y - 540 ?? 0);
+        }
     }
 }
 
-internal class Enemy : Component { }
+internal class Enemy : Component
+{
+    public override void FrameUpdate(double deltaTime)
+    {
+        base.Update(deltaTime);
+
+        Entity?.Transform.rotatedDegrees = 25f;
+
+    }
+}
