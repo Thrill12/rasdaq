@@ -5,7 +5,7 @@ public struct Vector3(double x = 0, double y = 0, double z = 0)
     public double Y { get; set; } = y;
     public double Z { get; set; } = z;
     public static readonly Vector3 Zero = new(0, 0, 0);
-    public override readonly string ToString() => $"({X}, {Y}, {z})";
+    public override readonly string ToString() => $"({X}, {Y}, {Z})";
 
     public static implicit operator OpenTK.Mathematics.Vector3(Vector3 v)
     {
