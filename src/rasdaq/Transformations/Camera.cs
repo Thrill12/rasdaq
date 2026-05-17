@@ -1,10 +1,8 @@
 using OpenTK.Mathematics;
-using OVector2 = OpenTK.Mathematics.Vector2;
 using OVector3 = OpenTK.Mathematics.Vector3;
 
 namespace rasdaq.Transformations;
 
-// dont make this static
 public class Camera
 {
     public Vector3 Position { get; private set; } = new(0.0f, 0.0f, 1000.0f);

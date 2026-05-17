@@ -17,4 +17,9 @@ public struct Vector2(double x = 0, double y = 0)
     {
         return new Vector2(v.X, v.Y);
     }
+
+    public static implicit operator Vector2(OpenTK.Mathematics.Vector2i v)
+    {
+        return new Vector2(v.X, v.Y);
+    }
 }

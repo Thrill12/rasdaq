@@ -20,6 +20,7 @@ namespace rasdaq;
 public sealed class Application : IDisposable
 {
     public static Application? Instance { get; private set; }
+    public static Vector2? WindowSize => Instance?._gameWindow.Size;
     internal InputManager InputManager { get; set; }
 
     private List<World> _worlds = new();
@@ -115,7 +116,7 @@ public sealed class Application : IDisposable
     {
         GL.Clear(ClearBufferMask.ColorBufferBit);
 
-        Renderer.Instance.Render(args.Time, _gameWindow.Size);
+        Renderer.Instance.Render(WindowSize ?? new Vector2(0, 0));
 
         _gameWindow.SwapBuffers();
     }

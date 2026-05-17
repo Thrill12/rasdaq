@@ -34,12 +34,12 @@ public class Renderer
         sprites.Add(sprite);
     }
 
-    internal void Render(double elapsedTime, Vector2i windowSize)
+    internal void Render(Vector2 windowSize)
     {
         // get view
         var view = Camera.GetView();
         // get projection
-        var projection = Matrix4.CreateOrthographicOffCenter(0, windowSize.X, 0, windowSize.Y, -1000.1f, 1001);
+        var projection = Matrix4.CreateOrthographicOffCenter(0, (float)windowSize.X, 0, (float)windowSize.Y, -1000.1f, 1001);
 
         foreach (Sprite sprite in sprites)
         {
