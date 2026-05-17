@@ -50,8 +50,6 @@ public class Transform(Vector3 spawnPosition)
         var rotation = Get2DRotation();
         var scale = ScaleFromNDC(imageWidth, imageHeight);
 
-        // return translation * rotation * scale;
-        // return translation * scale * rotation;
         return scale * rotation * translation;
     }
 }

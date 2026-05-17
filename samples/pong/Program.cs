@@ -55,7 +55,7 @@ internal class Program
     {
         try
         {
-            Entity soldier = new(new Vector3(344, 144, 50));
+            Entity soldier = new(new Vector3(344, 0, 50));
             Entity enemy = new(new Vector3(0, 0, 1));
 
             // TODO remove soldier from constructor, this was for testing purposes only
