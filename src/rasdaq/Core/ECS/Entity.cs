@@ -68,19 +68,3 @@ public class Entity(Vector3 spawnPosition)
         _components.ForEach(c => c.LateUpdate(dt));
     }
 }
-
-/// <summary>
-/// Component that can be added to entities.
-/// </summary>
-public abstract class Component
-{
-    /// <summary>
-    /// Associated entity.
-    /// </summary>
-    public Entity? Entity { get; internal set; }
-    internal virtual void Init() { }
-    public virtual void Start() { }
-    public virtual void Update(double deltaTime) { }
-    public virtual void FrameUpdate(double deltaTime) { }
-    public virtual void LateUpdate(double deltaTime) { }
-}
