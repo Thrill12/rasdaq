@@ -1,5 +1,5 @@
-using OVector2 = OpenTK.Mathematics.Vector2;
 using rasdaq.Core.ECS;
+using OVector2 = OpenTK.Mathematics.Vector2;
 
 namespace rasdaq.Transformations;
 

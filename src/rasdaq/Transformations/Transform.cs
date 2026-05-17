@@ -1,6 +1,6 @@
-using OVector2 = OpenTK.Mathematics.Vector2;
-using System.Runtime.CompilerServices;
 using OpenTK.Mathematics;
+using System.Runtime.CompilerServices;
+using OVector2 = OpenTK.Mathematics.Vector2;
 
 [assembly: InternalsVisibleTo("tests")]
 
