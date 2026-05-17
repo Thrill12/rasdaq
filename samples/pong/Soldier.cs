@@ -61,7 +61,10 @@ internal class Soldier : Component
         }
         if (Input.IsKeyDown(Keys.H))
         {
-            Renderer.Instance.Camera.SetPosition(Entity?.Transform.position.X - 960 ?? 0, Entity?.Transform.position.Y - 540 ?? 0);
+            // track camera to entity
+            var x = Entity?.Transform.position.X - (Application.WindowSize?.X / 2) ?? 0;
+            var y = Entity?.Transform.position.Y - (Application.WindowSize?.Y / 2) ?? 0;
+            Renderer.Instance.Camera.SetPosition(x, y);
         }
     }
 }
@@ -72,7 +75,13 @@ internal class Enemy : Component
     {
         base.Update(deltaTime);
 
-        Entity?.Transform.rotatedDegrees = 25f;
+        if (Input.IsKeyDown(Keys.I))
+        {
+            // track camera to entity
+            var x = Entity?.Transform.position.X - (Application.WindowSize?.X / 2) ?? 0;
+            var y = Entity?.Transform.position.Y - (Application.WindowSize?.Y / 2) ?? 0;
+            Renderer.Instance.Camera.SetPosition(x, y);
+        }
 
     }
 }

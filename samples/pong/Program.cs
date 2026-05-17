@@ -55,7 +55,7 @@ internal class Program
     {
         try
         {
-            Entity soldier = new(new Vector3(344, 0, 50));
+            Entity soldier = new(new Vector3(400, 0, 50));
             Entity enemy = new(new Vector3(0, 0, 1));
 
             // TODO remove soldier from constructor, this was for testing purposes only
@@ -69,8 +69,8 @@ internal class Program
             soldier.AddComponent(new Soldier());
             enemy.AddComponent(new Enemy());
 
-            Sprite spr = new(456, 456, tex);
-            Sprite evilSpr = new(304, 230, evilTex);
+            Sprite spr = new(400, 400, tex);
+            Sprite evilSpr = new(400, 400, evilTex);
 
             soldier.AddComponent(spr);
             enemy.AddComponent(evilSpr);
