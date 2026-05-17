@@ -39,7 +39,7 @@ public class Renderer
         // get view
         var view = Camera.GetView();
         // get projection
-        var projection = Matrix4.CreateOrthographicOffCenter(0, (float)windowSize.X, 0, (float)windowSize.Y, -1000.1f, 1001);
+        var projection = Matrix4.CreateOrthographicOffCenter(0, (float)windowSize.X, 0, (float)windowSize.Y, 0, 1000.1f);
 
         foreach (Sprite sprite in sprites)
         {

@@ -5,8 +5,13 @@ namespace rasdaq.Core.ECS;
 /// <summary>
 /// Base rasdaq game object class
 /// </summary>
-/// <param name="x">x coordinate of the object</param>
-/// <param name="y">y coordinate of the object</param>
+/// <param name="spawnPosition">
+/// The position where the object will be spawned. The z position determines how the sprites are layered on the screen.
+/// A higher z value means the object will be rendered on top of objects with lower z values
+/// The z value can be anywhere between 0 and 1000.
+///
+/// <para>The x and y coordinates is the position of the centre of the Entity</para>
+/// </param>
 public class Entity(Vector3 spawnPosition)
 {
     private readonly string _id = Guid.NewGuid().ToString("N");

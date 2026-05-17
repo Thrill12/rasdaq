@@ -102,6 +102,9 @@ public sealed class Application : IDisposable
         GL.Enable(EnableCap.Blend);
         GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
+        // Allows rendering in the correct order based on z value
+        GL.Enable(EnableCap.DepthTest);
+
         Log.Debug("rasdaq started");
 
         Renderer.Instance.Init();
@@ -114,7 +117,7 @@ public sealed class Application : IDisposable
 
     private void OnRenderFrame(FrameEventArgs args)
     {
-        GL.Clear(ClearBufferMask.ColorBufferBit);
+        GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
         Renderer.Instance.Render(WindowSize ?? new Vector2(0, 0));
 
