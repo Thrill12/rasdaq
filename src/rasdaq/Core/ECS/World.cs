@@ -44,7 +44,6 @@ public class World
         catch (Exception e)
         {
             Log.Error("Application has not been initialized. Call Run() first.");
-            throw new Exception(e.Message + " Application has not been initalized. Call Run() first." + e.StackTrace);
         }
     }
 
