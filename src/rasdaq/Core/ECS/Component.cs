@@ -7,18 +7,33 @@ namespace rasdaq.Core.ECS;
 public abstract class Component
 {
     /// <summary>
-    /// Associated entity.
+    /// Get the associated entity.
     /// </summary>
-    public Entity? Entity { get; internal set; }
+    public Entity Entity => _entity == null ? throw new InvalidOperationException($"{GetType().Name} is not attached to an entity.") : _entity;
 
     /// <summary>
     /// Determines if component has performed its start method.
     /// </summary>
     public bool Started { get; set; }
 
+    private Entity? _entity;
+
+    /// <summary>
+    /// Create a new component.
+    /// </summary>
     public Component()
     {
         Init();
+    }
+
+    internal void Attach(Entity entity)
+    {
+        _entity = entity;
+    }
+
+    internal void Detach()
+    {
+        _entity = null;
     }
 
     internal virtual void Init() { }

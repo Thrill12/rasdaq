@@ -8,9 +8,9 @@ namespace rasdaq.Core.ECS;
 public class Entity
 {
     /// <summary>
-    /// Return list of components attached to the entity.
+    /// Return the world which contains this entity.
     /// </summary>
-    public List<Component> Components => _components.Objects;
+    public World? world { get; private set; }
 
     private readonly string _id;
     private FlushEnumerable<Component> _components = new();
@@ -32,6 +32,7 @@ public class Entity
         if (world != null)
         {
             world.AddEntity(this);
+            this.world = world;
         }
     }
 
@@ -41,7 +42,7 @@ public class Entity
     /// <param name="c"></param>
     public void AddComponent(Component c)
     {
-        c.Entity = this;
+        c.Attach(this);
         _components.Add(c);
     }
 
@@ -51,6 +52,7 @@ public class Entity
     /// <param name="c"></param>
     public void RemoveComponent(Component c)
     {
+        c.Detach();
         c.Destroy();
         _components.Remove(c);
     }
@@ -65,10 +67,24 @@ public class Entity
         return _components.Objects.OfType<T>().FirstOrDefault();
     }
 
+    /// <summary>
+    /// Return all components of a certain type attached to the entity.
+    /// </summary>
+    public IEnumerable<T> GetComponents<T>() where T : Component
+    {
+        return _components.Objects.OfType<T>();
+    }
+
+    /// <summary>
+    /// Return all components attached to the entity.
+    /// </summary>
+    public IEnumerable<Component> GetComponents()
+    {
+        return _components.Objects;
+    }
+
     internal void Start()
     {
-        _components.FlushPending();
-
         for (int i = 0; i < _components.Objects.Count; i++)
         {
             Component c = _components.Objects[i];
@@ -79,8 +95,6 @@ public class Entity
 
     internal void Update(double dt)
     {
-        _components.FlushPending();
-
         for (int i = 0; i < _components.Objects.Count; i++)
         {
             Component c = _components.Objects[i];
@@ -91,8 +105,6 @@ public class Entity
 
     internal void FrameUpdate(double dt)
     {
-        _components.FlushPending();
-
         for (int i = 0; i < _components.Objects.Count; i++)
         {
             Component c = _components.Objects[i];
@@ -103,8 +115,6 @@ public class Entity
 
     internal void LateUpdate(double dt)
     {
-        _components.FlushPending();
-
         for (int i = 0; i < _components.Objects.Count; i++)
         {
             Component c = _components.Objects[i];

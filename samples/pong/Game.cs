@@ -24,5 +24,8 @@ public class Game : Application
 
         Sprite spr = new Sprite(1, 1, andrei);
         player.AddComponent(spr);
+
+        Soldier sold = new();
+        player.AddComponent(sold);
     }
 }

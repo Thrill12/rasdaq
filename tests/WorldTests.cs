@@ -23,11 +23,6 @@ public class WorldTests
 
         world.AddEntity(ent);
 
-        Assert.That(world.Entities.Count, Is.EqualTo(0));
-
-        // Have to tick here so that we flush the pending entities to be added
-        loop.Tick(1);
-
         Assert.That(world.Entities.Count, Is.EqualTo(1));
 
         Entity ent2 = new();

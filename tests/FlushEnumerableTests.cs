@@ -17,9 +17,6 @@ internal class FlushEnumerableTests
         Assert.That(Entities.Objects.Count, Is.EqualTo(0));
         Entities.Add(ent);
 
-        Assert.That(Entities.Objects.Count, Is.EqualTo(0));
-        Entities.FlushPending();
-
         Assert.That(Entities.Objects.Count, Is.EqualTo(1));
     }
 
@@ -37,9 +34,6 @@ internal class FlushEnumerableTests
         Entities.Add(ent2);
         Entities.Add(ent3);
 
-        Assert.That(Entities.Objects.Count, Is.EqualTo(0));
-        Entities.FlushPending();
-
         Assert.That(Entities.Objects.Count, Is.EqualTo(3));
     }
 
@@ -51,12 +45,10 @@ internal class FlushEnumerableTests
         Entity ent = new();
 
         Entities.Add(ent);
-        Entities.FlushPending();
 
         Assert.That(Entities.Objects.Count, Is.EqualTo(1));
 
         Entities.Remove(ent);
-        Entities.FlushPending();
 
         Assert.That(Entities.Objects.Count, Is.EqualTo(0));
     }
@@ -75,15 +67,11 @@ internal class FlushEnumerableTests
         Entities.Add(ent2);
         Entities.Add(ent3);
 
-        Assert.That(Entities.Objects.Count, Is.EqualTo(0));
-        Entities.FlushPending();
-
         Assert.That(Entities.Objects.Count, Is.EqualTo(3));
 
         Entities.Remove(ent);
         Entities.Remove(ent2);
         Entities.Remove(ent3);
-        Entities.FlushPending();
 
         Assert.That(Entities.Objects.Count, Is.EqualTo(0));
     }

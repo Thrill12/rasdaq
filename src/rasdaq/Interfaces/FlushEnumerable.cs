@@ -6,7 +6,16 @@ internal class FlushEnumerable<T>
     private List<T> _pendingAdd = new();
     private List<T> _pendingRemove = new();
 
-    public List<T> Objects => _objects;
+    public List<T> Objects
+    {
+        get
+        {
+            // Not sure if this is a good idea to FlushPending but i can't think of any good reasons
+            // we would want to manually flush in other places. Maybe in Update methods wherever these get used instead?
+            FlushPending();
+            return _objects;
+        }
+    }
 
     /// <summary>
     /// Add the specified entity to the world entities.

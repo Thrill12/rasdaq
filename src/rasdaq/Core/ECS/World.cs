@@ -28,6 +28,9 @@ public class World
     /// </summary>
     public List<Entity> Entities => _entities.Objects;
 
+    /// <summary>
+    /// Create a new world. A unique ID is generated automatically.
+    /// </summary>
     public World()
     {
         _id = Guid.NewGuid().ToString("N");
@@ -59,8 +62,6 @@ public class World
 
     internal void Start()
     {
-        _entities.FlushPending();
-
         for (int i = 0; i < Entities.Count; i++)
         {
             Entity e = Entities[i];
@@ -71,8 +72,6 @@ public class World
 
     internal void Update(double deltaTime)
     {
-        _entities.FlushPending();
-
         for (int i = 0; i < Entities.Count; i++)
         {
             Entity e = Entities[i];
@@ -83,8 +82,6 @@ public class World
 
     internal void FrameUpdate(double deltaTime)
     {
-        _entities.FlushPending();
-
         for (int i = 0; i < Entities.Count; i++)
         {
             Entity e = Entities[i];
@@ -95,8 +92,6 @@ public class World
 
     internal void LateUpdate(double deltaTime)
     {
-        _entities.FlushPending();
-
         for (int i = 0; i < Entities.Count; i++)
         {
             Entity e = Entities[i];
