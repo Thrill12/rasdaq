@@ -5,11 +5,11 @@ namespace rasdaq.Transformations;
 
 public class PhysicsBody : Component
 {
-    private OVector2 moveOnceVelocity = OVector2.Zero;
-    private OVector2 distanceToCover = OVector2.Zero;
-    private bool isDistanceToCoverVector = false;
-    private OVector2 distanceVelocity = OVector2.Zero;
-    private OVector2 distanceCovered;
+    private OVector2 _moveOnceVelocity = OVector2.Zero;
+    private OVector2 _distanceToCover = OVector2.Zero;
+    private bool _isDistanceToCoverVector = false;
+    private OVector2 _distanceVelocity = OVector2.Zero;
+    private OVector2 _distanceCovered;
     private OVector2 _velocity = OVector2.Zero;
     public Vector2 Velocity
     {
@@ -30,7 +30,7 @@ public class PhysicsBody : Component
     /// <param name="velocity">velocity of the entity this frame</param>
     public void MoveOnce(Vector2 velocity)
     {
-        moveOnceVelocity += (OVector2)velocity;
+        _moveOnceVelocity += (OVector2)velocity;
         _velocity += (OVector2)velocity;
     }
 
@@ -45,11 +45,11 @@ public class PhysicsBody : Component
     /// </param>
     public void MoveDistance(Vector2 velocity, float distance, bool thisDirectionOnly)
     {
-        distanceToCover = OVector2.Normalize((OVector2)velocity) * Math.Abs(distance);
-        distanceCovered = OVector2.Zero;
-        distanceVelocity = (OVector2)velocity;
+        _distanceToCover = OVector2.Normalize((OVector2)velocity) * Math.Abs(distance);
+        _distanceCovered = OVector2.Zero;
+        _distanceVelocity = (OVector2)velocity;
 
-        isDistanceToCoverVector = thisDirectionOnly;
+        _isDistanceToCoverVector = thisDirectionOnly;
     }
 
     /// <summary>
@@ -62,10 +62,10 @@ public class PhysicsBody : Component
         var delta = MoveFrameDistance(elapsedTime);
         delta += _velocity * elapsedTime;
 
-        if (moveOnceVelocity != OVector2.Zero)
+        if (_moveOnceVelocity != OVector2.Zero)
         {
-            _velocity -= moveOnceVelocity;
-            moveOnceVelocity = OVector2.Zero;
+            _velocity -= _moveOnceVelocity;
+            _moveOnceVelocity = OVector2.Zero;
         }
 
         return delta;
@@ -74,15 +74,15 @@ public class PhysicsBody : Component
     private OVector2 MoveFrameDistance(float elapsedTime)
     {
         // if no distance to cover
-        if (distanceToCover == OVector2.Zero) { return OVector2.Zero; }
+        if (_distanceToCover == OVector2.Zero) { return OVector2.Zero; }
 
-        OVector2 distanceThisFrame = distanceVelocity * elapsedTime;
+        OVector2 distanceThisFrame = _distanceVelocity * elapsedTime;
         OVector2 deltaVector;
 
         // if current distance to cover is LEQ distance to be covered by distance velocity
-        if ((distanceToCover - distanceCovered).LengthSquared <= distanceThisFrame.LengthSquared)
+        if ((_distanceToCover - _distanceCovered).LengthSquared <= distanceThisFrame.LengthSquared)
             // traverse remaining distance
-            deltaVector = distanceToCover - distanceCovered;
+            deltaVector = _distanceToCover - _distanceCovered;
         else
             // move max distance as yet to finish full distance
             deltaVector = distanceThisFrame;
@@ -94,34 +94,34 @@ public class PhysicsBody : Component
 
     private void ProcessRemainingDistance(OVector2 deltaVector, float elapsedTime)
     {
-        if (isDistanceToCoverVector)
+        if (_isDistanceToCoverVector)
             // net vector covered this frame
-            distanceCovered += deltaVector + (_velocity * elapsedTime);
+            _distanceCovered += deltaVector + (_velocity * elapsedTime);
         else
             // net distance covered this frame, then vectorized
-            distanceCovered += (deltaVector + (_velocity * elapsedTime)).Length * OVector2.Normalize(distanceVelocity);
+            _distanceCovered += (deltaVector + (_velocity * elapsedTime)).Length * OVector2.Normalize(_distanceVelocity);
 
         if (
-            distanceToCover.X > 0 && distanceCovered.X >= distanceToCover.X ||
-            distanceToCover.X < 0 && distanceCovered.X <= distanceToCover.X
+            _distanceToCover.X > 0 && _distanceCovered.X >= _distanceToCover.X ||
+            _distanceToCover.X < 0 && _distanceCovered.X <= _distanceToCover.X
         )
         {
-            distanceVelocity.X = 0;
-            distanceToCover.X = 0;
+            _distanceVelocity.X = 0;
+            _distanceToCover.X = 0;
         }
         if (
-            distanceToCover.Y > 0 && distanceCovered.Y >= distanceToCover.Y ||
-            distanceToCover.Y < 0 && distanceCovered.Y <= distanceToCover.Y
+            _distanceToCover.Y > 0 && _distanceCovered.Y >= _distanceToCover.Y ||
+            _distanceToCover.Y < 0 && _distanceCovered.Y <= _distanceToCover.Y
         )
         {
-            distanceVelocity.Y = 0;
-            distanceToCover.Y = 0;
+            _distanceVelocity.Y = 0;
+            _distanceToCover.Y = 0;
         }
 
         // if we have covered full distance
-        if (distanceToCover == OVector2.Zero)
+        if (_distanceToCover == OVector2.Zero)
         {
-            distanceCovered = OVector2.Zero;
+            _distanceCovered = OVector2.Zero;
         }
     }
 }
