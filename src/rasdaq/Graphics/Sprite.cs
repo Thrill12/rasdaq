@@ -106,12 +106,6 @@ public class Sprite : Component
         float topY = 0.5f;
         float bottomY = -0.5f;
 
-        // float leftX = 0f;
-        // float rightX = 1f;
-
-        // float topY = 1f;
-        // float bottomY = 0f;
-
         return
         [
             leftX, bottomY, 0, // BL
