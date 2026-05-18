@@ -43,7 +43,7 @@ public class TransformTests
     public void Get2DRotation_90ZRotation_Return90ZMatrix()
     {
         var angle = 90;
-        transform.rotatedDegrees = angle;
+        transform.rotation = angle;
         var correctMatrix = Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(angle));
         Assert.That(transform.Get2DRotation(), Is.EqualTo(correctMatrix));
     }
@@ -96,7 +96,7 @@ public class TransformTests
     {
         var position = new Vector3(10, 10, 0);
         transform.position = position;
-        transform.rotatedDegrees = 90;
+        transform.rotation = 90;
 
         // 90 degree rotation around Z axis matrix
         // [0 -1 0 0]

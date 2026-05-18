@@ -33,7 +33,7 @@ internal class Soldier : Component
     {
         base.Update(deltaTime);
 
-        Entity?.Transform.rotatedDegrees = 25f;
+        Entity?.Transform.rotation = 25f;
 
         // Console.SetCursorPosition(0, 0);
         // Log.Info("Soldier FPS " + Math.Round(1f / deltaTime));
