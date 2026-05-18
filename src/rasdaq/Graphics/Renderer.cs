@@ -1,4 +1,5 @@
 using OpenTK.Graphics.OpenGL4;
+using rasdaq.Interfaces;
 
 namespace rasdaq.Graphics;
 
@@ -9,13 +10,10 @@ public class Renderer
     private int vertexBufferObject;
     private int vertexArrayObject;
 
-    private List<Sprite> sprites = new();
+    private FlushEnumerable<Sprite> Sprites = new();
 
     private List<float> vertices = new();
     public List<float> Vertices => vertices;
-
-    private List<Sprite> _pendingAdd = new();
-    private List<Sprite> _pendingRemove = new();
 
     public void Init()
     {
@@ -30,37 +28,19 @@ public class Renderer
 
     public void LoadSprite(Sprite sprite)
     {
-        _pendingAdd.Add(sprite);
+        Sprites.Add(sprite);
     }
 
     public void RemoveSprite(Sprite sprite)
     {
-        _pendingRemove.Add(sprite);
-    }
-
-    private void FlushPendingEntities()
-    {
-        for (int i = 0; i < _pendingAdd.Count; i++)
-        {
-            Sprite s = _pendingAdd[i];
-            sprites.Add(s);
-        }
-        _pendingAdd.Clear();
-
-        for (int i = 0; i < _pendingRemove.Count; i++)
-        {
-            Sprite s = _pendingRemove[i];
-            sprites.Remove(s);
-        }
-        _pendingRemove.Clear();
+        Sprites.Add(sprite);
     }
 
     internal void Render()
     {
-        FlushPendingEntities();
-        for (int i = 0; i < sprites.Count; i++)
+        for (int i = 0; i < Sprites.Objects.Count; i++)
         {
-            Sprite sprite = sprites[i];
+            Sprite sprite = Sprites.Objects[i];
             vertices.Clear();
             AddSpriteVertices(sprite);
 
@@ -163,9 +143,9 @@ public class Renderer
         GL.DeleteVertexArray(vertexArrayObject);
         GL.BindVertexArray(0);
 
-        for (int i = 0; i < sprites.Count; i++)
+        for (int i = 0; i < Sprites.Objects.Count; i++)
         {
-            Sprite sprite = sprites[i];
+            Sprite sprite = Sprites.Objects[i];
             sprite.Shader.Dispose();
         }
     }
