@@ -41,7 +41,7 @@ public class World
         {
             Application.Instance.AddWorld(this);
         }
-        catch (Exception e)
+        catch (Exception)
         {
             Log.Error("Application has not been initialized. Call Run() first.");
         }
