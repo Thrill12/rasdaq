@@ -56,9 +56,8 @@ internal class Program
         try
         {
             Entity soldier = new(new Vector3(400, 0, 100));
-            Entity enemy = new(new Vector3(0, 0, 0));
+            Entity enemy = new();
 
-            // TODO remove soldier from constructor, this was for testing purposes only
             using Application app = new(800, 600, "rasdaq");
 
             Texture tex = ResourceManager.Load<Texture>("assets/andrei.png");

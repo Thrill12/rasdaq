@@ -37,12 +37,13 @@ public class Renderer
     internal void Render(Vector2 windowSize)
     {
         // get view
-        var view = Camera.GetView();
+        Matrix4 view = Camera.GetView();
         // get projection
-        var projection = Matrix4.CreateOrthographicOffCenter(0, (float)windowSize.X, 0, (float)windowSize.Y, 0, 1000.1f);
+        Matrix4 projection = Matrix4.CreateOrthographicOffCenter(0, (float)windowSize.X, 0, (float)windowSize.Y, 0, 1000.1f);
 
-        foreach (Sprite sprite in sprites)
+        for (int i = sprites.Count - 1; i >= 0; i--)
         {
+            Sprite sprite = sprites[i];
             if (sprite.Entity is null)
             {
                 continue;
@@ -59,9 +60,7 @@ public class Renderer
                 BufferUsageHint.DynamicDraw
             );
 
-            sprite.Shader.Use();
-
-            var model = sprite.Entity.Transform.GetRenderedTransform(sprite.width, sprite.height);
+            Matrix4 model = sprite.Entity.Transform.GetRenderedTransform(sprite.width, sprite.height);
 
             // set uniform: projection view model/transformation
             sprite.Shader.SetUniform("projection", projection, true);

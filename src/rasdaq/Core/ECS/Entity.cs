@@ -14,6 +14,11 @@ namespace rasdaq.Core.ECS;
 /// </param>
 public class Entity(Vector3 spawnPosition)
 {
+    /// <summary>
+    /// spawns the Entity at the bottom left corner of the screen by default
+    /// </summary>
+    public Entity() : this(Vector3.Zero) { }
+
     private readonly string _id = Guid.NewGuid().ToString("N");
     private List<Component> _components = [];
     private Transform _transform = new(spawnPosition);

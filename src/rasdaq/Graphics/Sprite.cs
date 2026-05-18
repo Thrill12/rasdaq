@@ -1,9 +1,6 @@
-﻿using OpenTK.Mathematics;
-using rasdaq.Core.ECS;
+﻿using rasdaq.Core.ECS;
 using rasdaq.Graphics.Shaders;
-using rasdaq.Transformations;
 using System.Drawing;
-using System.Numerics;
 
 namespace rasdaq.Graphics;
 
@@ -19,7 +16,6 @@ public class Sprite : Component
     /// Texture of sprite.
     /// </summary>
     public Texture? Texture => _texture;
-    // public Transform Transform => _transform;
     /// <summary>
     /// Shader of Sprite.
     /// </summary>
@@ -101,33 +97,6 @@ public class Sprite : Component
             0.0f, // BL (repeated)
         ];
     }
-
-    // private Sprite(float[] vertices, Color? color = null, Texture? texture = null, Shader? shader = null)
-    // {
-    //     _vertices = vertices;
-    //     _color = color ?? Color.White;
-    //     _texture = texture;
-
-    //     _shader = shader ?? (texture != null
-    //         ? new Shader(Common.TEXTURE_SHADER, Common.TEXTURE_SHADER_FRAG)
-    //         : new Shader(Common.COLOR_SHADER, Common.COLOR_SHADER_FRAG));
-
-    //     _uvs =
-    //     [
-    //         0.0f,
-    //         0.0f, // BL
-    //         1.0f,
-    //         0.0f, // BR
-    //         1.0f,
-    //         1.0f, // TR
-    //         0.0f,
-    //         1.0f, // TL
-    //         1.0f,
-    //         1.0f, // TR (repeated)
-    //         0.0f,
-    //         0.0f, // BL (repeated)
-    //     ];
-    // }
 
     private static float[] BuildVertices()
     {

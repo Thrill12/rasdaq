@@ -42,22 +42,25 @@ internal class Soldier : Component
         {
             Log.Info("V pressed");
         }
+
+        PhysicsBody? body = Entity?.GetComponent<PhysicsBody>();
+
         if (Input.IsKeyDown(Keys.W))
         {
-            Entity?.GetComponent<PhysicsBody>()?.MoveOnce(new Vector2(0, 100));
+            body?.MoveOnce(new Vector2(0, 100));
         }
 
         if (Input.IsKeyDown(Keys.S))
         {
-            Entity?.GetComponent<PhysicsBody>()?.MoveOnce(new Vector2(0, -100));
+            body?.MoveOnce(new Vector2(0, -100));
         }
         if (Input.IsKeyDown(Keys.A))
         {
-            Entity?.GetComponent<PhysicsBody>()?.MoveOnce(new Vector2(-100, 0));
+            body?.MoveOnce(new Vector2(-100, 0));
         }
         if (Input.IsKeyDown(Keys.D))
         {
-            Entity?.GetComponent<PhysicsBody>()?.MoveOnce(new Vector2(100, 0));
+            body?.MoveOnce(new Vector2(100, 0));
         }
         if (Input.IsKeyDown(Keys.H))
         {

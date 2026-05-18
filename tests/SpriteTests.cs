@@ -49,7 +49,7 @@ public class SpriteTests
     public void Sprite_WithTexture_LoadsTexture()
     {
         Texture tex = new MockTexture();
-        var sprite = new Sprite(1f, 1f, color: Color.White, texture: tex, shader: new MockShader());
+        var sprite = new Sprite(1f, 1f, Color.White, tex, new MockShader());
 
         Assert.That(sprite.Texture, Is.Not.Null);
         Assert.That(sprite.Color, Is.EqualTo(Color.White));
@@ -58,7 +58,7 @@ public class SpriteTests
     [Test]
     public void Sprite_DefaultColor_IsWhite()
     {
-        var sprite = new Sprite(1f, 1f, color: null, texture: null, shader: new MockShader());
+        var sprite = new Sprite(1f, 1f, shader: new MockShader());
 
         Assert.That(sprite.Color, Is.EqualTo(Color.White));
     }
