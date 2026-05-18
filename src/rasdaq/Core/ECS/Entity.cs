@@ -25,15 +25,12 @@ public class Entity
     /// </summary>
     public string ID => _id;
 
-    public Entity(World? world = null)
+    /// <summary>
+    /// Create a new entity.
+    /// </summary>
+    public Entity()
     {
         _id = Guid.NewGuid().ToString("N");
-
-        if (world != null)
-        {
-            world.AddEntity(this);
-            this.world = world;
-        }
     }
 
     /// <summary>

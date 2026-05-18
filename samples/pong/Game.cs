@@ -20,12 +20,14 @@ public class Game : Application
         base.Start();
 
         World world = new();
-        Entity player = new(world);
+        Entity player = new();
 
         Sprite spr = new Sprite(1, 1, andrei);
         player.AddComponent(spr);
 
         Soldier sold = new();
         player.AddComponent(sold);
+
+        world.AddEntity(player);
     }
 }

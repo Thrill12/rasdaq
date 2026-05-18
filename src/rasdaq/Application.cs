@@ -18,15 +18,35 @@ namespace rasdaq;
 public class Application : IDisposable
 {
     /// <summary>
-    /// The <c>Application</c> instance is created when <c>Run</c> is called.
+    /// The <c>Application</c> instance is created after <c>Run</c> is called.
     /// </summary>
-    public static Application? Instance { get; private set; }
+    public static Application Instance
+    {
+        get => _instance ?? throw new InvalidOperationException("Application not started. Call Run() first.");
+        private set => _instance = value;
+    }
+    private static Application? _instance;
+
+    /// <summary>
+    /// Return list of instantiated <c>Worlds</c>.
+    /// </summary>
     public List<World> Worlds => _worlds.Objects;
 
-    internal InputManager? InputManager { get; set; }
+    private InputManager? _inputManager;
+    internal InputManager InputManager
+    {
+        get => _inputManager ?? throw new InvalidOperationException("InputManager not started.");
+        private set => _inputManager = value;
+    }
 
     private FlushEnumerable<World> _worlds = new();
+
     private GameWindow? _gameWindow;
+    internal GameWindow GameWindow
+    {
+        get => _gameWindow ?? throw new InvalidOperationException("Game window not found. Call Run() first.");
+        private set => _gameWindow = value;
+    }
 
     internal void AddWorld(World world)
     {
@@ -35,7 +55,7 @@ public class Application : IDisposable
 
     internal void RemoveWorld(World world)
     {
-        _worlds.Add(world);
+        _worlds.Remove(world);
     }
 
     /// <summary>
@@ -43,14 +63,14 @@ public class Application : IDisposable
     /// </summary>
     public void Run(int width, int height, string title)
     {
-        if (Instance != null)
+        if (_instance != null)
         {
             throw new InvalidOperationException("There already exists an application.");
         }
 
         Instance = this;
 
-        _gameWindow = new(
+        GameWindow = new(
             new GameWindowSettings()
             {
                 UpdateFrequency = 0
@@ -60,15 +80,15 @@ public class Application : IDisposable
         {
             VSync = VSyncMode.Off
         };
-        _gameWindow.UpdateFrame += OnUpdateFrame;
-        _gameWindow.Load += OnLoad;
-        _gameWindow.RenderFrame += OnRenderFrame;
-        _gameWindow.FramebufferResize += OnFramebufferResize;
+        GameWindow.UpdateFrame += OnUpdateFrame;
+        GameWindow.Load += OnLoad;
+        GameWindow.RenderFrame += OnRenderFrame;
+        GameWindow.FramebufferResize += OnFramebufferResize;
 
-        InputManager = new InputManager(new GameWindowWrapper(_gameWindow));
+        InputManager = new InputManager(new GameWindowWrapper(GameWindow));
 
         InputManager.SetEventListeners();
-        _gameWindow.Run();
+        GameWindow.Run();
     }
 
     /// <summary>
@@ -89,10 +109,8 @@ public class Application : IDisposable
         Renderer.Instance.Init();
 
         Init();
-        _worlds.FlushPending();
 
         Start();
-        _worlds.FlushPending();
 
         for (int i = 0; i < Worlds.Count; i++)
         {
@@ -117,7 +135,7 @@ public class Application : IDisposable
 
         Renderer.Instance.Render();
 
-        _gameWindow?.SwapBuffers();
+        GameWindow.SwapBuffers();
     }
 
     private void OnFramebufferResize(FramebufferResizeEventArgs args)
@@ -131,7 +149,7 @@ public class Application : IDisposable
     public void Dispose()
     {
         _gameWindow?.Dispose();
-        Instance = null;
+        _instance = null;
     }
 
     /// <summary>

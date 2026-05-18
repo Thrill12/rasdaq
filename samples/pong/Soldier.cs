@@ -31,8 +31,9 @@ internal class Soldier : Component
             Sprite spr = new(randomSize, randomSize, tex);
             sprites.Add(spr);
 
-            Entity newEnt = new(Entity.world);
+            Entity newEnt = new();
             Entity.AddComponent(spr);
+            World.AddEntity(Entity);
         }
 
         if (Input.IsKeyDown(Keys.Backspace))

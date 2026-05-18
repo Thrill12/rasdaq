@@ -6,6 +6,10 @@ root = true
 
 #### Core EditorConfig Options ####
 
+# Nullable reference types
+nullable = enable
+dotnet_analyzer_diagnostic.category-Nullable.severity = error
+
 # Indentation and spacing
 indent_size = 4
 indent_style = space
