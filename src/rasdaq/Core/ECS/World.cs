@@ -1,4 +1,5 @@
 ﻿using rasdaq.Interfaces;
+using rasdaq.Logging;
 
 namespace rasdaq.Core.ECS;
 
@@ -36,9 +37,14 @@ public class World
         _id = Guid.NewGuid().ToString("N");
         _gameLoop = new(this);
 
-        if (Application.Instance != null)
+        try
         {
             Application.Instance.AddWorld(this);
+        }
+        catch (Exception e)
+        {
+            Log.Error("Application has not been initialized. Call Run() first.");
+            throw new Exception(e.Message + " Application has not been initalized. Call Run() first." + e.StackTrace);
         }
     }
 
