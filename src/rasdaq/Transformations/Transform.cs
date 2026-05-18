@@ -10,7 +10,10 @@ public class Transform(Vector3 spawnPosition)
 {
     public Vector3 position = spawnPosition;
     public Vector2 scale = new(1, 1);
-    public float rotatedDegrees = 0.0f;
+    /// <summary>
+    /// Rotation in degrees. Used for 2D rotation around Z axis.
+    /// </summary>
+    public float rotation = 0.0f;
 
     internal void CoordUpdate(OVector2 delta)
     {
@@ -20,7 +23,7 @@ public class Transform(Vector3 spawnPosition)
 
     internal Matrix4 Get2DRotation()
     {
-        return Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(rotatedDegrees));
+        return Matrix4.CreateRotationZ(MathHelper.DegreesToRadians(rotation));
     }
 
     /// <summary>
