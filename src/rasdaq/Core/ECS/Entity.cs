@@ -1,8 +1,5 @@
-<<<<<<< HEAD
-﻿using rasdaq.Transformations;
-=======
-﻿using rasdaq.Interfaces;
->>>>>>> origin/main
+using rasdaq.Transformations;
+using rasdaq.Interfaces;
 
 namespace rasdaq.Core.ECS;
 
@@ -19,44 +16,32 @@ namespace rasdaq.Core.ECS;
 public class Entity(Vector3 spawnPosition)
 {
     /// <summary>
-<<<<<<< HEAD
-    /// spawns the Entity at the bottom left corner of the screen by default
-    /// </summary>
-    public Entity() : this(Vector3.Zero) { }
-
-    private readonly string _id = Guid.NewGuid().ToString("N");
-    private List<Component> _components = [];
-    private Transform _transform = new(spawnPosition);
-=======
     /// Return the world which contains this entity.
     /// </summary>
-    public World? world { get; private set; }
+    public World? World { get; private set; }
 
     private readonly string _id;
     private FlushEnumerable<Component> _components = new();
+    private Transform _transform = new(spawnPosition);
 
     /// <summary>
     /// Determines if entity has performed its start method.
     /// </summary>
     internal bool Started { get; set; }
->>>>>>> origin/main
 
     /// <summary>
     /// Unique ID.
     /// </summary>
     public string ID => _id;
-<<<<<<< HEAD
     public Transform Transform => _transform;
-=======
 
     /// <summary>
     /// Create a new entity.
     /// </summary>
-    public Entity()
+    public Entity() : this(Vector3.Zero)
     {
         _id = Guid.NewGuid().ToString("N");
     }
->>>>>>> origin/main
 
     /// <summary>
     /// Add a component to the entity.

@@ -2,6 +2,7 @@
 using rasdaq.Core.ECS;
 using rasdaq.Graphics;
 using rasdaq.Resources;
+using rasdaq.Transformations;
 
 namespace pong;
 
@@ -22,11 +23,12 @@ public class Game : Application
         base.Start();
 
         World world = new();
-        Entity player = new(new Vector3(400, 0, 1));
+        Entity player = new(new Vector3(456, 228, 1));
         Entity enemy = new();
 
         Sprite spr = new(456, 456, andrei);
         player.AddComponent(spr);
+        player.AddComponent(new PhysicsBody());
 
         Sprite enemySprite = new(456, 456, evilDiv);
         enemy.AddComponent(enemySprite);
