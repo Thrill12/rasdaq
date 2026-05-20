@@ -49,6 +49,6 @@ public class EntityTests
         world.AddEntity(entity);
 
         Assert.That(world.Entities.Contains(entity));
-        Assert.That(entity.world, Is.EqualTo(world));
+        Assert.That(entity.World, Is.EqualTo(world));
     }
 }
