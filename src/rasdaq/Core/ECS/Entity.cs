@@ -39,8 +39,8 @@ public class Entity
     /// <param name="comp"></param>
     public void AddComponent(Component comp)
     {
-        c.Attach(this);
-        _components.Add(c);
+        comp.Attach(this);
+        _components.Add(comp);
     }
 
     /// <summary>
@@ -78,16 +78,6 @@ public class Entity
     public IEnumerable<Component> GetComponents()
     {
         return _components.Objects;
-    }
-
-    /// <summary>
-    /// Get all <c>Components</c> of a certain type attached to this entity.
-    /// </summary>
-    /// <typeparam name="T"></typeparam>
-    /// <returns></returns>
-    public IEnumerable<T>? GetComponents<T>() where T : Component
-    {
-        return _components.OfType<T>();
     }
 
     internal void Start()

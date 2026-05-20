@@ -30,11 +30,6 @@ public class World
     public List<Entity> Entities => _entities.Objects;
 
     /// <summary>
-    /// Create a new world. A unique ID is generated automatically.
-    /// </summary>
-    public List<Entity> Entities => _entities;
-
-    /// <summary>
     /// Create an instance of a <c>World</c>. An <c>ID</c> is generated automatically once the <c>World</c> is created.
     /// </summary>
     public World()
