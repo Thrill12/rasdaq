@@ -1,6 +1,7 @@
 ﻿using rasdaq;
 using rasdaq.Core.ECS;
 using rasdaq.Graphics;
+using rasdaq.Logging;
 using rasdaq.Resources;
 
 namespace pong;
@@ -22,7 +23,7 @@ public class Game : Application
         World world = new();
         Entity player = new();
 
-        Sprite spr = new Sprite(1, 1, andrei);
+        Sprite spr = new(1, 1, andrei);
         player.AddComponent(spr);
 
         Soldier sold = new();

@@ -18,37 +18,13 @@ internal class Soldier : Component
         base.Update(deltaTime);
     }
 
-    private List<Sprite> sprites = new();
     public override void FrameUpdate(double deltaTime)
     {
         base.Update(deltaTime);
 
-        if (Input.IsKeyDown(Keys.V))
+        if (Input.IsKeyPressed(Keys.V))
         {
-            Texture tex = ResourceManager.Load<Texture>("assets/andrei.png");
-            Random rand = new();
-            float randomSize = (float)(rand.Next(1, 101) / 100f);
-            Sprite spr = new(randomSize, randomSize, tex);
-            sprites.Add(spr);
-
-            Entity newEnt = new();
-            Entity.AddComponent(spr);
-            World.AddEntity(Entity);
-        }
-
-        if (Input.IsKeyDown(Keys.Backspace))
-        {
-            if (sprites.Count > 0)
-            {
-                Sprite sprite = sprites[sprites.Count - 1];
-
-                Entity.RemoveComponent(sprite);
-                sprites.RemoveAt(sprites.Count - 1);
-
-                Log.Info("Worlds: " + Application.Instance.Worlds.Count.ToString());
-                Log.Info("Components: " + Entity.GetComponents().Count().ToString());
-                Log.Info("Sprites: " + Entity.GetComponents<Sprite>().Count().ToString());
-            }
+            Log.Info("V pressed");
         }
     }
 }

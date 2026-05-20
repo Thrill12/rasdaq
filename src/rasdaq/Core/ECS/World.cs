@@ -54,6 +54,7 @@ public class World
     public void AddEntity(Entity e)
     {
         _entities.Add(e);
+        e.Attach(this);
     }
 
     /// <summary>
