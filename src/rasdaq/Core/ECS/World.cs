@@ -4,7 +4,7 @@ using rasdaq.Logging;
 namespace rasdaq.Core.ECS;
 
 /// <summary>
-/// A world is a container for entities. 
+/// A world is a container for entities.
 /// It is responsible for their lifecycle and management.
 /// </summary>
 public class World
@@ -54,6 +54,7 @@ public class World
     public void AddEntity(Entity e)
     {
         _entities.Add(e);
+        e.Attach(this);
     }
 
     /// <summary>
