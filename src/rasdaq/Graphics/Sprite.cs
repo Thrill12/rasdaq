@@ -134,4 +134,10 @@ public class Sprite : Component
             0.0f, // BL (repeated)
         ];
     }
+
+    public override void Destroy()
+    {
+        Renderer.Instance.RemoveSprite(this);
+        Shader.Dispose();
+    }
 }

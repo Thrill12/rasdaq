@@ -1,4 +1,5 @@
 using OpenTK.Graphics.OpenGL4;
+using rasdaq.Interfaces;
 
 namespace rasdaq.Graphics;
 
@@ -9,7 +10,7 @@ internal class Renderer
     private int vertexBufferObject;
     private int vertexArrayObject;
 
-    private List<Sprite> sprites = new();
+    private FlushEnumerable<Sprite> Sprites = new();
 
     private List<float> vertices = new();
     public List<float> Vertices => vertices;
@@ -27,13 +28,19 @@ internal class Renderer
 
     internal void LoadSprite(Sprite sprite)
     {
-        sprites.Add(sprite);
+        Sprites.Add(sprite);
+    }
+
+    public void RemoveSprite(Sprite sprite)
+    {
+        Sprites.Add(sprite);
     }
 
     internal void Render()
     {
-        foreach (Sprite sprite in sprites)
+        for (int i = 0; i < Sprites.Objects.Count; i++)
         {
+            Sprite sprite = Sprites.Objects[i];
             vertices.Clear();
             AddSpriteVertices(sprite);
 
@@ -136,8 +143,9 @@ internal class Renderer
         GL.DeleteVertexArray(vertexArrayObject);
         GL.BindVertexArray(0);
 
-        foreach (Sprite sprite in sprites)
+        for (int i = 0; i < Sprites.Objects.Count; i++)
         {
+            Sprite sprite = Sprites.Objects[i];
             sprite.Shader.Dispose();
         }
     }

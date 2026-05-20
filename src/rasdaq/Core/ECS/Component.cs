@@ -7,10 +7,46 @@
 public abstract class Component
 {
     /// <summary>
-    /// Associated entity.
+    /// Get the associated entity.
     /// </summary>
-    public Entity? Entity { get; internal set; }
+    public Entity Entity => _entity == null ? throw new InvalidOperationException($"{GetType().Name} is not attached to an entity.") : _entity;
+
+    /// <summary>
+    /// Get the world of the associated entity.
+    /// </summary>
+    public World World => _entity == null
+                ? throw new InvalidOperationException($"{GetType().Name} is not attached to an entity.")
+                : _entity.world == null
+                ? throw new InvalidOperationException($"{GetType().Name} Entity is not attached to a a world.")
+                : _entity.world;
+
+    /// <summary>
+    /// Determines if component has performed its start method.
+    /// </summary>
+    public bool Started { get; set; }
+
+    private Entity? _entity;
+
+    /// <summary>
+    /// Create a new component.
+    /// </summary>
+    public Component()
+    {
+        Init();
+    }
+
+    internal void Attach(Entity entity)
+    {
+        _entity = entity;
+    }
+
+    internal void Detach()
+    {
+        _entity = null;
+    }
+
     internal virtual void Init() { }
+
     /// <summary>
     /// Called at the start of a <c>Component</c>'s life.
     /// </summary>
@@ -30,4 +66,8 @@ public abstract class Component
     /// </summary>
     /// <param name="deltaTime"></param>
     public virtual void LateUpdate(double deltaTime) { }
+    /// <summary>
+    /// Called before the component is destroyed.
+    /// </summary>
+    public virtual void Destroy() { }
 }

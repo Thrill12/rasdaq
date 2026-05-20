@@ -48,6 +48,47 @@ public class GameLoopTests
 
         Assert.That(tracker.updateCounter, Is.EqualTo(10));
     }
+
+    [Test]
+    public void GameLoop_CorrectOrderOfLifecycle()
+    {
+        World world = new();
+        GameLoop loop = world.GameLoop;
+
+        Entity trackerEntity = new();
+        LifecycleTracker tracker = new();
+        trackerEntity.AddComponent(tracker);
+
+        world.AddEntity(trackerEntity);
+
+        world.GameLoop.Tick(loop.MsPerUpdate);
+
+        Assert.That(tracker.startCounter, Is.EqualTo(1));
+        Assert.That(tracker.updateCounter, Is.EqualTo(1));
+        Assert.That(tracker.frameUpdateCounter, Is.EqualTo(1));
+        Assert.That(tracker.lateUpdateCounter, Is.EqualTo(1));
+    }
+
+    [Test]
+    public void GameLoop_StartRunsOnlyOnce()
+    {
+        World world = new();
+        GameLoop loop = world.GameLoop;
+
+        Entity trackerEntity = new();
+        LifecycleTracker tracker = new();
+        trackerEntity.AddComponent(tracker);
+
+        world.AddEntity(trackerEntity);
+
+        world.GameLoop.Tick(loop.MsPerUpdate);
+        world.GameLoop.Tick(loop.MsPerUpdate);
+        world.GameLoop.Tick(loop.MsPerUpdate);
+        world.GameLoop.Tick(loop.MsPerUpdate);
+
+        Assert.That(tracker.startCounter, Is.EqualTo(1));
+        Assert.That(tracker.updateCounter, Is.EqualTo(4));
+    }
 }
 
 /// <summary>
@@ -55,9 +96,15 @@ public class GameLoopTests
 /// </summary>
 internal class LifecycleTracker : Component
 {
+    public int startCounter;
     public int updateCounter;
     public int frameUpdateCounter;
     public int lateUpdateCounter;
+
+    public override void Start()
+    {
+        startCounter++;
+    }
 
     public override void Update(double deltaTime)
     {
@@ -76,6 +123,7 @@ internal class LifecycleTracker : Component
 
     public void Reset()
     {
+        startCounter = 0;
         updateCounter = 0;
         frameUpdateCounter = 0;
         lateUpdateCounter = 0;

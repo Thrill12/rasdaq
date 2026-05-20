@@ -4,7 +4,7 @@ using OpenTK.Windowing.Desktop;
 using rasdaq.Core.ECS;
 using rasdaq.Graphics;
 using rasdaq.Inputs;
-using rasdaq.Logging;
+using rasdaq.Interfaces;
 using System.Drawing;
 using System.Runtime.CompilerServices;
 
@@ -15,31 +15,62 @@ namespace rasdaq;
 /// <summary>
 /// Main rasdaq application class.
 /// </summary>
-public sealed class Application : IDisposable
+public class Application : IDisposable
 {
-    public static Application? Instance { get; private set; }
-    internal InputManager InputManager { get; set; }
-
-    private List<World> _worlds = new();
-    private GameWindow _gameWindow;
+    /// <summary>
+    /// The <c>Application</c> instance is created after <c>Run</c> is called.
+    /// </summary>
+    public static Application Instance
+    {
+        get => _instance ?? throw new InvalidOperationException("Application not started. Call Run() first.");
+        private set => _instance = value;
+    }
+    private static Application? _instance;
 
     /// <summary>
-    /// Main entry point of a rasdaq-based application.
+    /// Return list of instantiated <c>Worlds</c>.
     /// </summary>
-    /// <param name="width"></param>
-    /// <param name="height"></param>
-    /// <param name="title"></param>
-    /// <exception cref="InvalidOperationException"></exception>
-    public Application(int width, int height, string title)
+    public List<World> Worlds => _worlds.Objects;
+
+    private InputManager? _inputManager;
+    internal InputManager InputManager
     {
-        if (Instance != null)
+        get => _inputManager ?? throw new InvalidOperationException("InputManager not started.");
+        private set => _inputManager = value;
+    }
+
+    private FlushEnumerable<World> _worlds = new();
+
+    private GameWindow? _gameWindow;
+    internal GameWindow GameWindow
+    {
+        get => _gameWindow ?? throw new InvalidOperationException("Game window not found. Call Run() first.");
+        private set => _gameWindow = value;
+    }
+
+    internal void AddWorld(World world)
+    {
+        _worlds.Add(world);
+    }
+
+    internal void RemoveWorld(World world)
+    {
+        _worlds.Remove(world);
+    }
+
+    /// <summary>
+    /// Starts the application window.
+    /// </summary>
+    public void Run(int width, int height, string title)
+    {
+        if (_instance != null)
         {
             throw new InvalidOperationException("There already exists an application.");
         }
 
         Instance = this;
 
-        _gameWindow = new(
+        GameWindow = new(
             new GameWindowSettings()
             {
                 UpdateFrequency = 0
@@ -49,34 +80,15 @@ public sealed class Application : IDisposable
         {
             VSync = VSyncMode.Off
         };
-        _gameWindow.UpdateFrame += OnUpdateFrame;
-        _gameWindow.Load += OnLoad;
-        _gameWindow.RenderFrame += OnRenderFrame;
-        _gameWindow.FramebufferResize += OnFramebufferResize;
+        GameWindow.UpdateFrame += OnUpdateFrame;
+        GameWindow.Load += OnLoad;
+        GameWindow.RenderFrame += OnRenderFrame;
+        GameWindow.FramebufferResize += OnFramebufferResize;
 
-        InputManager = new InputManager(new GameWindowWrapper(_gameWindow));
-    }
+        InputManager = new InputManager(new GameWindowWrapper(GameWindow));
 
-    internal void RegisterWorld(World world)
-    {
-        _worlds.Add(world);
-    }
-
-    /// <summary>
-    /// Starts the application window.
-    /// </summary>
-    public void Run()
-    {
         InputManager.SetEventListeners();
-        _gameWindow.Run();
-    }
-
-    private void OnUpdateFrame(FrameEventArgs args)
-    {
-        foreach (World world in _worlds)
-        {
-            world.GameLoop.Tick(args.Time);
-        }
+        GameWindow.Run();
     }
 
     /// <summary>
@@ -94,13 +106,26 @@ public sealed class Application : IDisposable
         GL.Enable(EnableCap.Blend);
         GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
-        Log.Debug("rasdaq started");
-
         Renderer.Instance.Init();
 
-        foreach (World world in _worlds)
+        Init();
+
+        Start();
+
+        for (int i = 0; i < Worlds.Count; i++)
         {
+            World world = Worlds[i];
             world.Start();
+        }
+    }
+
+    private void OnUpdateFrame(FrameEventArgs args)
+    {
+        _worlds.FlushPending();
+        for (int i = 0; i < Worlds.Count; i++)
+        {
+            World world = Worlds[i];
+            world.GameLoop.Tick(args.Time);
         }
     }
 
@@ -110,7 +135,7 @@ public sealed class Application : IDisposable
 
         Renderer.Instance.Render();
 
-        _gameWindow.SwapBuffers();
+        GameWindow.SwapBuffers();
     }
 
     private void OnFramebufferResize(FramebufferResizeEventArgs args)
@@ -123,7 +148,17 @@ public sealed class Application : IDisposable
     /// </summary>
     public void Dispose()
     {
-        _gameWindow.Dispose();
-        Instance = null;
+        _gameWindow?.Dispose();
+        _instance = null;
     }
+
+    /// <summary>
+    /// Executes before any <c>World</c> start function, once the application window starts.
+    /// </summary>
+    public virtual void Start() { }
+
+    /// <summary>
+    /// Executes before <c>Start</c>, once the application window starts.
+    /// </summary>
+    public virtual void Init() { }
 }

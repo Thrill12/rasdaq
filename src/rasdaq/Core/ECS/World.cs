@@ -1,114 +1,111 @@
-﻿namespace rasdaq.Core.ECS;
+﻿using rasdaq.Interfaces;
+using rasdaq.Logging;
+
+namespace rasdaq.Core.ECS;
 
 /// <summary>
-/// A world is a container for entities and their components. 
-/// It is responsible for the entity lifecycle and management.
+/// A world is a container for entities.
+/// It is responsible for their lifecycle and management.
 /// </summary>
 public class World
 {
-    private readonly string _id;
-    private GameLoop _gameLoop;
-
-    private List<Entity> _entities = new();
-    private List<Entity> _pendingAdd = new();
-    private List<Entity> _pendingRemove = new();
-
-    internal GameLoop GameLoop => _gameLoop;
-
     /// <summary>
     /// Unique ID representing the world.
     /// </summary>
     public string ID => _id;
+
+    private readonly string _id;
+    private GameLoop _gameLoop;
+    private FlushEnumerable<Entity> _entities = new();
+
     /// <summary>
-    /// Gets the collection of entities managed by this world.
+    /// Determines if world has performed its start method.
+    /// </summary>
+    internal bool Started { get; set; }
+    internal GameLoop GameLoop => _gameLoop;
+
+    /// <summary>
+    /// Get the collection of entities managed by this world.
+    /// </summary>
+    public List<Entity> Entities => _entities.Objects;
+
+    /// <summary>
+    /// Create a new world. A unique ID is generated automatically.
     /// </summary>
     public List<Entity> Entities => _entities;
 
     /// <summary>
-    /// Creates an instance of a <c>World</c>. An <c>ID</c> is generated automatically once the <c>World</c> is created.
+    /// Create an instance of a <c>World</c>. An <c>ID</c> is generated automatically once the <c>World</c> is created.
     /// </summary>
     public World()
     {
         _id = Guid.NewGuid().ToString("N");
         _gameLoop = new(this);
 
-        if (Application.Instance != null)
+        try
         {
-            Application.Instance.RegisterWorld(this);
+            Application.Instance.AddWorld(this);
+        }
+        catch (Exception)
+        {
+            Log.Error("Application has not been initialized. Call Run() first.");
         }
     }
 
     /// <summary>
-    /// Adds an <c>Entity</c> to the <c>World</c>.
+    /// Add the specified entity to the world.
     /// </summary>
     /// <param name="e"></param>
     public void AddEntity(Entity e)
     {
-        _pendingAdd.Add(e);
+        _entities.Add(e);
     }
 
     /// <summary>
-    /// Removes an <c>Entity</c> from the <c>World</c>.
+    /// Remove the specified entity from the world.
     /// </summary>
     /// <param name="e"></param>
     public void RemoveEntity(Entity e)
     {
-        _pendingRemove.Add(e);
-    }
-
-    /// <summary>
-    /// Processes entities queued for addition/removal. Used
-    /// to prevent adding or removing entities at runtime
-    /// causing entities to be skipped, or updated twice.
-    /// </summary>
-    private void FlushPendingEntities()
-    {
-        foreach (var e in _pendingAdd)
-        {
-            _entities.Add(e);
-        }
-
-        _pendingAdd.Clear();
-        foreach (var e in _pendingRemove)
-        {
-            _entities.Remove(e);
-        }
-
-        _pendingRemove.Clear();
+        _entities.Remove(e);
     }
 
     internal void Start()
     {
-        FlushPendingEntities();
-        foreach (var e in _entities)
+        for (int i = 0; i < Entities.Count; i++)
         {
+            Entity e = Entities[i];
             e.Start();
+            e.Started = true;
         }
     }
 
     internal void Update(double deltaTime)
     {
-        FlushPendingEntities();
-        foreach (var e in _entities)
+        for (int i = 0; i < Entities.Count; i++)
         {
+            Entity e = Entities[i];
+            Utils.EnsureStartableStart(e);
             e.Update(deltaTime);
         }
     }
 
     internal void FrameUpdate(double deltaTime)
     {
-        FlushPendingEntities();
-        foreach (var e in _entities)
+        for (int i = 0; i < Entities.Count; i++)
         {
+            Entity e = Entities[i];
+            Utils.EnsureStartableStart(e);
             e.FrameUpdate(deltaTime);
         }
     }
 
     internal void LateUpdate(double deltaTime)
     {
-        FlushPendingEntities();
-        foreach (var e in _entities)
+        for (int i = 0; i < Entities.Count; i++)
         {
+            Entity e = Entities[i];
+            Utils.EnsureStartableStart(e);
             e.LateUpdate(deltaTime);
         }
     }
