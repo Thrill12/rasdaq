@@ -1,7 +1,7 @@
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
-using rasdaq.Transformations;
 using rasdaq.Interfaces;
+using rasdaq.Transformations;
 
 namespace rasdaq.Graphics;
 

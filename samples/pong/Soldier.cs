@@ -3,9 +3,8 @@ using rasdaq.Core.ECS;
 using rasdaq.Graphics;
 using rasdaq.Inputs;
 using rasdaq.Logging;
-using rasdaq.Transformations;
-
 using rasdaq.Resources;
+using rasdaq.Transformations;
 namespace pong;
 
 internal class Soldier : Component
