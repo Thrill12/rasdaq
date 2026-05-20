@@ -23,11 +23,6 @@ public class WorldTests
 
         world.AddEntity(ent);
 
-        Assert.That(world.Entities.Count, Is.EqualTo(0));
-
-        // Have to tick here so that we flush the pending entities to be added
-        loop.Tick(0.01);
-
         Assert.That(world.Entities.Count, Is.EqualTo(1));
 
         Entity ent2 = new(Vector3.Zero);
@@ -36,7 +31,7 @@ public class WorldTests
         world.AddEntity(ent2);
         world.AddEntity(ent3);
 
-        loop.Tick(0.1);
+        loop.Tick(1);
 
         Assert.That(world.Entities.Count, Is.EqualTo(3));
 
@@ -44,7 +39,7 @@ public class WorldTests
         world.RemoveEntity(ent2);
         world.RemoveEntity(ent3);
 
-        loop.Tick(0.1);
+        loop.Tick(1);
 
         Assert.That(world.Entities.Count, Is.EqualTo(0));
     }

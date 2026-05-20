@@ -1,7 +1,7 @@
 using OpenTK.Graphics.OpenGL4;
 using OpenTK.Mathematics;
 using rasdaq.Transformations;
-using System.Diagnostics;
+using rasdaq.Interfaces;
 
 namespace rasdaq.Graphics;
 
@@ -13,9 +13,9 @@ public class Renderer
     private int vertexBufferObject;
     private int vertexArrayObject;
 
-    private List<Sprite> sprites = new List<Sprite>();
+    private FlushEnumerable<Sprite> Sprites = new();
 
-    private List<float> vertices = new List<float>();
+    private List<float> vertices = new();
     public List<float> Vertices => vertices;
 
     public void Init()
@@ -31,7 +31,12 @@ public class Renderer
 
     public void LoadSprite(Sprite sprite)
     {
-        sprites.Add(sprite);
+        Sprites.Add(sprite);
+    }
+
+    public void RemoveSprite(Sprite sprite)
+    {
+        Sprites.Add(sprite);
     }
 
     internal void Render(Vector2 windowSize)
@@ -41,14 +46,9 @@ public class Renderer
         // get projection
         Matrix4 projection = Matrix4.CreateOrthographicOffCenter(0, (float)windowSize.X, 0, (float)windowSize.Y, 0, 1000.1f);
 
-        for (int i = sprites.Count - 1; i >= 0; i--)
+        for (int i = 0; i < Sprites.Objects.Count; i++)
         {
-            Sprite sprite = sprites[i];
-            if (sprite.Entity is null)
-            {
-                continue;
-            }
-
+            Sprite sprite = Sprites.Objects[i];
             vertices.Clear();
             AddSpriteVertices(sprite);
 
@@ -157,8 +157,9 @@ public class Renderer
         GL.DeleteVertexArray(vertexArrayObject);
         GL.BindVertexArray(0);
 
-        foreach (Sprite sprite in sprites)
+        for (int i = 0; i < Sprites.Objects.Count; i++)
         {
+            Sprite sprite = Sprites.Objects[i];
             sprite.Shader.Dispose();
         }
     }

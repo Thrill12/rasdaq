@@ -13,6 +13,8 @@ public class EntityTests
         var tracker = new LifecycleTracker();
         entity.AddComponent(tracker);
 
+        entity.Update(1);
+
         var result = entity.GetComponent<LifecycleTracker>();
 
         Assert.That(result != null);

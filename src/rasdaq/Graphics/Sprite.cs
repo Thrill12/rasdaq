@@ -116,4 +116,10 @@ public class Sprite : Component
             leftX, bottomY, 0 // BL (repeated)
         ];
     }
+
+    public override void Destroy()
+    {
+        Renderer.Instance.RemoveSprite(this);
+        Shader.Dispose();
+    }
 }
