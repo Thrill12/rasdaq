@@ -43,6 +43,11 @@ public class Entity(Vector3 spawnPosition)
         _id = Guid.NewGuid().ToString("N");
     }
 
+    internal void Attach(World w)
+    {
+        world = w;
+    }
+
     /// <summary>
     /// Add a component to the entity.
     /// </summary>

@@ -40,4 +40,15 @@ public class EntityTests
 
         Assert.That(entity, Is.EqualTo(tracker.Entity));
     }
+
+    [Test]
+    public void AddEntityToWorld()
+    {
+        World world = new();
+        Entity entity = new();
+        world.AddEntity(entity);
+
+        Assert.That(world.Entities.Contains(entity));
+        Assert.That(entity.world, Is.EqualTo(world));
+    }
 }
