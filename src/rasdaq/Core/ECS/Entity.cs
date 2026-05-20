@@ -45,7 +45,7 @@ public class Entity(Vector3 spawnPosition)
 
     internal void Attach(World w)
     {
-        world = w;
+        World = w;
     }
 
     /// <summary>

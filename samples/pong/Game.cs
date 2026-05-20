@@ -37,6 +37,9 @@ public class Game : Application
         Soldier sold = new();
         player.AddComponent(sold);
 
+        Enemy enem = new();
+        enemy.AddComponent(enem);
+
         world.AddEntity(player);
         world.AddEntity(enemy);
     }
