@@ -1,11 +1,14 @@
 using OpenTK.Graphics.OpenGL4;
+using OpenTK.Mathematics;
 using rasdaq.Interfaces;
+using rasdaq.Transformations;
 
 namespace rasdaq.Graphics;
 
 public class Renderer
 {
     public static Renderer Instance { get; private set; } = new Renderer();
+    public Camera Camera { get; set; } = new Camera();
 
     private int vertexBufferObject;
     private int vertexArrayObject;
@@ -23,7 +26,7 @@ public class Renderer
         GL.BindVertexArray(vertexArrayObject);
         GL.BindBuffer(BufferTarget.ArrayBuffer, vertexBufferObject);
 
-        vertices = new();
+        vertices = [];
     }
 
     public void LoadSprite(Sprite sprite)
@@ -36,8 +39,13 @@ public class Renderer
         Sprites.Add(sprite);
     }
 
-    internal void Render()
+    internal void Render(Vector2 windowSize)
     {
+        // get view
+        Matrix4 view = Camera.GetView();
+        // get projection
+        Matrix4 projection = Matrix4.CreateOrthographicOffCenter(0, (float)windowSize.X, 0, (float)windowSize.Y, 0, 1000.1f);
+
         for (int i = 0; i < Sprites.Objects.Count; i++)
         {
             Sprite sprite = Sprites.Objects[i];
@@ -52,7 +60,13 @@ public class Renderer
                 BufferUsageHint.DynamicDraw
             );
 
-            sprite.Shader.Use();
+            Matrix4 model = sprite.Entity.Transform.GetRenderedTransform(sprite.width, sprite.height);
+
+            // set uniform: projection view model/transformation
+            sprite.Shader.SetUniform("projection", projection, true);
+            sprite.Shader.SetUniform("view", view, true);
+            sprite.Shader.SetUniform("transform", model, true);
+
             SetVertexAttributes(sprite);
 
             GL.DrawArrays(PrimitiveType.Triangles, 0, vertices.Count / 9);
@@ -120,11 +134,11 @@ public class Renderer
 
     private void AddSpriteVertices(Sprite sprite)
     {
-        for (int i = 0, uvIndex = 0; i < sprite.Vertices.Length; i += 3, uvIndex += 2)
+        for (int i = 0, uvIndex = 0; i < sprite.NdcVertices.Length; i += 3, uvIndex += 2)
         {
-            vertices.Add(sprite.Vertices[i]);
-            vertices.Add(sprite.Vertices[i + 1]);
-            vertices.Add(sprite.Vertices[i + 2]);
+            vertices.Add(sprite.NdcVertices[i]);
+            vertices.Add(sprite.NdcVertices[i + 1]);
+            vertices.Add(sprite.NdcVertices[i + 2]);
 
             vertices.Add(sprite.UVs[uvIndex]);
             vertices.Add(sprite.UVs[uvIndex + 1]);

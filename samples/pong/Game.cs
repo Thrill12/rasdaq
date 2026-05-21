@@ -3,17 +3,20 @@ using rasdaq.Core.ECS;
 using rasdaq.Graphics;
 using rasdaq.Logging;
 using rasdaq.Resources;
+using rasdaq.Transformations;
 
 namespace pong;
 
 public class Game : Application
 {
     public Texture andrei;
+    public Texture evilDiv;
 
     public override void Init()
     {
         base.Init();
         andrei = ResourceManager.Load<Texture>("assets/andrei.png");
+        evilDiv = ResourceManager.Load<Texture>("assets/evil_enemy.jpg");
     }
 
     public override void Start()
@@ -21,14 +24,23 @@ public class Game : Application
         base.Start();
 
         World world = new();
-        Entity player = new();
+        Entity player = new(new Vector3(456, 228, 1));
+        Entity enemy = new();
 
-        Sprite spr = new(1, 1, andrei);
+        Sprite spr = new(456, 456, andrei);
         player.AddComponent(spr);
+        player.AddComponent(new PhysicsBody());
+
+        Sprite enemySprite = new(456, 456, evilDiv);
+        enemy.AddComponent(enemySprite);
 
         Soldier sold = new();
         player.AddComponent(sold);
 
+        Enemy enem = new();
+        enemy.AddComponent(enem);
+
         world.AddEntity(player);
+        world.AddEntity(enemy);
     }
 }
