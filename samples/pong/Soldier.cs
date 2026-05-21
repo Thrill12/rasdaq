@@ -17,6 +17,9 @@ internal class Soldier : Component
     public override void Update(double deltaTime)
     {
         base.Update(deltaTime);
+
+        Entity.Transform.rotation += 1f;
+        Entity.Transform.rotationRadius = 400f;
     }
 
     public override void FrameUpdate(double deltaTime)
