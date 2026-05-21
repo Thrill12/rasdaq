@@ -1,4 +1,9 @@
 
+/// <summary>
+/// A simple 2D vector struct. Does not support math operations currently
+/// </summary>
+/// <param name="x">X component</param>
+/// <param name="y">Y component</param>
 public struct Vector2(double x = 0, double y = 0)
 {
     public double X { get; set; } = x;

@@ -3,6 +3,9 @@ using OVector2 = OpenTK.Mathematics.Vector2;
 
 namespace rasdaq.Transformations;
 
+/// <summary>
+/// Component that allows entity to move with physics properties like velocity and distance-based movement
+/// </summary>
 public class PhysicsBody : Component
 {
     private OVector2 _moveOnceVelocity = OVector2.Zero;
@@ -11,6 +14,9 @@ public class PhysicsBody : Component
     private OVector2 _distanceVelocity = OVector2.Zero;
     private OVector2 _distanceCovered;
     private OVector2 _velocity = OVector2.Zero;
+    /// <summary>
+    /// Constant velocity of the entity. This velocity is applied every physics update
+    /// </summary>
     public Vector2 Velocity
     {
         get => (Vector2)_velocity;
@@ -25,7 +31,7 @@ public class PhysicsBody : Component
 
     /// <summary>
     /// Move entity once this frame, at specified velocity. Ideal for input based movement.
-    /// Note that if velocity property is also set, then this velocity adds on to it
+    /// Note that if velocity property is also set, this velocity adds on to it
     /// </summary>
     /// <param name="velocity">velocity of the entity this frame</param>
     public void MoveOnce(Vector2 velocity)

@@ -6,9 +6,20 @@ using OVector2 = OpenTK.Mathematics.Vector2;
 
 namespace rasdaq.Transformations;
 
+/// <summary>
+/// Defines the position, scale and rotation of an `Entity`
+/// </summary>
+/// <param name="spawnPosition"></param>
 public class Transform(Vector3 spawnPosition)
 {
+    /// <summary>
+    /// position of the centre of the entity
+    /// </summary>
     public Vector3 position = spawnPosition;
+    /// <summary>
+    /// Scale of the entity. (1,1) is the default, and means the image will be rendered at its original size
+    /// The X and Y components of the scale are applied to the width and height of the entity respectively
+    /// </summary>
     public Vector2 scale = new(1, 1);
     /// <summary>
     /// Rotation in degrees. Used for 2D rotation around Z axis.

@@ -1,4 +1,10 @@
 
+/// <summary>
+/// A simple 3D vector struct. Does not support math operations currently
+/// </summary>
+/// <param name="x">X component</param>
+/// <param name="y">Y component</param>
+/// <param name="z">Z component</param>
 public struct Vector3(double x = 0, double y = 0, double z = 0)
 {
     public double X { get; set; } = x;
