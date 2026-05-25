@@ -38,7 +38,7 @@ public class Game : Application
 
     public override void Init()
     {
-        texture = ResourceManager.Load<Texture>("assets/andrei.png");
+        texture = ResourceManager.Load<Texture>("assets/texture.png");
     }
 
     public override void Start()
@@ -47,7 +47,7 @@ public class Game : Application
         Entity entity = new();
         world.AddEntity(entity);
 
-        Sprite spr = new(1, 1, andrei);
+        Sprite spr = new(1, 1, texture);
         entity.AddComponent(spr);
 
         Soldier sold = new();
@@ -84,7 +84,7 @@ public override void Init()
 }
 ```
 
-The `Init` function handles loading a texture using the `ResourceManager`. It may return any type from any path, as long as it's configured to do so.
+The `Init` function handles loading a texture using the `ResourceManager`. It may return any type from any path, as long as it's configured to do so. Use paths relative to the executable.
 
 > **Note**
 > The `ResourceManager` will soon be expanded to allow users to define their own file loaders.
