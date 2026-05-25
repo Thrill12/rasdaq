@@ -26,7 +26,7 @@ public class Application : IDisposable
         private set => _instance = value;
     }
     private static Application? _instance;
-
+    public static Vector2? WindowSize => Instance._gameWindow?.Size;
     /// <summary>
     /// Return list of instantiated <c>Worlds</c>.
     /// </summary>
@@ -106,6 +106,9 @@ public class Application : IDisposable
         GL.Enable(EnableCap.Blend);
         GL.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
 
+        // Allows rendering in the correct order based on z value
+        GL.Enable(EnableCap.DepthTest);
+
         Renderer.Instance.Init();
 
         Init();
@@ -131,9 +134,9 @@ public class Application : IDisposable
 
     private void OnRenderFrame(FrameEventArgs args)
     {
-        GL.Clear(ClearBufferMask.ColorBufferBit);
+        GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit);
 
-        Renderer.Instance.Render();
+        Renderer.Instance.Render(WindowSize ?? new Vector2(0, 0));
 
         GameWindow.SwapBuffers();
     }

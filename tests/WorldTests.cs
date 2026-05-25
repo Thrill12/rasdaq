@@ -19,14 +19,14 @@ public class WorldTests
     {
         World world = new();
         GameLoop loop = world.GameLoop;
-        Entity ent = new();
+        Entity ent = new(Vector3.Zero);
 
         world.AddEntity(ent);
 
         Assert.That(world.Entities.Count, Is.EqualTo(1));
 
-        Entity ent2 = new();
-        Entity ent3 = new();
+        Entity ent2 = new(Vector3.Zero);
+        Entity ent3 = new(Vector3.Zero);
 
         world.AddEntity(ent2);
         world.AddEntity(ent3);

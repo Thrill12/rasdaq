@@ -1,19 +1,28 @@
-﻿using rasdaq.Interfaces;
+using rasdaq.Interfaces;
+using rasdaq.Transformations;
 
 namespace rasdaq.Core.ECS;
 
 /// <summary>
 /// Base rasdaq game object class.
 /// </summary>
-public class Entity
+/// <param name="spawnPosition">
+/// The position where the object will be spawned. The z position determines how the sprites are layered on the screen.
+/// A higher z value means the object will be rendered on top of objects with lower z values
+/// The z value can be anywhere between 0 and 1000.
+///
+/// <para>The x and y coordinates is the position of the centre of the Entity</para>
+/// </param>
+public class Entity(Vector3 spawnPosition)
 {
     /// <summary>
     /// Return the world which contains this entity.
     /// </summary>
-    public World? world { get; private set; }
+    public World? World { get; private set; }
 
     private readonly string _id;
     private FlushEnumerable<Component> _components = new();
+    private Transform _transform = new(spawnPosition);
 
     /// <summary>
     /// Determines if entity has performed its start method.
@@ -24,18 +33,19 @@ public class Entity
     /// Unique ID.
     /// </summary>
     public string ID => _id;
+    public Transform Transform => _transform;
 
     /// <summary>
     /// Create a new entity.
     /// </summary>
-    public Entity()
+    public Entity() : this(Vector3.Zero)
     {
         _id = Guid.NewGuid().ToString("N");
     }
 
     internal void Attach(World w)
     {
-        world = w;
+        World = w;
     }
 
     /// <summary>

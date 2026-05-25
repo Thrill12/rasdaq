@@ -1,4 +1,4 @@
-﻿using pong;
+using pong;
 
 namespace Pong;
 

@@ -16,9 +16,9 @@ public abstract class Component
     /// </summary>
     public World World => _entity == null
                 ? throw new InvalidOperationException($"{GetType().Name} is not attached to an entity.")
-                : _entity.world == null
+                : _entity.World == null
                 ? throw new InvalidOperationException($"{GetType().Name} Entity is not attached to a a world.")
-                : _entity.world;
+                : _entity.World;
 
     /// <summary>
     /// Determines if component has performed its start method.
