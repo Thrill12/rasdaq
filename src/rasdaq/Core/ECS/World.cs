@@ -30,6 +30,11 @@ public class World
     public List<Entity> Entities => _entities.Objects;
 
     /// <summary>
+    /// Physics engine for the world. This is where physics bodies are managed and updated.
+    /// </summary>
+    public Physics Physics { get; } = new();
+
+    /// <summary>
     /// Create an instance of a <c>World</c>. An <c>ID</c> is generated automatically once the <c>World</c> is created.
     /// </summary>
     public World()
@@ -83,6 +88,7 @@ public class World
             Entity e = Entities[i];
             Utils.EnsureStartableStart(e);
             e.Update(deltaTime);
+            Physics.Update();
         }
     }
 

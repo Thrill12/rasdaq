@@ -1,4 +1,5 @@
 using rasdaq.Core.ECS;
+using rasdaq.Logging;
 using OVector2 = OpenTK.Mathematics.Vector2;
 
 namespace rasdaq.Transformations;
@@ -14,6 +15,12 @@ public class PhysicsBody : Component
     private OVector2 _distanceVelocity = OVector2.Zero;
     private OVector2 _distanceCovered;
     private OVector2 _velocity = OVector2.Zero;
+
+    /// <summary>
+    /// Whether the entity is affected by gravity.
+    /// </summary>
+    public bool ApplyGravity { get; set; } = true;
+
     /// <summary>
     /// Constant velocity of the entity. This velocity is applied every physics update
     /// </summary>
@@ -21,6 +28,17 @@ public class PhysicsBody : Component
     {
         get => (Vector2)_velocity;
         set => _velocity = (OVector2)value;
+    }
+
+    public override void Start()
+    {
+        World.Physics.AddBody(this);
+    }
+
+    public override void Destroy()
+    {
+        base.Destroy();
+        World.Physics.RemoveBody(this);
     }
 
     public override void Update(double deltaTime)
@@ -80,7 +98,10 @@ public class PhysicsBody : Component
     private OVector2 MoveFrameDistance(float elapsedTime)
     {
         // if no distance to cover
-        if (_distanceToCover == OVector2.Zero) { return OVector2.Zero; }
+        if (_distanceToCover == OVector2.Zero)
+        {
+            return OVector2.Zero;
+        }
 
         OVector2 distanceThisFrame = _distanceVelocity * elapsedTime;
         OVector2 deltaVector;
@@ -105,19 +126,21 @@ public class PhysicsBody : Component
             _distanceCovered += deltaVector + (_velocity * elapsedTime);
         else
             // net distance covered this frame, then vectorized
-            _distanceCovered += (deltaVector + (_velocity * elapsedTime)).Length * OVector2.Normalize(_distanceVelocity);
+            _distanceCovered +=
+                (deltaVector + (_velocity * elapsedTime)).Length
+                * OVector2.Normalize(_distanceVelocity);
 
         if (
-            _distanceToCover.X > 0 && _distanceCovered.X >= _distanceToCover.X ||
-            _distanceToCover.X < 0 && _distanceCovered.X <= _distanceToCover.X
+            _distanceToCover.X > 0 && _distanceCovered.X >= _distanceToCover.X
+            || _distanceToCover.X < 0 && _distanceCovered.X <= _distanceToCover.X
         )
         {
             _distanceVelocity.X = 0;
             _distanceToCover.X = 0;
         }
         if (
-            _distanceToCover.Y > 0 && _distanceCovered.Y >= _distanceToCover.Y ||
-            _distanceToCover.Y < 0 && _distanceCovered.Y <= _distanceToCover.Y
+            _distanceToCover.Y > 0 && _distanceCovered.Y >= _distanceToCover.Y
+            || _distanceToCover.Y < 0 && _distanceCovered.Y <= _distanceToCover.Y
         )
         {
             _distanceVelocity.Y = 0;

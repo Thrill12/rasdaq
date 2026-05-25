@@ -9,7 +9,6 @@ public class Sprite : Component
     private Shader _shader;
     private float[] _ndcVertices;
     private float[] _uvs;
-    private Color _color;
     private Texture? _texture;
 
     /// <summary>
@@ -25,7 +24,7 @@ public class Sprite : Component
     /// <summary>
     /// Colour of Sprite.
     /// </summary>
-    public Color Color => _color;
+    public Color Color { get; set; }
     public float[] UVs => _uvs;
     public float[] NdcVertices => _ndcVertices;
     public float width;
@@ -80,7 +79,7 @@ public class Sprite : Component
         _ndcVertices = BuildVertices();
         this.width = width;
         this.height = height;
-        _color = color ?? Color.White;
+        this.Color = color ?? Color.White;
         _texture = texture;
 
         _shader =

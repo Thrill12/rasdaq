@@ -1,4 +1,5 @@
 using rasdaq.Interfaces;
+using rasdaq.Logging;
 using rasdaq.Transformations;
 
 namespace rasdaq.Core.ECS;
@@ -38,7 +39,8 @@ public class Entity(Vector3 spawnPosition)
     /// <summary>
     /// Create a new entity.
     /// </summary>
-    public Entity() : this(Vector3.Zero)
+    public Entity()
+        : this(Vector3.Zero)
     {
         _id = Guid.NewGuid().ToString("N");
     }
@@ -54,6 +56,7 @@ public class Entity(Vector3 spawnPosition)
     /// <param name="comp"></param>
     public void AddComponent(Component comp)
     {
+        Log.Info($"Adding component of type {comp.GetType().Name} to entity {ID}");
         comp.Attach(this);
         _components.Add(comp);
     }
@@ -74,7 +77,8 @@ public class Entity(Vector3 spawnPosition)
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns>The first component of type T on the entity</returns>
-    public T? GetComponent<T>() where T : Component
+    public T? GetComponent<T>()
+        where T : Component
     {
         return _components.Objects.OfType<T>().FirstOrDefault();
     }
@@ -82,7 +86,8 @@ public class Entity(Vector3 spawnPosition)
     /// <summary>
     /// Return all components of a certain type attached to the entity.
     /// </summary>
-    public IEnumerable<T> GetComponents<T>() where T : Component
+    public IEnumerable<T> GetComponents<T>()
+        where T : Component
     {
         return _components.Objects.OfType<T>();
     }

@@ -22,11 +22,14 @@ public class Application : IDisposable
     /// </summary>
     public static Application Instance
     {
-        get => _instance ?? throw new InvalidOperationException("Application not started. Call Run() first.");
+        get =>
+            _instance
+            ?? throw new InvalidOperationException("Application not started. Call Run() first.");
         private set => _instance = value;
     }
     private static Application? _instance;
     public static Vector2? WindowSize => Instance._gameWindow?.Size;
+
     /// <summary>
     /// Return list of instantiated <c>Worlds</c>.
     /// </summary>
@@ -44,7 +47,9 @@ public class Application : IDisposable
     private GameWindow? _gameWindow;
     internal GameWindow GameWindow
     {
-        get => _gameWindow ?? throw new InvalidOperationException("Game window not found. Call Run() first.");
+        get =>
+            _gameWindow
+            ?? throw new InvalidOperationException("Game window not found. Call Run() first.");
         private set => _gameWindow = value;
     }
 
@@ -71,14 +76,11 @@ public class Application : IDisposable
         Instance = this;
 
         GameWindow = new(
-            new GameWindowSettings()
-            {
-                UpdateFrequency = 0
-            },
+            new GameWindowSettings() { UpdateFrequency = 0 },
             new NativeWindowSettings() { ClientSize = (width, height), Title = title }
         )
         {
-            VSync = VSyncMode.Off
+            VSync = VSyncMode.Off,
         };
         GameWindow.UpdateFrame += OnUpdateFrame;
         GameWindow.Load += OnLoad;
