@@ -1,7 +1,6 @@
 ﻿using rasdaq;
 using rasdaq.Core.ECS;
 using rasdaq.Graphics;
-using rasdaq.Logging;
 using rasdaq.Resources;
 using rasdaq.Transformations;
 
@@ -14,15 +13,12 @@ public class Game : Application
 
     public override void Init()
     {
-        base.Init();
         andrei = ResourceManager.Load<Texture>("assets/andrei.png");
         evilDiv = ResourceManager.Load<Texture>("assets/evil_enemy.jpg");
     }
 
     public override void Start()
     {
-        base.Start();
-
         World world = new();
         Entity player = new(new Vector3(456, 228, 1));
         Entity enemy = new();

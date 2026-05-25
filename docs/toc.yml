@@ -1,4 +1,5 @@
-- name: Introduction
-  href: introduction.md
-- name: Getting Started
-  href: getting-started.md
+items:
+- name: Getting started
+  items:
+  - href: introduction.md
+  - href: first-window.md

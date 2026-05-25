@@ -4,6 +4,9 @@ using System.Runtime.InteropServices;
 
 namespace rasdaq.Graphics;
 
+/// <summary>
+/// 2D texture. Created by loading a file using the <c>ResourceManager</c>.
+/// </summary>
 public class Texture
 {
     private int _handle;
