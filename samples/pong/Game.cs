@@ -8,35 +8,35 @@ namespace pong;
 
 public class Game : Application
 {
-        public Texture andrei;
-        public Texture evilDiv;
+    public Texture andrei;
+    public Texture evilDiv;
 
-        public override void Init()
-        {
-                andrei = ResourceManager.Load<Texture>("assets/andrei.png");
-                evilDiv = ResourceManager.Load<Texture>("assets/evil_enemy.jpg");
-        }
+    public override void Init()
+    {
+        andrei = ResourceManager.Load<Texture>("assets/andrei.png");
+        evilDiv = ResourceManager.Load<Texture>("assets/evil_enemy.jpg");
+    }
 
-        public override void Start()
-        {
-                World world = new();
-                Entity player = new(new Vector3(456, 228, 1));
-                Entity enemy = new();
+    public override void Start()
+    {
+        World world = new();
+        Entity player = new(new Vector3(456, 228, 1));
+        Entity enemy = new();
 
-                Sprite spr = new(456, 456, andrei);
-                player.AddComponent(spr);
-                player.AddComponent(new PhysicsBody());
+        Sprite spr = new(456, 456, andrei);
+        player.AddComponent(spr);
+        player.AddComponent(new PhysicsBody());
 
-                Sprite enemySprite = new(456, 456, evilDiv);
-                enemy.AddComponent(enemySprite);
+        Sprite enemySprite = new(456, 456, evilDiv);
+        enemy.AddComponent(enemySprite);
 
-                Soldier sold = new();
-                player.AddComponent(sold);
+        Soldier sold = new();
+        player.AddComponent(sold);
 
-                Enemy enem = new();
-                enemy.AddComponent(enem);
+        Enemy enem = new();
+        enemy.AddComponent(enem);
 
-                world.AddEntity(player);
-                world.AddEntity(enemy);
-        }
+        world.AddEntity(player);
+        world.AddEntity(enemy);
+    }
 }
