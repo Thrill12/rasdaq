@@ -19,14 +19,14 @@ public class GameLoopTests
 
         world.AddEntity(trackerEntity);
 
-        loop.Tick(loop.MsPerUpdate);
+        loop.Tick(0.01f);
         Assert.That(tracker.updateCounter, Is.EqualTo(1));
         Assert.That(tracker.frameUpdateCounter, Is.EqualTo(1));
         Assert.That(tracker.lateUpdateCounter, Is.EqualTo(1));
 
         tracker.Reset();
 
-        loop.Tick(loop.MsPerUpdate * 10);
+        loop.Tick(0.01f * 11);
         Assert.That(tracker.updateCounter, Is.EqualTo(10));
         Assert.That(tracker.frameUpdateCounter, Is.EqualTo(1));
         Assert.That(tracker.lateUpdateCounter, Is.EqualTo(1));
@@ -36,7 +36,6 @@ public class GameLoopTests
     public void GameLoop_MaxUpdates()
     {
         World world = new();
-        GameLoop loop = world.GameLoop;
 
         Entity trackerEntity = new(Vector3.Zero);
         LifecycleTracker tracker = new();
@@ -44,7 +43,7 @@ public class GameLoopTests
 
         world.AddEntity(trackerEntity);
 
-        world.GameLoop.Tick(loop.MsPerUpdate * 100);
+        world.GameLoop.Tick(0.01f * 100);
 
         Assert.That(tracker.updateCounter, Is.EqualTo(10));
     }
@@ -53,7 +52,6 @@ public class GameLoopTests
     public void GameLoop_CorrectOrderOfLifecycle()
     {
         World world = new();
-        GameLoop loop = world.GameLoop;
 
         Entity trackerEntity = new();
         LifecycleTracker tracker = new();
@@ -61,7 +59,7 @@ public class GameLoopTests
 
         world.AddEntity(trackerEntity);
 
-        world.GameLoop.Tick(loop.MsPerUpdate);
+        world.GameLoop.Tick(0.01f);
 
         Assert.That(tracker.startCounter, Is.EqualTo(1));
         Assert.That(tracker.updateCounter, Is.EqualTo(1));
@@ -73,7 +71,6 @@ public class GameLoopTests
     public void GameLoop_StartRunsOnlyOnce()
     {
         World world = new();
-        GameLoop loop = world.GameLoop;
 
         Entity trackerEntity = new();
         LifecycleTracker tracker = new();
@@ -81,10 +78,10 @@ public class GameLoopTests
 
         world.AddEntity(trackerEntity);
 
-        world.GameLoop.Tick(loop.MsPerUpdate);
-        world.GameLoop.Tick(loop.MsPerUpdate);
-        world.GameLoop.Tick(loop.MsPerUpdate);
-        world.GameLoop.Tick(loop.MsPerUpdate);
+        world.GameLoop.Tick(0.01f);
+        world.GameLoop.Tick(0.01f);
+        world.GameLoop.Tick(0.01f);
+        world.GameLoop.Tick(0.01f);
 
         Assert.That(tracker.startCounter, Is.EqualTo(1));
         Assert.That(tracker.updateCounter, Is.EqualTo(4));

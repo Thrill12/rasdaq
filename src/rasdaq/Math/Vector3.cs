@@ -28,6 +28,11 @@ public struct Vector3(double x = 0, double y = 0, double z = 0)
         return new Vector2(v.X, v.Y);
     }
 
+    public static implicit operator Vector3(Vector2 v)
+    {
+        return new Vector3(v.X, v.Y, 0);
+    }
+
     public static implicit operator OpenTK.Mathematics.Vector2(Vector3 v)
     {
         return new OpenTK.Mathematics.Vector2((float)v.X, (float)v.Y);
