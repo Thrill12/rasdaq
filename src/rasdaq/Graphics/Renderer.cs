@@ -5,7 +5,7 @@ using rasdaq.Transformations;
 
 namespace rasdaq.Graphics;
 
-internal class Renderer
+public class Renderer
 {
     public static Renderer Instance { get; private set; } = new Renderer();
     public Camera Camera { get; set; } = new Camera();
