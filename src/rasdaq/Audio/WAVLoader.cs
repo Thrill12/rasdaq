@@ -1,9 +1,12 @@
-﻿using System.Buffers.Binary;
+﻿using OpenTK.Audio.OpenAL;
+using rasdaq.Logging;
+using rasdaq.Resources;
+using System.Buffers.Binary;
 using System.Text;
 
 namespace rasdaq.Audio;
 
-internal class WAVLoader
+internal class WAVLoader : IResourceLoader
 {
     /// <summary>
     /// Format information about the WAV file.
@@ -18,6 +21,7 @@ internal class WAVLoader
         public ushort BitsPerSample;
         public FmtChunkExtension? Extension;
     };
+
     /// <summary>
     /// Extra format information for certain WAV files.
     /// </summary>
@@ -163,5 +167,71 @@ internal class WAVLoader
                 Data = dataChunk
             };
         }
+    }
+
+    /// <summary>
+    /// Load a WAV file that contains PCM data only.
+    /// </summary>
+    /// <param name="path">Path to WAV file</param>
+    /// <returns>A integer handle referring to the loaded audio</returns>
+    /// <exception cref="Exception"></exception>
+    public object Load(string path)
+    {
+        // Create an OpenAL buffer for the data to go in.
+        Audio audio = new Audio();
+
+        // Load the WAV file
+        WAVLoader.WAVData wavData = WAVLoader.LoadWav(path);
+
+        // Discern the format of the audio data based on number of channels and bits per sample.
+        ALFormat format;
+        if (wavData.Format.NumChannels == 1)
+        {
+            if (wavData.Format.BitsPerSample == 8)
+            {
+                format = ALFormat.Mono8;
+            }
+            else if (wavData.Format.BitsPerSample == 16)
+            {
+                format = ALFormat.Mono16;
+            }
+            else
+            {
+                string err = $"Unsupported bits per sample: {wavData.Format.BitsPerSample}";
+                Log.Error(err);
+                throw new Exception(err);
+            }
+        }
+        else if (wavData.Format.NumChannels == 2)
+        {
+            if (wavData.Format.BitsPerSample == 8)
+            {
+                format = ALFormat.Stereo8;
+            }
+            else if (wavData.Format.BitsPerSample == 16)
+            {
+                format = ALFormat.Stereo16;
+            }
+            else
+            {
+                string err = $"Unsupported bits per sample: {wavData.Format.BitsPerSample}";
+                Log.Error(err);
+                throw new Exception(err);
+            }
+        }
+        else
+        {
+            string err = $"Unsupported number of channels: {wavData.Format.NumChannels}";
+            Log.Error(err);
+            throw new Exception(err);
+        }
+
+        // Load the audio data into the OpenAL buffer.
+        AL.BufferData(audio.Handle, format, wavData.Data.Data, (int)wavData.Format.SampleRate);
+
+        // Check if we have any errors from trying to load the audio data.
+        AudioManager.CheckALError();
+
+        return audio;
     }
 }

@@ -1,10 +1,16 @@
-﻿using rasdaq;
+using rasdaq;
 using rasdaq.Core.ECS;
 using rasdaq.Graphics;
 using rasdaq.Inputs;
 using rasdaq.Logging;
 using rasdaq.Resources;
 using rasdaq.Transformations;
+using OpenTK.Audio.OpenAL;
+using rasdaq.Audio;
+using rasdaq.Core.ECS;
+using rasdaq.Inputs;
+using rasdaq.Logging;
+using rasdaq.Resources;
 
 namespace pong;
 
@@ -13,16 +19,37 @@ internal class Soldier : Component
     public override void Start()
     {
         base.Start();
+
+        Entity?.AddComponent(new AudioSource());
+
+        Audio audio1 = ResourceManager.Load<Audio>("assets/test.wav");
+        Entity?.GetComponent<AudioSource>()?.AttachAudio(audio1);
+
+        Log.Info($"Audio initialized on {Thread.CurrentThread.Name}");
+
+        Input.OnKeyDownEvent.Add(Keys.W, () =>
+        {
+            Log.Info("User pressed W based on an event");
+        });
+
+        Input.OnKeyUpEvent.Add(Keys.B, () =>
+        {
+            Log.Info("Hello");
+        });
     }
 
     public override void Update(double deltaTime)
     {
         base.Update(deltaTime);
+
+        Log.Info($"Audio initialized on {Thread.CurrentThread.Name}");
     }
 
     public override void FrameUpdate(double deltaTime)
     {
         base.Update(deltaTime);
+        Log.Info($"Audio initialized on {Thread.CurrentThread.Name}");
+
 
         if (Input.IsKeyPressed(Keys.V))
         {
@@ -70,6 +97,12 @@ internal class Enemy : Component
             var x = Entity?.Transform.position.X - (Application.WindowSize?.X / 2) ?? 0;
             var y = Entity?.Transform.position.Y - (Application.WindowSize?.Y / 2) ?? 0;
             Renderer.Instance.Camera.SetPosition(x, y);
+            if (Input.IsKeyDown(Keys.W))
+            {
+                ALContext context = ALC.GetCurrentContext();
+                Log.Info($"CurrentContext = {context == ALContext.Null}");
+                Log.Info($"W is held down, playing AudioSource! {Entity?.GetComponent<AudioSource>() == null}");
+                Entity?.GetComponent<AudioSource>()?.Play();
+            }
         }
     }
-}

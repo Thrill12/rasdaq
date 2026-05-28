@@ -9,6 +9,11 @@ public class AudioSource : Component, IDisposable
 {
     internal int? Handle = null;
 
+    public AudioSource()
+    {
+        Init();
+    }
+
     internal override void Init()
     {
         Handle = AL.GenSource();
@@ -23,6 +28,24 @@ public class AudioSource : Component, IDisposable
         }
     }
 
+    /// <summary>
+    /// Add a loaded audio file to an audio source, so that it can be played.
+    /// </summary>
+    /// <param name="audio">Audio file</param>
+    /// <param name="audioSource">Audio source</param>
+    public void AttachAudio(Audio audio)
+    {
+        if (Handle != null)
+        {
+            AL.Source(Handle.Value, ALSourcei.Buffer, audio.Handle);
+            AudioManager.CheckALError();
+        }
+        else
+        {
+            Log.Error("Audio source has not been initialized yet. Cannot attach audio.");
+        }
+    }
+
     public void Play()
     {
         if (!Handle.HasValue)
@@ -30,6 +53,7 @@ public class AudioSource : Component, IDisposable
             Log.Error("Audio source handle is null. Cannot play audio.");
             return;
         }
+        Log.Info("PLAYING AUDIO!!!");
         AL.SourcePlay(Handle.Value);
         AudioManager.CheckALError();
     }

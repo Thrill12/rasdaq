@@ -60,7 +60,7 @@ public class Application : IDisposable
         _worlds.Remove(world);
     }
 
-    public AudioManager AudioManager { get; private set; }
+    internal AudioManager AudioManager { get; private set; }
 
     private List<World> _worlds = new();
     private GameWindow _gameWindow;
@@ -117,6 +117,7 @@ public class Application : IDisposable
         GL.Enable(EnableCap.DepthTest);
 
         Renderer.Instance.Init();
+        AudioManager.Initialize();
 
         Init();
 

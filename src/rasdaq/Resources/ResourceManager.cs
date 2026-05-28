@@ -1,4 +1,5 @@
-﻿using rasdaq.Logging;
+﻿using rasdaq.Audio;
+using rasdaq.Logging;
 using rasdaq.Resources.Loaders;
 
 namespace rasdaq.Resources;
@@ -17,6 +18,7 @@ public static class ResourceManager
         _loaders["txt"] = new TextLoader();
         _loaders["png"] = new TextureLoader();
         _loaders["jpg"] = new TextureLoader();
+        _loaders["wav"] = new WAVLoader();
     }
 
     /// <summary>
