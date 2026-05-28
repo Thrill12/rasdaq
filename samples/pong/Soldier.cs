@@ -21,8 +21,6 @@ internal class Soldier : Component
         Audio audio1 = ResourceManager.Load<Audio>("assets/audio.wav");
         Entity?.GetComponent<AudioSource>()?.AttachAudio(audio1);
 
-        Log.Info($"Audio initialized on {Thread.CurrentThread.Name}");
-
         Input.OnKeyDownEvent.Add(Keys.W, () =>
         {
             Log.Info("User pressed W based on an event");
@@ -38,13 +36,11 @@ internal class Soldier : Component
     {
         base.Update(deltaTime);
 
-        Log.Info($"Audio initialized on {Thread.CurrentThread.Name}");
     }
 
     public override void FrameUpdate(double deltaTime)
     {
         base.Update(deltaTime);
-        Log.Info($"Audio initialized on {Thread.CurrentThread.Name}");
 
 
         if (Input.IsKeyPressed(Keys.V))
@@ -96,9 +92,6 @@ internal class Enemy : Component
             if (Input.IsKeyDown(Keys.W))
             {
                 ALContext context = ALC.GetCurrentContext();
-                Log.Info($"CurrentContext = {context == ALContext.Null}");
-                Log.Info($"W is held down, playing AudioSource! {Entity?.GetComponent<AudioSource>() == null}");
-                Entity?.GetComponent<AudioSource>()?.Play();
             }
         }
     }

@@ -53,7 +53,6 @@ public class AudioSource : Component, IDisposable
             Log.Error("Audio source handle is null. Cannot play audio.");
             return;
         }
-        Log.Info("PLAYING AUDIO!!!");
         AL.SourcePlay(Handle.Value);
         AudioManager.CheckALError();
     }

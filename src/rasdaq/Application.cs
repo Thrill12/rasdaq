@@ -112,6 +112,7 @@ public class Application : IDisposable
         GL.Enable(EnableCap.DepthTest);
 
         Renderer.Instance.Init();
+
         AudioManager.Initialize();
 
         Init();
