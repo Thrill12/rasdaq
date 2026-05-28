@@ -7,10 +7,6 @@ using rasdaq.Resources;
 using rasdaq.Transformations;
 using OpenTK.Audio.OpenAL;
 using rasdaq.Audio;
-using rasdaq.Core.ECS;
-using rasdaq.Inputs;
-using rasdaq.Logging;
-using rasdaq.Resources;
 
 namespace pong;
 
@@ -22,7 +18,7 @@ internal class Soldier : Component
 
         Entity?.AddComponent(new AudioSource());
 
-        Audio audio1 = ResourceManager.Load<Audio>("assets/test.wav");
+        Audio audio1 = ResourceManager.Load<Audio>("assets/audio.wav");
         Entity?.GetComponent<AudioSource>()?.AttachAudio(audio1);
 
         Log.Info($"Audio initialized on {Thread.CurrentThread.Name}");
@@ -106,3 +102,4 @@ internal class Enemy : Component
             }
         }
     }
+}

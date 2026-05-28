@@ -22,17 +22,13 @@ public class Application : IDisposable
     /// <summary>
     /// The <c>Application</c> instance is created after <c>Run</c> is called.
     /// </summary>
+    private static Application? _instance;
     public static Application Instance
     {
         get => _instance ?? throw new InvalidOperationException("Application not started. Call Run() first.");
         private set => _instance = value;
     }
-    private static Application? _instance;
     public static Vector2? WindowSize => Instance._gameWindow?.Size;
-    /// <summary>
-    /// Return list of instantiated <c>Worlds</c>.
-    /// </summary>
-    public List<World> Worlds => _worlds.Objects;
 
     private InputManager? _inputManager;
     internal InputManager InputManager
@@ -42,6 +38,10 @@ public class Application : IDisposable
     }
 
     private FlushEnumerable<World> _worlds = new();
+    /// <summary>
+    /// Return list of instantiated <c>Worlds</c>.
+    /// </summary>
+    public List<World> Worlds => _worlds.Objects;
 
     private GameWindow? _gameWindow;
     internal GameWindow GameWindow
@@ -59,11 +59,6 @@ public class Application : IDisposable
     {
         _worlds.Remove(world);
     }
-
-    internal AudioManager AudioManager { get; private set; }
-
-    private List<World> _worlds = new();
-    private GameWindow _gameWindow;
 
     /// <summary>
     /// Starts the application window.
