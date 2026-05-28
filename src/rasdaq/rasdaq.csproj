@@ -5,6 +5,8 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
   </PropertyGroup>
 
   <ItemGroup>
@@ -20,5 +22,5 @@
   <ItemGroup>
     <EmbeddedResource Include="Graphics/Shaders/*.vert" />
     <EmbeddedResource Include="Graphics/Shaders/*.frag" />
-</ItemGroup>
+  </ItemGroup>  
 </Project>

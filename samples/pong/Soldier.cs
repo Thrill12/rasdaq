@@ -5,6 +5,7 @@ using rasdaq.Inputs;
 using rasdaq.Logging;
 using rasdaq.Resources;
 using rasdaq.Transformations;
+
 namespace pong;
 
 internal class Soldier : Component
@@ -73,6 +74,5 @@ internal class Enemy : Component
             var y = Entity?.Transform.position.Y - (Application.WindowSize?.Y / 2) ?? 0;
             Renderer.Instance.Camera.SetPosition(x, y);
         }
-
     }
 }

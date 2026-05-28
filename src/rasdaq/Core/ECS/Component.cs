@@ -1,4 +1,4 @@
-namespace rasdaq.Core.ECS;
+﻿namespace rasdaq.Core.ECS;
 
 /// <summary>
 /// Component that can be added to entities.

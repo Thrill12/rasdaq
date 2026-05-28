@@ -30,7 +30,7 @@ public class World
     public List<Entity> Entities => _entities.Objects;
 
     /// <summary>
-    /// Create a new world. A unique ID is generated automatically.
+    /// Create an instance of a <c>World</c>. An <c>ID</c> is generated automatically once the <c>World</c> is created.
     /// </summary>
     public World()
     {
@@ -48,7 +48,7 @@ public class World
     }
 
     /// <summary>
-    /// Add the specified entity to the world entities.
+    /// Add the specified entity to the world.
     /// </summary>
     /// <param name="e"></param>
     public void AddEntity(Entity e)
@@ -58,7 +58,7 @@ public class World
     }
 
     /// <summary>
-    /// Remove the specified entity from the world entities.
+    /// Remove the specified entity from the world.
     /// </summary>
     /// <param name="e"></param>
     public void RemoveEntity(Entity e)

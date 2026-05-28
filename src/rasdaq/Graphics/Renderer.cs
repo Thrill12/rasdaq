@@ -18,7 +18,7 @@ public class Renderer
     private List<float> vertices = new();
     public List<float> Vertices => vertices;
 
-    public void Init()
+    internal void Init()
     {
         vertexBufferObject = GL.GenBuffer();
         vertexArrayObject = GL.GenVertexArray();
@@ -29,7 +29,7 @@ public class Renderer
         vertices = [];
     }
 
-    public void LoadSprite(Sprite sprite)
+    internal void LoadSprite(Sprite sprite)
     {
         Sprites.Add(sprite);
     }
@@ -44,7 +44,14 @@ public class Renderer
         // get view
         Matrix4 view = Camera.GetView();
         // get projection
-        Matrix4 projection = Matrix4.CreateOrthographicOffCenter(0, (float)windowSize.X, 0, (float)windowSize.Y, 0, 1000.1f);
+        Matrix4 projection = Matrix4.CreateOrthographicOffCenter(
+            0,
+            (float)windowSize.X,
+            0,
+            (float)windowSize.Y,
+            0,
+            1000.1f
+        );
 
         for (int i = 0; i < Sprites.Objects.Count; i++)
         {
@@ -60,7 +67,10 @@ public class Renderer
                 BufferUsageHint.DynamicDraw
             );
 
-            Matrix4 model = sprite.Entity.Transform.GetRenderedTransform(sprite.width, sprite.height);
+            Matrix4 model = sprite.Entity.Transform.GetRenderedTransform(
+                sprite.width,
+                sprite.height
+            );
 
             // set uniform: projection view model/transformation
             sprite.Shader.SetUniform("projection", projection, true);

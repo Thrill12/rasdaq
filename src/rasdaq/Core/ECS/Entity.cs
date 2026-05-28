@@ -51,11 +51,11 @@ public class Entity(Vector3 spawnPosition)
     /// <summary>
     /// Add a component to the entity.
     /// </summary>
-    /// <param name="c"></param>
-    public void AddComponent(Component c)
+    /// <param name="comp"></param>
+    public void AddComponent(Component comp)
     {
-        c.Attach(this);
-        _components.Add(c);
+        comp.Attach(this);
+        _components.Add(comp);
     }
 
     /// <summary>

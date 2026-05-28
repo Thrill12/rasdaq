@@ -16,10 +16,12 @@ public class Sprite : Component
     /// Texture of sprite.
     /// </summary>
     public Texture? Texture => _texture;
+
     /// <summary>
     /// Shader of Sprite.
     /// </summary>
     public Shader Shader => _shader;
+
     /// <summary>
     /// Colour of Sprite.
     /// </summary>
@@ -46,9 +48,8 @@ public class Sprite : Component
     /// <param name="height">height of sprite, in pixels</param>
     /// <param name="color">color of sprite</param>
     /// <param name="shader">Shader object for the sprite</param>
-    public Sprite(float width, float height, Color color, Shader? shader = null) :
-        this(width, height, color, null, shader)
-    { }
+    public Sprite(float width, float height, Color color, Shader? shader = null)
+        : this(width, height, color, null, shader) { }
 
     /// <summary>
     /// Create sprite object with texture (such as image)
@@ -57,9 +58,8 @@ public class Sprite : Component
     /// <param name="height">height of sprite, in pixels</param>
     /// <param name="texture">texture of sprite</param>
     /// <param name="shader">Shader object for the sprite</param>
-    public Sprite(float width, float height, Texture texture, Shader? shader = null) :
-        this(width, height, Color.White, texture, shader)
-    { }
+    public Sprite(float width, float height, Texture texture, Shader? shader = null)
+        : this(width, height, Color.White, texture, shader) { }
 
     /// <summary>
     /// Create sprite object with texture and a color tint
@@ -69,7 +69,13 @@ public class Sprite : Component
     /// <param name="color">color tint of sprite</param>
     /// <param name="texture">texture of sprite</param>
     /// <param name="shader">Shader object for the sprite</param>
-    public Sprite(float width, float height, Color? color = null, Texture? texture = null, Shader? shader = null)
+    public Sprite(
+        float width,
+        float height,
+        Color? color = null,
+        Texture? texture = null,
+        Shader? shader = null
+    )
     {
         _ndcVertices = BuildVertices();
         this.width = width;
@@ -77,9 +83,13 @@ public class Sprite : Component
         _color = color ?? Color.White;
         _texture = texture;
 
-        _shader = shader ?? (texture != null
-            ? new Shader(Common.TEXTURE_SHADER, Common.TEXTURE_SHADER_FRAG)
-            : new Shader(Common.COLOR_SHADER, Common.COLOR_SHADER_FRAG));
+        _shader =
+            shader
+            ?? (
+                texture != null
+                    ? new Shader(Common.TEXTURE_SHADER, Common.TEXTURE_SHADER_FRAG)
+                    : new Shader(Common.COLOR_SHADER, Common.COLOR_SHADER_FRAG)
+            );
 
         _uvs =
         [
@@ -108,12 +118,24 @@ public class Sprite : Component
 
         return
         [
-            leftX, bottomY, 0, // BL
-            rightX, bottomY, 0, // BR
-            rightX, topY, 0, // TR
-            leftX, topY, 0, // TL
-            rightX, topY, 0, // TR (repeated)
-            leftX, bottomY, 0 // BL (repeated)
+            leftX,
+            bottomY,
+            0, // BL
+            rightX,
+            bottomY,
+            0, // BR
+            rightX,
+            topY,
+            0, // TR
+            leftX,
+            topY,
+            0, // TL
+            rightX,
+            topY,
+            0, // TR (repeated)
+            leftX,
+            bottomY,
+            0, // BL (repeated)
         ];
     }
 
