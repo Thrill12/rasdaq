@@ -9,40 +9,38 @@ namespace pong;
 
 public class Game : Application
 {
-    public Texture andrei;
-    public Texture evilDiv;
+    public Texture carTexture;
+    public Texture background;
 
     public override void Init()
     {
-        andrei = ResourceManager.Load<Texture>("assets/andrei.png");
-        evilDiv = ResourceManager.Load<Texture>("assets/evil_enemy.jpg");
+        carTexture = ResourceManager.Load<Texture>("assets/sport_red.png");
+        background = ResourceManager.Load<Texture>("assets/rug.png");
     }
 
     public override void Start()
     {
         World world = new();
-        Renderer.Instance.Camera.SetPosition(0, 0);
+        Renderer.Instance.Camera.SetPosition(new Vector2(0, 0));
         Entity player = new(new Vector3(500, 500, 1));
         Entity enemy = new(new Vector3(300, 300, 1));
 
         world.AddEntity(player);
         world.AddEntity(enemy);
 
-        Sprite spr = new(25, 25, Color.WhiteSmoke);
+        Entity background = new(new Vector3(500, 200, 0));
+        world.AddEntity(background);
+        Sprite bgSprite = new(8000, 4000, this.background);
+        background.AddComponent(bgSprite);
+
+        Sprite spr = new(50, 25, carTexture);
         player.AddComponent(spr);
         PhysicsBody body = new() { ApplyGravity = false };
         player.AddComponent(body);
-        BoxCollider collider = new(25, 25);
-        player.AddComponent(collider);
-        Soldier soldier = new();
-        player.AddComponent(soldier);
-        soldier.moveSpeed = 5;
-
-        Sprite enemySprite = new(25, 25, Color.White);
-        enemy.AddComponent(enemySprite);
-        PhysicsBody enemyBody = new() { ApplyGravity = false };
-        enemy.AddComponent(enemyBody);
-        BoxCollider enemyCollider = new(25, 25);
-        enemy.AddComponent(enemyCollider);
+        Car car = new();
+        player.AddComponent(car);
+        car.speed = 1000;
+        car.rotationSpeed = 250;
+        car.maxSpeed = 5000;
     }
 }

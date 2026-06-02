@@ -25,10 +25,8 @@ public class Camera
     /// <summary>
     /// Sets the camera's position
     /// </summary>
-    /// <param name="x">X coordinate of the bottom left corner of the camera's view</param>
-    /// <param name="y">Y coordinate of the bottom left corner of the camera's view</param>
-    public void SetPosition(double x, double y)
+    public void SetPosition(Vector2 position)
     {
-        Position = new(x, y, 1000.0f);
+        Position = new(position.X, position.Y, 1000.0f);
     }
 }
