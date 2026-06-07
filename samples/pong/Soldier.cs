@@ -1,12 +1,12 @@
+using OpenTK.Audio.OpenAL;
 using rasdaq;
+using rasdaq.Audio;
 using rasdaq.Core.ECS;
 using rasdaq.Graphics;
 using rasdaq.Inputs;
 using rasdaq.Logging;
 using rasdaq.Resources;
 using rasdaq.Transformations;
-using OpenTK.Audio.OpenAL;
-using rasdaq.Audio;
 
 namespace pong;
 
@@ -41,7 +41,6 @@ internal class Soldier : Component
     public override void FrameUpdate(double deltaTime)
     {
         base.Update(deltaTime);
-
 
         if (Input.IsKeyPressed(Keys.V))
         {
