@@ -14,7 +14,7 @@ namespace rasdaq.Core.ECS;
 ///
 /// <para>The x and y coordinates is the position of the centre of the Entity</para>
 /// </param>
-public class Entity(Vector3 spawnPosition)
+public class Entity
 {
     /// <summary>
     /// Return the world which contains this entity.
@@ -23,7 +23,7 @@ public class Entity(Vector3 spawnPosition)
 
     private readonly string _id;
     private FlushEnumerable<Component> _components = new();
-    private Transform _transform = new(spawnPosition);
+    private Transform _transform = new(Vector3.Zero);
 
     /// <summary>
     /// Determines if entity has performed its start method.
@@ -40,9 +40,15 @@ public class Entity(Vector3 spawnPosition)
     /// Create a new entity.
     /// </summary>
     public Entity()
-        : this(Vector3.Zero)
     {
         _id = Guid.NewGuid().ToString("N");
+        _transform.position = Vector3.Zero;
+    }
+
+    public Entity(Vector3 spawnPosition)
+    {
+        _id = Guid.NewGuid().ToString("N");
+        _transform.position = spawnPosition;
     }
 
     internal void Attach(World w)

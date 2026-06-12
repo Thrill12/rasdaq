@@ -4,6 +4,7 @@ using rasdaq.Transformations;
 public class Physics
 {
     private readonly List<PhysicsBody> _bodies = new();
+    internal List<PhysicsBody> Bodies => _bodies;
 
     public double Gravity { get; set; } = 9.81;
 
@@ -25,50 +26,63 @@ public class Physics
 
     internal void Update()
     {
+        // Process each unique pair once
         for (int i = 0; i < _bodies.Count; i++)
         {
-            PhysicsBody? body = _bodies[i];
-            if (body == null)
+            for (int j = i + 1; j < _bodies.Count; j++)
             {
-                continue;
+                CheckCollisions(_bodies[i], _bodies[j]);
             }
+        }
 
-            CheckCollisions(body);
-
-            if (body.ApplyGravity)
+        for (int i = 0; i < _bodies.Count; i++)
+        {
+            if (_bodies[i].ApplyGravity)
             {
-                ApplyGravity(body);
+                ApplyGravity(_bodies[i]);
             }
         }
     }
 
-    private void CheckCollisions(PhysicsBody body)
+    /// <summary>
+    /// Handles collisions and sends updates. The order is on purpose:
+    /// - Check for any collisions that are no longer happening and need to be removed - send their event
+    /// - Send collision stay events for collisions that are currently happening
+    /// - Check for any new collisions that need to be added - send their event
+    /// </summary>
+    /// <param name="body">Physics body to check.</param>
+    private void CheckCollisions(PhysicsBody bodyA, PhysicsBody bodyB)
     {
-        // Update collisions for each physics body which has a BoxCollider
-        BoxCollider? collider = body.Entity?.GetComponent<BoxCollider>();
+        BoxCollider? colliderA = bodyA.Entity?.GetComponent<BoxCollider>();
+        BoxCollider? colliderB = bodyB.Entity?.GetComponent<BoxCollider>();
 
-        if (collider == null)
-        {
+        if (colliderA == null || colliderB == null)
             return;
-        }
 
-        collider.Collisions.Clear();
+        bool isColliding = CheckCollision(colliderA, colliderB);
+        bool wasColliding = colliderA.Collisions.Contains(colliderB);
 
-        for (int j = 0; j < _bodies.Count; j++)
+        if (wasColliding && !isColliding)
         {
-            PhysicsBody? otherBody = _bodies[j];
-
-            if (otherBody == body)
-            {
-                continue;
-            }
-
-            BoxCollider? otherCollider = otherBody.Entity?.GetComponent<BoxCollider>();
-
-            if (otherCollider != null && CheckCollision(collider, otherCollider))
-            {
-                collider.Collisions.Add(otherCollider);
-            }
+            // Collision ended - notify both sides
+            colliderA.Collisions.Remove(colliderB);
+            colliderB.Collisions.Remove(colliderA);
+            colliderA.OnCollisionExit?.Invoke(colliderB);
+            colliderB.OnCollisionExit?.Invoke(colliderA);
+        }
+        else if (wasColliding && isColliding)
+        {
+            // Collision ongoing - notify both sides once
+            colliderA.OnCollisionStay?.Invoke(colliderB);
+            colliderB.OnCollisionStay?.Invoke(colliderA);
+        }
+        else if (!wasColliding && isColliding)
+        {
+            // New collision - notify both sides
+            colliderA.Collisions.Add(colliderB);
+            colliderB.Collisions.Add(colliderA);
+            colliderA.OnCollisionEnter?.Invoke(colliderB);
+            colliderB.OnCollisionEnter?.Invoke(colliderA);
         }
     }
 

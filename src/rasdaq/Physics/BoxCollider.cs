@@ -6,6 +6,10 @@ public class BoxCollider : Component
     public float Height { get; set; }
     public List<BoxCollider> Collisions { get; internal set; } = new();
 
+    public Action<BoxCollider>? OnCollisionEnter { get; set; }
+    public Action<BoxCollider>? OnCollisionExit { get; set; }
+    public Action<BoxCollider>? OnCollisionStay { get; set; }
+
     public BoxCollider(float width, float height)
     {
         Width = width;

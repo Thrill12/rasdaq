@@ -88,8 +88,9 @@ public class World
             Entity e = Entities[i];
             Utils.EnsureStartableStart(e);
             e.Update(deltaTime);
-            Physics.Update();
         }
+
+        Physics.Update();
     }
 
     internal void FrameUpdate(double deltaTime)
