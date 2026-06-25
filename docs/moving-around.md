@@ -58,14 +58,14 @@ topStar.AddComponent(starBody);
 
 starBody.Velocity = starVelocity
 ```
-
+<!-- TODO This is wrong, 200 is the speed, not distance every tick. Fix here and below and above etc. -->
 The star will now move at 200 pixels to the right every **physics tick**.
 
 > [!TIP]
 > A physics tick is its own unit of time used by our game engine for physics operations
 > This allows us to do physics operations periodically but independently of the framerate.
 
-##### Moving a given distance
+#### Moving a given distance
 To move the star a specific distance at a specific velocity, we can use the `MoveDistance` method.
 ```c#
 Vector2 starDistanceVelocity = new(50, 0);
@@ -73,7 +73,7 @@ Vector2 starDistanceVelocity = new(50, 0);
 // set the independent velocity to zero otherwise this would add to the starDistanceVelocity
 // for the purpose of this demo, we just want the star to move by MoveDistance
 starBody.Velocity = Vector2.Zero;
-starBody.MoveDistance(velocity: starDistanceVelocity, distance: 200, thisDirectionOnly: true);
+starBody.MoveDistance(velocity: starDistanceVelocity, distance: 200, thisDirectionOnly: false);
 ```
 
 Now, you will notice the star moves to the right over 4 seconds, and then stops.
@@ -81,3 +81,47 @@ Now, you will notice the star moves to the right over 4 seconds, and then stops.
 There is one parameter here that might sound confusing: `thisDirectionOnly`. This will be broken down
 in this next section.
 
+#### Moving a given distance in a particular direction only
+Now if we want to make sure the star covers the required distance in the direction provided by the velocity, 
+we set the `thisDirectionOnly` to true.
+
+The difference here is that it doesn't count any component of distance travelled in another direction.
+
+So if you were to have another "velocity" on the star in the opposite direction, of lets say (40, 0) then for
+each second, it will only count 10 units of distance covered.
+
+#### Moving once
+If you want to move a specific velocity for one physics tick, you can call the `MoveOnce` method. This is ideal for
+input-based movement, as you can call this everytime the user presses a key.
+```c#
+// creating a component so that we can use its Update method
+class StarComponent : Component
+{
+    public override void Update(double deltaTime)
+    {
+        base.Update(deltaTime);
+
+        PhysicsBody? body = Entity?.GetComponent<PhysicsBody>();
+
+        if (Input.IsKeyDown(Keys.W))
+        {
+            body?.MoveOnce(new Vector2(0, 100));
+        }
+        if (Input.IsKeyDown(Keys.S))
+        {
+            body?.MoveOnce(new Vector2(0, -100));
+        }
+    }
+}
+
+...
+
+// somewhere in application start, we add our custom component to our desired entity
+StarComponent starComponent = new()
+topStar.AddComponent(starComponent);
+```
+
+Here, when the Update method (which is called every physics tick on all components) is called, and the `W` key is pressed
+by the user, it will call `MoveOnce` on the `PhysicsBody` component of the entity it's attached to (in this case it will be `topStar`).
+
+So in simple words, everytime `W` is pressed, the entity is moved once at (0, 100) velocity, allowing for input-based movement!
