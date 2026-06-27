@@ -1,4 +1,5 @@
 using rasdaq.Interfaces;
+using rasdaq.Logging;
 using rasdaq.Transformations;
 
 namespace rasdaq.Core.ECS;
@@ -13,7 +14,7 @@ namespace rasdaq.Core.ECS;
 ///
 /// <para>The x and y coordinates is the position of the centre of the Entity</para>
 /// </param>
-public class Entity(Vector3 spawnPosition)
+public class Entity
 {
     /// <summary>
     /// Return the world which contains this entity.
@@ -22,7 +23,7 @@ public class Entity(Vector3 spawnPosition)
 
     private readonly string _id;
     private FlushEnumerable<Component> _components = new();
-    private Transform _transform = new(spawnPosition);
+    private Transform _transform = new(Vector3.Zero);
 
     /// <summary>
     /// Determines if entity has performed its start method.
@@ -38,9 +39,16 @@ public class Entity(Vector3 spawnPosition)
     /// <summary>
     /// Create a new entity.
     /// </summary>
-    public Entity() : this(Vector3.Zero)
+    public Entity()
     {
         _id = Guid.NewGuid().ToString("N");
+        _transform.position = Vector3.Zero;
+    }
+
+    public Entity(Vector3 spawnPosition)
+    {
+        _id = Guid.NewGuid().ToString("N");
+        _transform.position = spawnPosition;
     }
 
     internal void Attach(World w)
@@ -74,7 +82,8 @@ public class Entity(Vector3 spawnPosition)
     /// </summary>
     /// <typeparam name="T"></typeparam>
     /// <returns>The first component of type T on the entity</returns>
-    public T? GetComponent<T>() where T : Component
+    public T? GetComponent<T>()
+        where T : Component
     {
         return _components.Objects.OfType<T>().FirstOrDefault();
     }
@@ -82,7 +91,8 @@ public class Entity(Vector3 spawnPosition)
     /// <summary>
     /// Return all components of a certain type attached to the entity.
     /// </summary>
-    public IEnumerable<T> GetComponents<T>() where T : Component
+    public IEnumerable<T> GetComponents<T>()
+        where T : Component
     {
         return _components.Objects.OfType<T>();
     }

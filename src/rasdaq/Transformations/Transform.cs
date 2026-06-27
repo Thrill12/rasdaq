@@ -16,15 +16,26 @@ public class Transform(Vector3 spawnPosition)
     /// position of the centre of the entity
     /// </summary>
     public Vector3 position = spawnPosition;
+
     /// <summary>
     /// Scale of the entity. (1,1) is the default, and means the image will be rendered at its original size
     /// The X and Y components of the scale are applied to the width and height of the entity respectively
     /// </summary>
     public Vector2 scale = new(1, 1);
+
     /// <summary>
     /// Rotation in degrees. Used for 2D rotation around Z axis.
     /// </summary>
     public float rotation = 0.0f;
+
+    public Vector2 Forward
+    {
+        get
+        {
+            var radians = MathHelper.DegreesToRadians(rotation);
+            return new Vector2((float)Math.Cos(radians), (float)Math.Sin(radians));
+        }
+    }
 
     internal void CoordUpdate(OVector2 delta)
     {
@@ -45,7 +56,8 @@ public class Transform(Vector3 spawnPosition)
     /// <returns>Matrix transformation of scale</returns>
     internal Matrix4 ScaleFromNDC(float imageWidth, float imageHeight)
     {
-        return Matrix4.CreateScale(imageWidth, imageHeight, 1.0f) * Scale((float)scale.X, (float)scale.Y);
+        return Matrix4.CreateScale(imageWidth, imageHeight, 1.0f)
+            * Scale((float)scale.X, (float)scale.Y);
     }
 
     internal static Matrix4 Scale(float xScale, float yScale)

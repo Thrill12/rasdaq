@@ -20,4 +20,6 @@ internal interface IGameWindow
     public bool IsMouseButtonDown(MouseButton button);
     public bool IsMouseButtonPressed(MouseButton button);
     public bool IsMouseButtonReleased(MouseButton button);
+
+    public Vector2? WindowSize { get; set; }
 }

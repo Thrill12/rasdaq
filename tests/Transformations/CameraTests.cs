@@ -17,13 +17,12 @@ public class CameraTests
     [Test]
     public void SetCameraPosition_SetValidCoordinates_UpdateCameraPosition()
     {
-        camera.SetPosition(10f, 20f);
+        camera.Position = new Vector2(10f, 20f);
 
         Assert.Multiple(() =>
         {
-            Assert.That(camera.Position.X, Is.EqualTo(10f));
-            Assert.That(camera.Position.Y, Is.EqualTo(20f));
+            Assert.That(camera._Position.X, Is.EqualTo(10f));
+            Assert.That(camera._Position.Y, Is.EqualTo(20f));
         });
-
     }
 }
