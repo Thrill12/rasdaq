@@ -62,7 +62,6 @@ public class Entity
     /// <param name="comp"></param>
     public void AddComponent(Component comp)
     {
-        Log.Info($"Adding component of type {comp.GetType().Name} to entity {ID}");
         comp.Attach(this);
         _components.Add(comp);
     }

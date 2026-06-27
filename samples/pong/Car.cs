@@ -15,8 +15,6 @@ public class Car : Component
         base.Start();
 
         body = Entity?.GetComponent<PhysicsBody>();
-
-        Log.Info("Car component started");
     }
 
     Vector2 currentMovement = Vector2.Zero;
