@@ -6,11 +6,18 @@ public class Physics
     private readonly List<PhysicsBody> _bodies = new();
     internal List<PhysicsBody> Bodies => _bodies;
 
+    /// <summary>
+    /// The gravity value to apply to all physics bodies that have ApplyGravity set to true.
+    ///
+    /// <value>Default: 9.81</value>
+    /// </summary>
     public double Gravity { get; set; } = 9.81;
 
     /// <summary>
     /// Time interval for updates to aim to occur at.
     /// For example, if this is set to 0.01, the game will aim to update every 10 milliseconds (100 updates per second).
+    ///
+    /// <value>Default: 0.01</value>
     /// </summary>
     public double FixedUpdateTime { get; set; } = 0.01f;
 
