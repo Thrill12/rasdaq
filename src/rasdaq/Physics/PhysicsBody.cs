@@ -45,16 +45,6 @@ public class PhysicsBody : Component
     {
         var delta = GetDeltaVector((float)deltaTime);
         Entity?.Transform.CoordUpdate(delta);
-
-        // // Check collisions with other bodies
-        // for (int i = 0; i < World.Physics.Bodies.Count; i++)
-        // {
-        //     PhysicsBody otherBody = World.Physics.Bodies[i];
-        //     if (otherBody != this)
-        //     {
-        //         World.Physics.CheckCollisions(this, otherBody);
-        //     }
-        // }
     }
 
     /// <summary>
