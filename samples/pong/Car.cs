@@ -1,3 +1,4 @@
+using rasdaq;
 using rasdaq.Core.ECS;
 using rasdaq.Graphics;
 using rasdaq.Inputs;
@@ -25,6 +26,18 @@ public class Car : Component
         base.Update(deltaTime);
         Accelerate(deltaTime);
         Turn((float)deltaTime);
+        CameraFollow(deltaTime);
+    }
+
+    private void CameraFollow(double deltaTime)
+    {
+        Vector2 lerpedCamPosition = Lerp.Linear(
+            Renderer.Instance.Camera.Position,
+            (Vector2)Entity.Transform.position,
+            10 * (float)deltaTime
+        );
+
+        Renderer.Instance.Camera.Position = lerpedCamPosition;
     }
 
     private float _currentSpeed;
@@ -47,7 +60,7 @@ public class Car : Component
         }
         else
         {
-            _currentSpeed = (float)Lerp.Linear(_currentSpeed, 0, 1 * (float)deltaTime);
+            _currentSpeed = Lerp.Linear(_currentSpeed, 0, 1 * (float)deltaTime);
         }
 
         _currentSpeed = Math.Clamp(_currentSpeed, -maxSpeed, maxSpeed);
@@ -62,17 +75,6 @@ public class Car : Component
 
         Vertical();
         Horizontal();
-
-        Log.Info($"Current movement: {currentMovement}");
-    }
-
-    public override void LateUpdate(double deltaTime)
-    {
-        base.LateUpdate(deltaTime);
-
-        Renderer.Instance.Camera.SetPosition(
-            (Vector2)Entity.Transform.position - new Vector2(300, 300)
-        );
     }
 
     public float rotationSpeed = 100;
@@ -108,7 +110,6 @@ public class Car : Component
             currentMovement.X = 0;
         }
 
-        // Reverse for car-like movement
         if (_currentSpeed < 0)
         {
             currentMovement.X *= -1;

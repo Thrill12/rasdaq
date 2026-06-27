@@ -21,7 +21,6 @@ public class Game : Application
     public override void Start()
     {
         World world = new();
-        Renderer.Instance.Camera.SetPosition(new Vector2(0, 0));
         Entity player = new(new Vector3(500, 500, 1));
         Entity enemy = new(new Vector3(300, 300, 1));
 

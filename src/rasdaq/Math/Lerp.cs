@@ -7,4 +7,14 @@ public static class Lerp
     {
         return a + ((b - a) * t);
     }
+
+    public static float Linear(float a, float b, float t)
+    {
+        return a + ((b - a) * t);
+    }
+
+    public static Vector3 Linear(Vector3 a, Vector3 b, float t)
+    {
+        return a + ((b - a) * t);
+    }
 }
