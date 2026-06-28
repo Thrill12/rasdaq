@@ -6,8 +6,9 @@ can involve two aspects:
 2. Using player input to trigger their movement (amongst other things)
 
 
-Each entity has a `Transform` object property that stores its position in the world.
-This is stored in a `Vector3` property called `position` with the `Transform`.
+Each entity has a `Transform` property, which holds attributes like position, rotation, and scale.
+
+We'll begin our tutorial by focusing on `position`, which is stored in a `Vector3` property.
 
 The `Vector3` is a struct that stores the `X`, `Y`, and `Z` coordinates of the entity. 
 While the `X` and `Y` coordinates correspond to a position on our 2D screen, the `Z` 
@@ -16,7 +17,7 @@ when objects overlap, which sprite overlaps another.
 
 > [!NOTE]
 > The Z coordinate must be between 0 and 1000, otherwise the object won't appear. All
-> these coordinates are `double`s, so they can even be a decimal number.
+> these coordinates are `double`, so they can even be a decimal number.
 
 When creating an Entity, you can pass in a `Vector3` as a spawn position:
 ```c#
@@ -90,7 +91,7 @@ The difference here is that it doesn't count any component of distance travelled
 So if you were to have another "velocity" on the star in the opposite direction, of lets say (40, 0) then for
 each second, it will only count 10 units of distance covered.
 
-#### Moving once
+#### Moving once / using player input to trigger movement
 If you want to move a specific velocity for one physics tick, you can call the `MoveOnce` method. This is ideal for
 input-based movement, as you can call this everytime the user presses a key.
 ```c#
