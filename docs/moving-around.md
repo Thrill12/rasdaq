@@ -126,3 +126,47 @@ Here, when the Update method (which is called every physics tick on all componen
 by the user, it will call `MoveOnce` on the `PhysicsBody` component of the entity it's attached to (in this case it will be `topStar`).
 
 So in simple words, everytime `W` is pressed, the entity is moved once at (0, 100) velocity, allowing for input-based movement!
+
+### Moving the camera
+Now that we have learned about movement, let us learn how to move the camera so it tracks `topStar` such that it
+doesn't disappear from the screen.
+
+This is fairly straightforward. All we have to do is get the instance of `Camera`, which is a property 
+of the singleton `Renderer`, and set its coordinates in the world.
+
+Note that the coordinates we set here is of the **bottom left corner** of the camera.
+
+```
+    +---------------------------------+
+    |                                 |
+    |                                 |
+    |             Window              |
+    |                                 |
+    |                                 |
+    +---------------------------------+
+  (x, y)                
+    ^
+    |
+Camera coordinates
+```
+
+> [!NOTE]
+> This feature will soon be changed to use center of the camera window as coordinates
+
+```c#
+// somewhere in a frame update loop
+...
+// getting entity's x/y position... 
+// and then offsetting its coordinates by half of window size...
+// so the entity is in the center of camera window
+var cameraX = Entity?.Transform.position.X - (Application.WindowSize?.X / 2) ?? 0;
+var cameraY = Entity?.Transform.position.Y - (Application.WindowSize?.Y / 2) ?? 0;
+Renderer.Instance.Camera.SetPosition(x, y);
+```
+
+Now when moving around you will notice the entity doesn't appear to move, due to the camera tracking
+its position.
+
+### Rotation
+
+### Scaling
