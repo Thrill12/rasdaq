@@ -164,9 +164,5 @@ var cameraY = Entity?.Transform.position.Y - (Application.WindowSize?.Y / 2) ?? 
 Renderer.Instance.Camera.SetPosition(x, y);
 ```
 
-Now when moving around you will notice the entity doesn't appear to move, due to the camera tracking
+Now when moving around you will notice the entity doesn't appear to move, which is due to the camera tracking
 its position.
-
-### Rotation
-
-### Scaling
