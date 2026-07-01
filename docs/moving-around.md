@@ -3,7 +3,7 @@
 Now that we have entities in our world, we would like to move them around. This 
 can involve two aspects:
 1. Moving them around visually
-2. Using player input to trigger their movement (amongst other things)
+2. Using player input to trigger their movement (amongst other ways)
 
 
 Each entity has a `Transform` property, which holds attributes like position, rotation, and scale.
@@ -44,7 +44,7 @@ topStar.position = new Vector3(20, 10, 1);
 This will change the position of `topStar` to `x: 20` from `x: 10`. However, this will simply
 "teleport" the object there.
 
-We would instead want the object to move smoothly that distance. This is where we use `PhysicsBody`
+We would instead want the object to smoothly move that distance. This is where we use `PhysicsBody`
 component, which will deal with the visual movement based on given parameters.
 
 ### Using `PhysicsBody`
@@ -59,17 +59,20 @@ topStar.AddComponent(starBody);
 
 starBody.Velocity = starVelocity
 ```
-<!-- TODO This is wrong, 200 is the speed, not distance every tick. Fix here and below and above etc. -->
-The star will now move at 200 pixels to the right every **physics tick**.
+The star will now move at 200 pixels per millisecond. The actual distance it moves here
+would be determined by the time the **physics tick** takes (since distance is a product
+of speed and time).
 
 > [!TIP]
 > A physics tick is its own unit of time used by our game engine for physics operations
 > This allows us to do physics operations periodically but independently of the framerate.
+>
+> The tick is timed in milliseconds, hence the speed being mentioned in pixels per millisecond.
 
 #### Moving a given distance
 To move the star a specific distance at a specific velocity, we can use the `MoveDistance` method.
 ```c#
-Vector2 starDistanceVelocity = new(50, 0);
+Vector2 starDistanceVelocity = new(30, 0);
 
 // set the independent velocity to zero otherwise this would add to the starDistanceVelocity
 // for the purpose of this demo, we just want the star to move by MoveDistance
@@ -77,19 +80,24 @@ starBody.Velocity = Vector2.Zero;
 starBody.MoveDistance(velocity: starDistanceVelocity, distance: 200, thisDirectionOnly: false);
 ```
 
-Now, you will notice the star moves to the right over 4 seconds, and then stops.
+Now, you will notice the star moves to the right until it covers that distance, and then stops.
 
 There is one parameter here that might sound confusing: `thisDirectionOnly`. This will be broken down
 in this next section.
 
 #### Moving a given distance in a particular direction only
-Now if we want to make sure the star covers the required distance in the direction provided by the velocity, 
+Things get complicated if the star is being pushed by more than one force at the same time. Let's say
+we have another "velocity" on the star in a perpendicular direction, in `(0, 40)`. How does the game calculate
+when the star has covered 200 pixels? This is determined by `thisDirectionOnly`.
+
+If we want to make sure the star covers the required distance only in the direction provided by the velocity, 
 we set the `thisDirectionOnly` to true.
 
 The difference here is that it doesn't count any component of distance travelled in another direction.
 
-So if you were to have another "velocity" on the star in the opposite direction, of lets say (40, 0) then for
-each second, it will only count 10 units of distance covered.
+So if `thisDirectionOnly` is set to true, it will only count 30 units of distance covered per unit time. 
+On the other hand, if `thisDirectionOnly` is set to false, the distance counted as covered would be 50 units 
+(30 horizontal and 40 from vertical velocity, and so a diagonal distance of 50 units).
 
 #### Moving once / using player input to trigger movement
 If you want to move a specific velocity for one physics tick, you can call the `MoveOnce` method. This is ideal for
