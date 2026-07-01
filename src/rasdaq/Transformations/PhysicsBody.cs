@@ -59,7 +59,7 @@ public class PhysicsBody : Component
     }
 
     /// <summary>
-    /// Internally called every frame to get delta movement of entity
+    /// Internally called every physics update to get delta movement of entity
     /// </summary>
     /// <param name="elapsedTime">elapsed time since last frame</param>
     /// <returns>delta vector</returns>
