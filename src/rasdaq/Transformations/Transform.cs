@@ -17,8 +17,8 @@ public class Transform(Vector3 spawnPosition)
     /// </summary>
     public Vector3 position = spawnPosition;
     /// <summary>
-    /// Scale of the entity. (1,1) is the default, and means the image will be rendered at its original size
-    /// The X and Y components of the scale are applied to the width and height of the entity respectively
+    /// <para>Scale of the entity. (1, 1) is the default, and means the image will be rendered at its original size.</para>
+    /// <para>The (X, Y) components of the scale are applied to the width and height of the entity respectively</para>
     /// </summary>
     public Vector2 scale = new(1, 1);
     /// <summary>
