@@ -25,10 +25,29 @@ public class Transform(Vector3 spawnPosition)
     /// Rotation in degrees. Used for 2D rotation around Z axis.
     /// </summary>
     public float rotation = 0.0f;
-    /// <summary>
-    /// distance from the centre of the entity, to rotate around
-    /// </summary>
-    public double rotationRadius = 0.0;
+
+    public void RotateFromPoint(Vector2 point, float degrees)
+    {
+        // get radius
+        Vector2 entityPos = new(position.X, position.Y);
+        Vector2 radius = (OVector2)entityPos - (OVector2)point;
+
+        Console.WriteLine("radius: " + radius);
+
+        // get trig
+        var sin = Math.Sin(MathHelper.DegreesToRadians(degrees));
+        var cos = Math.Cos(MathHelper.DegreesToRadians(degrees));
+
+        // get x,y from origin
+        var xFromOrigin = radius.X * cos - radius.Y * sin;
+        var yFromOrigin = radius.X * sin + radius.Y * cos;
+
+        // set position and round to 4 dp
+        position.X = Math.Round(point.X + xFromOrigin, 4);
+        position.Y = Math.Round(point.Y + yFromOrigin, 4);
+
+        Console.WriteLine("position: " + position);
+    }
 
     internal void CoordUpdate(OVector2 delta)
     {
@@ -65,11 +84,10 @@ public class Transform(Vector3 spawnPosition)
     internal Matrix4 GetRenderedTransform(float imageWidth, float imageHeight)
     {
         var translation = Translate();
-        var rotationTranslation = Matrix4.CreateTranslation((float)rotationRadius, 0, 0);
         var rotation = Get2DRotation();
         var scale = ScaleFromNDC(imageWidth, imageHeight);
 
-        return scale * rotationTranslation * rotation * translation;
+        return scale * rotation * translation;
         // return scale * rotation * translation;
     }
 }
