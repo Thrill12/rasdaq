@@ -26,7 +26,16 @@ public class Transform(Vector3 spawnPosition)
     /// </summary>
     public float rotation = 0.0f;
 
-    public void RotateFromPoint(Vector2 point, float degrees)
+    /// <summary>
+    /// Rotate the entity from a point in the world space.
+    ///
+    /// Note that this does not rotate the entity itself.
+    /// Instead, it moves the entity in a circular arc, with `point` being the centre of the arc.
+    ///
+    /// </summary>
+    /// <param name="point">centre of rotation</param>
+    /// <param name="rotation">rotation in degrees</param>
+    public void RotateFromPoint(Vector2 point, float rotation)
     {
         // get radius
         Vector2 entityPos = new(position.X, position.Y);
@@ -35,8 +44,8 @@ public class Transform(Vector3 spawnPosition)
         Console.WriteLine("radius: " + radius);
 
         // get trig
-        var sin = Math.Sin(MathHelper.DegreesToRadians(degrees));
-        var cos = Math.Cos(MathHelper.DegreesToRadians(degrees));
+        var sin = Math.Sin(MathHelper.DegreesToRadians(rotation));
+        var cos = Math.Cos(MathHelper.DegreesToRadians(rotation));
 
         // get x,y from origin
         var xFromOrigin = radius.X * cos - radius.Y * sin;
