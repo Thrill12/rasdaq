@@ -18,8 +18,6 @@ internal class Soldier : Component
     {
         base.Update(deltaTime);
 
-        Entity.Transform.rotation += 1f;
-        Entity.Transform.rotationRadius = 400f;
     }
 
     public override void FrameUpdate(double deltaTime)
@@ -28,7 +26,7 @@ internal class Soldier : Component
 
         if (Input.IsKeyPressed(Keys.V))
         {
-            Log.Info("V pressed");
+            Entity.Transform.RotateFromPoint(new Vector2(800, 200), 90);
         }
 
         PhysicsBody? body = Entity?.GetComponent<PhysicsBody>();
