@@ -41,8 +41,6 @@ public class Transform(Vector3 spawnPosition)
         Vector2 entityPos = new(position.X, position.Y);
         Vector2 radius = (OVector2)entityPos - (OVector2)point;
 
-        Console.WriteLine("radius: " + radius);
-
         // get trig
         var sin = Math.Sin(MathHelper.DegreesToRadians(rotation));
         var cos = Math.Cos(MathHelper.DegreesToRadians(rotation));
@@ -54,8 +52,6 @@ public class Transform(Vector3 spawnPosition)
         // set position and round to 4 dp
         position.X = Math.Round(point.X + xFromOrigin, 4);
         position.Y = Math.Round(point.Y + yFromOrigin, 4);
-
-        Console.WriteLine("position: " + position);
     }
 
     internal void CoordUpdate(OVector2 delta)
