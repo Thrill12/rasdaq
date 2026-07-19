@@ -140,4 +140,30 @@ public class TransformTests
         // need to transpose back since openTK uses row major
         AssertMatrixEqual(transform.GetRenderedTransform(1, 1), correctMatrix.Transposed());
     }
+
+    [Test]
+    public void RotateFromPoint_At90CCW_Rotate90CCW()
+    {
+        // (x: 2, y: 0)
+        transform.position = new Vector3(2, 0, 0);
+
+        Vector2 center = new(0, 0);
+        transform.RotateFromPoint(center, 90);
+        var actual = new Vector3(0, 2, 0);
+
+        Assert.That(transform.position, Is.EqualTo(actual));
+    }
+
+    [Test]
+    public void RotateFromPoint_AtMinus90WithCenterOnRight_Rotate90CW()
+    {
+        // (x: 2, y: 0)
+        transform.position = new Vector3(-2, 0, 0);
+
+        Vector2 center = new(0, 0);
+        transform.RotateFromPoint(center, -90);
+        var actual = new Vector3(0, 2, 0);
+
+        Assert.That(transform.position, Is.EqualTo(actual));
+    }
 }
