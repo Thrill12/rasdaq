@@ -20,7 +20,7 @@ public class Game : Application
     public override void Start()
     {
         World world = new();
-        Entity player = new(new Vector3(456, 228, 1));
+        Entity player = new(new Vector3(400, 200, 1));
         Entity enemy = new();
 
         Sprite spr = new(456, 456, andrei);

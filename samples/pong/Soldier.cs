@@ -17,6 +17,7 @@ internal class Soldier : Component
     public override void Update(double deltaTime)
     {
         base.Update(deltaTime);
+
     }
 
     public override void FrameUpdate(double deltaTime)
@@ -25,7 +26,7 @@ internal class Soldier : Component
 
         if (Input.IsKeyPressed(Keys.V))
         {
-            Log.Info("V pressed");
+            Entity.Transform.RotateFromPoint(new Vector2(800, 200), 90);
         }
 
         PhysicsBody? body = Entity?.GetComponent<PhysicsBody>();
