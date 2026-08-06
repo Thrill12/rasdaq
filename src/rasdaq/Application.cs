@@ -1,6 +1,8 @@
 ﻿using OpenTK.Graphics.OpenGL4;
 using OpenTK.Windowing.Common;
 using OpenTK.Windowing.Desktop;
+
+using rasdaq.Audio;
 using rasdaq.Core.ECS;
 using rasdaq.Graphics;
 using rasdaq.Inputs;
@@ -20,17 +22,13 @@ public class Application : IDisposable
     /// <summary>
     /// The <c>Application</c> instance is created after <c>Run</c> is called.
     /// </summary>
+    private static Application? _instance;
     public static Application Instance
     {
         get => _instance ?? throw new InvalidOperationException("Application not started. Call Run() first.");
         private set => _instance = value;
     }
-    private static Application? _instance;
     public static Vector2? WindowSize => Instance._gameWindow?.Size;
-    /// <summary>
-    /// Return list of instantiated <c>Worlds</c>.
-    /// </summary>
-    public List<World> Worlds => _worlds.Objects;
 
     private InputManager? _inputManager;
     internal InputManager InputManager
@@ -40,6 +38,10 @@ public class Application : IDisposable
     }
 
     private FlushEnumerable<World> _worlds = new();
+    /// <summary>
+    /// Return list of instantiated <c>Worlds</c>.
+    /// </summary>
+    public List<World> Worlds => _worlds.Objects;
 
     private GameWindow? _gameWindow;
     internal GameWindow GameWindow
@@ -85,7 +87,7 @@ public class Application : IDisposable
         GameWindow.RenderFrame += OnRenderFrame;
         GameWindow.FramebufferResize += OnFramebufferResize;
 
-        InputManager = new InputManager(new GameWindowWrapper(GameWindow));
+        InputManager = new InputManager(new GameWindowWrapper(_gameWindow));
 
         InputManager.SetEventListeners();
         GameWindow.Run();
@@ -110,6 +112,8 @@ public class Application : IDisposable
         GL.Enable(EnableCap.DepthTest);
 
         Renderer.Instance.Init();
+
+        AudioManager.Initialize();
 
         Init();
 
