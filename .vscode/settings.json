@@ -11,6 +11,14 @@
         "source.fixAll.dotnet": "explicit"
     },
     "[csharp]": {
-        "editor.defaultFormatter": "ms-dotnettools.csharp"
-    }
+        "editor.defaultFormatter": "EditorConfig.EditorConfig"
+    },
+    "editor.formatOnPaste": true,
+    "editor.defaultFormatter": "EditorConfig.EditorConfig",
+    "remove-empty-lines.runOnSave": true,
+    "remove-empty-lines.onSaveReason": {
+        "afterDelay": true,
+        "focusOut": true
+    },
+    "remove-empty-lines.allowedNumberOfEmptyLines": 1
 }
