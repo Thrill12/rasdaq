@@ -1,4 +1,6 @@
-﻿using rasdaq;
+using OpenTK.Audio.OpenAL;
+using rasdaq;
+using rasdaq.Audio;
 using rasdaq.Core.ECS;
 using rasdaq.Graphics;
 using rasdaq.Inputs;
@@ -12,6 +14,21 @@ internal class Soldier : Component
     public override void Start()
     {
         base.Start();
+
+        Entity?.AddComponent(new AudioSource());
+
+        Audio audio1 = ResourceManager.Load<Audio>("assets/audio.wav");
+        Entity?.GetComponent<AudioSource>()?.AttachAudio(audio1);
+
+        Input.OnKeyDownEvent.Add(Keys.W, () =>
+        {
+            Log.Info("User pressed W based on an event");
+        });
+
+        Input.OnKeyUpEvent.Add(Keys.B, () =>
+        {
+            Log.Info("Hello");
+        });
     }
 
     public override void Update(double deltaTime)
@@ -70,6 +87,10 @@ internal class Enemy : Component
             var x = Entity?.Transform.position.X - (Application.WindowSize?.X / 2) ?? 0;
             var y = Entity?.Transform.position.Y - (Application.WindowSize?.Y / 2) ?? 0;
             Renderer.Instance.Camera.SetPosition(x, y);
+            if (Input.IsKeyDown(Keys.W))
+            {
+                ALContext context = ALC.GetCurrentContext();
+            }
         }
     }
 }
