@@ -3,6 +3,9 @@ using rasdaq.Resources.Loaders;
 
 namespace rasdaq.Resources;
 
+/// <summary>
+/// Class responsible for caching resource references, and loading files into rasdaq types.
+/// </summary>
 public static class ResourceManager
 {
     private static Dictionary<string, object> _cache = new();
@@ -13,6 +16,7 @@ public static class ResourceManager
         // Match file extensions with specific loaders here.
         _loaders["txt"] = new TextLoader();
         _loaders["png"] = new TextureLoader();
+        _loaders["jpg"] = new TextureLoader();
     }
 
     /// <summary>

@@ -19,24 +19,19 @@ public class WorldTests
     {
         World world = new();
         GameLoop loop = world.GameLoop;
-        Entity ent = new();
+        Entity ent = new(Vector3.Zero);
 
         world.AddEntity(ent);
 
-        Assert.That(world.Entities.Count, Is.EqualTo(0));
-
-        // Have to tick here so that we flush the pending entities to be added
-        loop.Tick(0.01);
-
         Assert.That(world.Entities.Count, Is.EqualTo(1));
 
-        Entity ent2 = new();
-        Entity ent3 = new();
+        Entity ent2 = new(Vector3.Zero);
+        Entity ent3 = new(Vector3.Zero);
 
         world.AddEntity(ent2);
         world.AddEntity(ent3);
 
-        loop.Tick(0.1);
+        loop.Tick(1);
 
         Assert.That(world.Entities.Count, Is.EqualTo(3));
 
@@ -44,7 +39,7 @@ public class WorldTests
         world.RemoveEntity(ent2);
         world.RemoveEntity(ent3);
 
-        loop.Tick(0.1);
+        loop.Tick(1);
 
         Assert.That(world.Entities.Count, Is.EqualTo(0));
     }

@@ -171,7 +171,7 @@ public class Shader : IDisposable
         GL.Uniform1(location, val);
     }
 
-    public void SetUniform(string uniformName, Vector2 val)
+    public void SetUniform(string uniformName, OpenTK.Mathematics.Vector2 val)
     {
         Use();
         int location = GetUniformLocation(uniformName);
@@ -184,7 +184,7 @@ public class Shader : IDisposable
         GL.Uniform2(location, val.X, val.Y);
     }
 
-    public void SetUniform(string uniformName, Vector3 val)
+    public void SetUniform(string uniformName, OpenTK.Mathematics.Vector3 val)
     {
         Use();
         int location = GetUniformLocation(uniformName);

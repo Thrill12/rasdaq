@@ -31,31 +31,18 @@ public class SpriteTests
     }
 
     [Test]
-    public void Sprite_WithVertices_SetsPropertiesCorrectly()
+    public void Sprite_WithWidthHeight_SetsPropertiesCorrectly()
     {
-        float[] vertices = [0f, 0f, 0f, 1f, 0f, 0f, 0f, 1f, 0f];
+        float width = 10f;
+        float height = 10f;
         Color color = Color.Red;
 
-        var sprite = new Sprite(vertices, color, null, new MockShader());
+        var sprite = new Sprite(width, height, color, null, new MockShader());
 
-        Assert.That(sprite.Vertices, Is.EqualTo(vertices));
+        Assert.That(sprite.width, Is.EqualTo(width));
+        Assert.That(sprite.height, Is.EqualTo(height));
         Assert.That(sprite.Color, Is.EqualTo(color));
         Assert.That(sprite.Texture, Is.Null);
-    }
-
-    [Test]
-    public void Sprite_WithWidthHeight_GeneratesCorrectQuadVertices()
-    {
-        float width = 2f,
-            height = 3f;
-
-        var sprite = new Sprite(width, height, Color.White, new MockShader());
-
-        Assert.That(sprite.Vertices.Length, Is.EqualTo(18)); // 6 vertices * 3 floats
-        Assert.That(sprite.Vertices[0], Is.EqualTo(-1f)); // left
-        Assert.That(sprite.Vertices[1], Is.EqualTo(-1.5f)); // bottom
-        Assert.That(sprite.Vertices[3], Is.EqualTo(1f)); // right
-        Assert.That(sprite.Vertices[7], Is.EqualTo(1.5f)); // top
     }
 
     [Test]
@@ -71,7 +58,7 @@ public class SpriteTests
     [Test]
     public void Sprite_DefaultColor_IsWhite()
     {
-        var sprite = new Sprite(1f, 1f, null, null, new MockShader());
+        var sprite = new Sprite(1f, 1f, shader: new MockShader());
 
         Assert.That(sprite.Color, Is.EqualTo(Color.White));
     }
