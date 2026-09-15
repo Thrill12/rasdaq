@@ -1,8 +1,8 @@
-using System.Buffers.Binary;
-using System.Text;
 using OpenTK.Audio.OpenAL;
 using rasdaq.Logging;
 using rasdaq.Resources;
+using System.Buffers.Binary;
+using System.Text;
 
 namespace rasdaq.Audio;
 
