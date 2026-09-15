@@ -11,6 +11,6 @@
         "source.fixAll.dotnet": "explicit"
     },
     "[csharp]": {
-        "editor.defaultFormatter": "ms-dotnettools.csharp"
+        "editor.defaultFormatter": "csharpier.csharpier-vscode"
     }
 }
