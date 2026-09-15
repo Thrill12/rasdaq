@@ -6,7 +6,7 @@ namespace rasdaq.Audio;
 
 public class AudioSource : Component, IDisposable
 {
-    public int Handle;
+    internal int Handle;
     public Audio AudioClip;
 
     public AudioSource(Audio? audioClip = null)
@@ -33,11 +33,26 @@ public class AudioSource : Component, IDisposable
         AL.DeleteSource(Handle);
     }
 
+    /// <summary>
+    /// Plays the loaded audio clip.
+    /// </summary>
     public void Play()
     {
         AudioManager.Instance.PlaySource(this);
     }
 
+    /// <summary>
+    /// Stops playing the audio source.
+    /// </summary>
+    public void Stop()
+    {
+        AudioManager.Instance.StopSource(this);
+    }
+
+    /// <summary>
+    /// Sets the audio clip of the audio source.
+    /// </summary>
+    /// <param name="audioClip"></param>
     public void SetAudio(Audio audioClip)
     {
         AudioManager.Instance.AttachAudioToSource(audioClip, this);

@@ -83,7 +83,7 @@ public class AudioManager
     /// <param name="path">Path to WAV file</param>
     /// <returns>A integer handle referring to the loaded audio</returns>
     /// <exception cref="Exception"></exception>
-    public Audio LoadAudio(string path)
+    internal Audio LoadAudio(string path)
     {
         // Create an OpenAL buffer for the data to go in.
         Audio audio = new Audio();
@@ -148,7 +148,7 @@ public class AudioManager
     /// </summary>
     /// <param name="audio">Audio file</param>
     /// <param name="audioSource">Audio source</param>
-    public void AttachAudioToSource(Audio audio, AudioSource audioSource)
+    internal void AttachAudioToSource(Audio audio, AudioSource audioSource)
     {
         AL.Source(audioSource.Handle, ALSourcei.Buffer, audio.Handle);
         CheckALError();
@@ -158,7 +158,7 @@ public class AudioManager
     /// Play back an audio source that has audio attached to it.
     /// </summary>
     /// <param name="source"></param>
-    public void PlaySource(AudioSource audioSource)
+    internal void PlaySource(AudioSource audioSource)
     {
         AL.SourcePlay(audioSource.Handle);
         CheckALError();
@@ -168,7 +168,7 @@ public class AudioManager
     /// Stop playback of an audio source.
     /// </summary>
     /// <param name="source"></param>
-    public void StopSource(AudioSource audioSource)
+    internal void StopSource(AudioSource audioSource)
     {
         AL.SourceStop(audioSource.Handle);
         CheckALError();

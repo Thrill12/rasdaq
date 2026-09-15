@@ -1,12 +1,11 @@
 ﻿using OpenTK.Audio.OpenAL;
-
 using rasdaq.Logging;
 
 namespace rasdaq.Audio;
 
 public class Audio : IDisposable
 {
-    public int Handle;
+    internal int Handle;
 
     public Audio()
     {
