@@ -1,8 +1,8 @@
+using System.Buffers.Binary;
+using System.Text;
 using OpenTK.Audio.OpenAL;
 using rasdaq.Logging;
 using rasdaq.Resources;
-using System.Buffers.Binary;
-using System.Text;
 
 namespace rasdaq.Audio;
 
@@ -68,18 +68,26 @@ internal class WAVLoader : IResourceLoader
         chunk.SampleRate = BinaryPrimitives.ReadUInt32LittleEndian(ReadBytesFromStream(stream, 4));
         chunk.ByteRate = BinaryPrimitives.ReadUInt32LittleEndian(ReadBytesFromStream(stream, 4));
         chunk.BlockAlign = BinaryPrimitives.ReadUInt16LittleEndian(ReadBytesFromStream(stream, 2));
-        chunk.BitsPerSample = BinaryPrimitives.ReadUInt16LittleEndian(ReadBytesFromStream(stream, 2));
+        chunk.BitsPerSample = BinaryPrimitives.ReadUInt16LittleEndian(
+            ReadBytesFromStream(stream, 2)
+        );
 
         if (size > 16)
         {
-            ushort extensionSize = BinaryPrimitives.ReadUInt16LittleEndian(ReadBytesFromStream(stream, 2));
+            ushort extensionSize = BinaryPrimitives.ReadUInt16LittleEndian(
+                ReadBytesFromStream(stream, 2)
+            );
             if (extensionSize == 22)
             {
                 chunk.Extension = new FmtChunkExtension()
                 {
-                    ValidBitsPerSample = BinaryPrimitives.ReadUInt16LittleEndian(ReadBytesFromStream(stream, 2)),
-                    SpeakerPositionMask = BinaryPrimitives.ReadUInt32LittleEndian(ReadBytesFromStream(stream, 4)),
-                    SubFormat = new Guid(ReadBytesFromStream(stream, 16))
+                    ValidBitsPerSample = BinaryPrimitives.ReadUInt16LittleEndian(
+                        ReadBytesFromStream(stream, 2)
+                    ),
+                    SpeakerPositionMask = BinaryPrimitives.ReadUInt32LittleEndian(
+                        ReadBytesFromStream(stream, 4)
+                    ),
+                    SubFormat = new Guid(ReadBytesFromStream(stream, 16)),
                 };
             }
         }
@@ -129,7 +137,9 @@ internal class WAVLoader : IResourceLoader
             Encoding.UTF8.GetString(byteFileType);
             if (Encoding.ASCII.GetString(byteFileType) != "WAVE")
             {
-                throw new Exception("Invalid WAV file: file type not listed as WAVE in RIFF header.");
+                throw new Exception(
+                    "Invalid WAV file: file type not listed as WAVE in RIFF header."
+                );
             }
 
             FmtChunk fmtChunk = new FmtChunk();
@@ -157,15 +167,14 @@ internal class WAVLoader : IResourceLoader
                 }
                 else
                 {
-                    throw new Exception("Unsupported WAV file: unknown chunk type " + Encoding.ASCII.GetString(chunkId));
+                    throw new Exception(
+                        "Unsupported WAV file: unknown chunk type "
+                            + Encoding.ASCII.GetString(chunkId)
+                    );
                 }
             }
 
-            return new WAVData()
-            {
-                Format = fmtChunk,
-                Data = dataChunk
-            };
+            return new WAVData() { Format = fmtChunk, Data = dataChunk };
         }
     }
 
@@ -178,10 +187,10 @@ internal class WAVLoader : IResourceLoader
     public object Load(string path)
     {
         // Create an OpenAL buffer for the data to go in.
-        Audio audio = new Audio();
+        Audio audio = new();
 
         // Load the WAV file
-        WAVLoader.WAVData wavData = WAVLoader.LoadWav(path);
+        WAVData wavData = LoadWav(path);
 
         // Discern the format of the audio data based on number of channels and bits per sample.
         ALFormat format;

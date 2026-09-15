@@ -18,7 +18,7 @@ public static class ResourceManager
         _loaders["txt"] = new TextLoader();
         _loaders["png"] = new TextureLoader();
         _loaders["jpg"] = new TextureLoader();
-        _loaders["wav"] = new WAVLoader();
+        _loaders["wav"] = new AudioLoader();
     }
 
     /// <summary>

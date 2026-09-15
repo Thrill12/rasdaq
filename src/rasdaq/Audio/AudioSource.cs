@@ -7,8 +7,9 @@ namespace rasdaq.Audio;
 public class AudioSource : Component, IDisposable
 {
     public int Handle;
+    public Audio AudioClip;
 
-    public AudioSource()
+    public AudioSource(Audio? audioClip = null)
     {
         Handle = AL.GenSource();
         // Check for errors
@@ -20,10 +21,26 @@ public class AudioSource : Component, IDisposable
             Log.Error(err);
             throw new Exception("OpenAL error while trying to create audio source: " + error);
         }
+
+        if (audioClip != null)
+        {
+            SetAudio(audioClip);
+        }
     }
 
     public void Dispose()
     {
         AL.DeleteSource(Handle);
+    }
+
+    public void Play()
+    {
+        AudioManager.Instance.PlaySource(this);
+    }
+
+    public void SetAudio(Audio audioClip)
+    {
+        AudioManager.Instance.AttachAudioToSource(audioClip, this);
+        this.AudioClip = audioClip;
     }
 }

@@ -12,33 +12,23 @@ namespace pong;
 
 internal class Soldier : Component
 {
+    AudioSource _audioSource;
+
     public override void Start()
     {
         base.Start();
 
-        AudioSource source = new();
-        Entity.AddComponent(source);
-
         Audio audio1 = ResourceManager.Load<Audio>("assets/laser.wav");
-        Entity.GetComponent<AudioSource>();
-        source.Handle = audio1.Handle;
-        Game.Instance.AudioManager.PlaySource(source);
-
-        Input.OnKeyDownEvent.Add(Keys.W, () =>
-        {
-            Log.Info("User pressed W based on an event");
-        });
-
-        Input.OnKeyUpEvent.Add(Keys.B, () =>
-        {
-            Log.Info("Hello");
-        });
+        AudioSource source = new();
+        // source.Handle = audio1.Handle;
+        source.SetAudio(audio1);
+        _audioSource = source;
+        Entity.AddComponent(source);
     }
 
     public override void Update(double deltaTime)
     {
         base.Update(deltaTime);
-
     }
 
     public override void FrameUpdate(double deltaTime)
@@ -48,6 +38,11 @@ internal class Soldier : Component
         if (Input.IsKeyPressed(Keys.V))
         {
             Entity.Transform.RotateFromPoint(new Vector2(800, 200), 90);
+        }
+
+        if (Input.IsKeyPressed(Keys.Space))
+        {
+            _audioSource.Play();
         }
 
         PhysicsBody? body = Entity?.GetComponent<PhysicsBody>();

@@ -1,11 +1,25 @@
 ﻿using OpenTK.Audio.OpenAL;
-
 using rasdaq.Logging;
 
 namespace rasdaq.Audio;
 
 public class AudioManager
 {
+    public static AudioManager Instance
+    {
+        get
+        {
+            if (_instance == null)
+            {
+                _instance = new();
+            }
+
+            return _instance;
+        }
+    }
+
+    private static AudioManager _instance;
+
     private static void CheckALCError(ALDevice device)
     {
         AlcError error = ALC.GetError(device);
@@ -44,7 +58,10 @@ public class AudioManager
         }
 
         // Create a context for the device.
-        ALContext context = ALC.CreateContext(device, new ALContextAttributes(null, null, null, null, null));
+        ALContext context = ALC.CreateContext(
+            device,
+            new ALContextAttributes(null, null, null, null, null)
+        );
         if (context == ALContext.Null)
         {
             ALC.CloseDevice(device);
