@@ -45,6 +45,11 @@ internal class Soldier : Component
             _audioSource.Play();
         }
 
+        if (Input.IsKeyPressed(Keys.LeftShift))
+        {
+            _audioSource.Stop();
+        }
+
         PhysicsBody? body = Entity?.GetComponent<PhysicsBody>();
 
         if (Input.IsKeyDown(Keys.W))
