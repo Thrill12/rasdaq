@@ -17,7 +17,7 @@ public class AudioManager
         }
     }
 
-    private static void CheckALError()
+    public static void CheckALError()
     {
         ALError error = AL.GetError();
         if (error != ALError.NoError)

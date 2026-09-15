@@ -5,6 +5,7 @@ using rasdaq.Core.ECS;
 using rasdaq.Graphics;
 using rasdaq.Inputs;
 using rasdaq.Logging;
+using rasdaq.Resources;
 using rasdaq.Transformations;
 
 namespace pong;
@@ -15,10 +16,13 @@ internal class Soldier : Component
     {
         base.Start();
 
-        Entity?.AddComponent(new AudioSource());
+        AudioSource source = new();
+        Entity.AddComponent(source);
 
-        Audio audio1 = ResourceManager.Load<Audio>("assets/audio.wav");
-        Entity?.GetComponent<AudioSource>()?.AttachAudio(audio1);
+        Audio audio1 = ResourceManager.Load<Audio>("assets/laser.wav");
+        Entity.GetComponent<AudioSource>();
+        source.Handle = audio1.Handle;
+        Game.Instance.AudioManager.PlaySource(source);
 
         Input.OnKeyDownEvent.Add(Keys.W, () =>
         {

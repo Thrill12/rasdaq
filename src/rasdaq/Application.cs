@@ -116,8 +116,6 @@ public class Application : IDisposable
 
         Renderer.Instance.Init();
 
-        AudioManager.Initialize();
-
         Init();
 
         Start();
